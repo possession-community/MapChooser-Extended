@@ -7,11 +7,6 @@ General purpose map voting plugin, started as a simple RTV and now has more feat
 
 # Enjoying the plugin?
 Please drop a ⭐ star in the repository 
-![image](https://github.com/abnerfs/cs2-rockthevote/assets/14078661/bf4bb677-3c83-4cb6-ac8a-393435c91105)
-
-Feeling like paying me a ☕? Go ahead and donate:
-
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=XDAQUYUGT5PTJ)
 
   
 ## Requirements
