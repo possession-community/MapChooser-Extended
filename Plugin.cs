@@ -32,6 +32,7 @@ namespace cs2_rockthevote
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
         private readonly TimeLeftCommand _timeLeft;
+        private readonly ExtendRoundTimeCommand _extendRoundTime;
         private readonly NextMapCommand _nextMap;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
@@ -40,6 +41,7 @@ namespace cs2_rockthevote
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
             TimeLeftCommand timeLeft,
+            ExtendRoundTimeCommand extendRoundTime,
             NextMapCommand nextMap)
         {
             _dependencyManager = dependencyManager;
@@ -48,6 +50,7 @@ namespace cs2_rockthevote
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
             _timeLeft = timeLeft;
+            _extendRoundTime = extendRoundTime;
             _nextMap = nextMap;
         }
 
