@@ -13,6 +13,7 @@ namespace cs2_rockthevote
     public partial class Plugin
     {
         [ConsoleCommand("css_voteextend", "Extends time for the current map")]
+        [ConsoleCommand("css_ve", "Extends time for the current map")]
         [CommandHelper(whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
         [RequiresPermissions("@css/vip")]
         public void OnVoteExtendRoundTimeCommandCommand(CCSPlayerController? player, CommandInfo commandInfo)
