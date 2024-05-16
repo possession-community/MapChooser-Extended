@@ -37,15 +37,16 @@ namespace cs2_rockthevote
     public class ExtendRoundTimeCommand : IPluginDependency<Plugin, Config>
     {
         private TimeLimitManager _timeLimitManager;
+        private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
 
-        public ExtendRoundTimeCommand(TimeLimitManager timeLimitManager, GameRules gameRules, IStringLocalizer stringLocalizer)
+        public ExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer)
         {
             _gameRules = gameRules;
             _localizer = new StringLocalizer(stringLocalizer, "extendtime.prefix");
             _timeLimitManager = timeLimitManager;
-
+            _extendRoundTimeManager = extendRoundTimeManager;
         }
 
         public bool CommandHandler(CCSPlayerController player, CommandInfo commandInfo, int timeToExtend)
@@ -61,13 +62,9 @@ namespace cs2_rockthevote
                 if (_timeLimitManager.TimeRemaining > 1)
                 {
                     // Update the round time
-                    ExtendRoundTime(timeToExtend);
+                    _extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
 
-                    // Update TimeRemaining in timeLimitManager
-                    // TimeRemaining is in minutes, divide round time by 60
-                    _timeLimitManager.TimeRemaining = timeToExtend;
-
-                    commandInfo.ReplyToCommand($"Increased round time by {timeToExtend * 60} minute(s)");
+                    commandInfo.ReplyToCommand($"Increased round time by {timeToExtend} minute(s)");
 
                     return true;
                 }
@@ -80,26 +77,6 @@ namespace cs2_rockthevote
             else
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.notapplicable"));
-                return false;
-            }
-        }
-
-        public bool ExtendRoundTime(int minutesToExtendBy)
-        {
-            try
-            {
-                // RoundTime is in seconds, so multiply by 60 to convert to minutes
-                _gameRules.RoundTime += (minutesToExtendBy * 60);
-
-                var gameRulesProxy = Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First();
-                Utilities.SetStateChanged(gameRulesProxy, "CCSGameRulesProxy", "m_pGameRules");
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                //Logger.LogWarning("Something went wrong when updating the round time {message}", ex.Message);
-
                 return false;
             }
         }
