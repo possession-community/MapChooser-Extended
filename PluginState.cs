@@ -4,18 +4,20 @@
     {
         public bool MapChangeScheduled { get; set; }
         public bool EofVoteHappening { get; set; }
+        public bool ExtendTimeVoteHappening { get; set; }
 
         public PluginState()
         {
 
         }
 
-        public bool DisableCommands => MapChangeScheduled || EofVoteHappening;
+        public bool DisableCommands => MapChangeScheduled || EofVoteHappening || ExtendTimeVoteHappening;
 
         public void OnMapStart(string map)
         {
             MapChangeScheduled = false;
             EofVoteHappening = false;
+            ExtendTimeVoteHappening = false;
         }
     }
 }
