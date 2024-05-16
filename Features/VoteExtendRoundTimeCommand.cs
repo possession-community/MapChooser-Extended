@@ -45,7 +45,6 @@ namespace cs2_rockthevote
             _timeLimitManager = timeLimitManager;
             _extendRoundTimeManager = extendRoundTimeManager;
             _pluginState = pluginState;
-
         }
 
         public void CommandHandler(CCSPlayerController player, CommandInfo commandInfo)

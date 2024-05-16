@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
 using cs2_rockthevote.Core;
+using Microsoft.Extensions.Localization;
 using System.Data;
 using System.Text;
 using static CounterStrikeSharp.API.Core.Listeners;
@@ -15,9 +16,9 @@ namespace cs2_rockthevote
     public class ExtendRoundTimeManager : IPluginDependency<Plugin, Config>
     {
         const int MAX_OPTIONS_HUD_MENU = 6;
-        public ExtendRoundTimeManager(StringLocalizer localizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules)
+        public ExtendRoundTimeManager(IStringLocalizer stringLocalizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules)
         {
-            _localizer = localizer;
+            _localizer = new StringLocalizer(stringLocalizer, "extendtime.prefix");
             _pluginState = pluginState;
             _timeLimitManager = timeLimitManager;
             _gameRules = gameRules;
@@ -53,7 +54,7 @@ namespace cs2_rockthevote
         public void ExtendTimeVoted(CCSPlayerController player, string voteResponse)
         {
             Votes[voteResponse] += 1;
-            player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtimevote.you-voted", voteResponse));
+            player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.you-voted", voteResponse));
             if (Votes.Select(x => x.Value).Sum() >= _canVote)
             {
                 ExtendTimeVote();
@@ -111,6 +112,9 @@ namespace cs2_rockthevote
             bool mapEnd = _config is EndOfMapConfig;
             KillTimer();
 
+            // TODO: Move this into the cfg
+            var minutesToExtend = 30;
+
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
             Random rnd = new();
@@ -121,23 +125,29 @@ namespace cs2_rockthevote
 
             if (maxVotes > 0)
             {
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended", winner.Key, percent, totalVotes));
+                if (winner.Key == "No")
+                {
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.failed", percent, totalVotes));
+                }
+                else
+                {
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", minutesToExtend, percent, totalVotes));
+                }
             }
             else
             {
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended-no-votes", winner.Key));
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended-no-votes"));
             }
 
             if (winner.Key == "No")
             {
                 // Do nothing, vote did not pass
-
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "not be extended."));
             }
             else
             {
                 // Extend round time
-                ExtendRoundTime(30, _timeLimitManager, _gameRules);
+                ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
             }
@@ -167,7 +177,7 @@ namespace cs2_rockthevote
             foreach (var player in ServerManager.ValidPlayers())
                 MenuManager.OpenChatMenu(player, menu);
 
-            timeLeft = 30;
+            timeLeft = _config.VoteDuration;
             Timer = _plugin!.AddTimer(1.0F, () =>
             {
                 if (timeLeft <= 0)
