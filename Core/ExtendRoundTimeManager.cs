@@ -151,6 +151,9 @@ namespace cs2_rockthevote
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
             }
+
+
+            _pluginState.ExtendTimeVoteHappening = false;
         }
 
         public void StartVote(IEndOfMapConfig config)
