@@ -14,6 +14,7 @@ namespace cs2_rockthevote
     {
         public int VotePercentage { get; set; }
         public bool ChangeMapImmediatly { get; set; }
+        public bool IgnoreSpec { get; set; } 
     }
 
 
@@ -37,6 +38,10 @@ namespace cs2_rockthevote
         public int TriggerSecondsBeforeEnd { get; set; } = 120;
         public int TriggerRoundsBeforEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
+        public bool AllowExtend { get; set; } = true;
+        public float ExtendTimeStep { get; set; } = 15f;
+        public int ExtendRoundStep { get; set; } = 5;
+        public int ExtendLimit { get; set; } = 3;
     }
 
     public class RtvConfig : ICommandConfig, IVoteConfig, IEndOfMapConfig
@@ -52,6 +57,9 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
         public bool HudMenu { get; set; } = true;
+        public bool DontChangeRtv { get; set; } = true;
+        public bool IgnoreSpec { get; set; } = true;
+
     }
 
     public class VotemapConfig : ICommandConfig, IVoteConfig
@@ -63,6 +71,8 @@ namespace cs2_rockthevote
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
         public bool HudMenu { get; set; } = false;
+        public bool IgnoreSpec { get; set; } = true;
+
     }
 
     public class TimeleftConfig
