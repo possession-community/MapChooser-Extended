@@ -21,8 +21,8 @@ namespace cs2_rockthevote
     public partial class Plugin : BasePlugin, IPluginConfig<Config>
     {
         public override string ModuleName => "RockTheVote";
-        public override string ModuleVersion => "1.8.5";
-        public override string ModuleAuthor => "abnerfs";
+        public override string ModuleVersion => "1.8.6";
+        public override string ModuleAuthor => "abnerfs, Oz-Lin";
         public override string ModuleDescription => "https://github.com/abnerfs/cs2-rockthevote";
 
 
@@ -102,7 +102,7 @@ namespace cs2_rockthevote
         {
             Config = config;
 
-            if (Config.Version < 9)
+            if (Config.Version < 10)
                 Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
             if (Config.Version < 7)

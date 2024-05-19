@@ -88,7 +88,7 @@ namespace cs2_rockthevote
 
     public class Config : IBasePluginConfig
     {
-        public int Version { get; set; } = 9;
+        public int Version { get; set; } = 10;
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
