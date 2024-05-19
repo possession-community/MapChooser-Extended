@@ -113,7 +113,7 @@ namespace cs2_rockthevote
             KillTimer();
 
             // TODO: Move this into the cfg
-            var minutesToExtend = 30;
+            var minutesToExtend = 15;
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
