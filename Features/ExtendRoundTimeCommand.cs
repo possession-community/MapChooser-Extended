@@ -13,7 +13,7 @@ namespace cs2_rockthevote
     {
         [ConsoleCommand("css_extend", "Extends time for the current map")]
         [CommandHelper(minArgs: 1, usage: "<number of minutes to extend the map time ex. 30>", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
-        [RequiresPermissions("@css/root")]
+        [RequiresPermissions("@css/changemap")]
         public void OnExtendRoundTimeCommand(CCSPlayerController? player, CommandInfo commandInfo)
         {
             var newRoundTime = commandInfo.GetArg(1);
