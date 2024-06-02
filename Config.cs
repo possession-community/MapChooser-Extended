@@ -14,7 +14,7 @@ namespace cs2_rockthevote
     {
         public int VotePercentage { get; set; }
         public bool ChangeMapImmediatly { get; set; }
-        public bool IgnoreSpec { get; set; } 
+        public bool IgnoreSpec { get; set; }
     }
 
 
@@ -59,6 +59,7 @@ namespace cs2_rockthevote
         public bool HudMenu { get; set; } = true;
         public bool DontChangeRtv { get; set; } = true;
         public bool IgnoreSpec { get; set; } = true;
+        public int VoteCooldownTime { get; set; } = 300;
 
     }
 
