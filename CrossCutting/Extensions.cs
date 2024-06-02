@@ -9,7 +9,7 @@ namespace cs2_rockthevote
         {
             return player is not null && player.IsValid && player.Connected == PlayerConnectedState.PlayerConnected &&
                 (considerBots || (!player.IsBot && !player.IsHLTV)) &&
-                (!ignoreSpecs || (player.Team != CsTeam.Spectator || player.Team != CsTeam.None));
+                (!ignoreSpecs || (player.Team != CsTeam.Spectator && player.Team != CsTeam.None));
         }
     }
 }
