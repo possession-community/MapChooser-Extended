@@ -1,7 +1,7 @@
 # CS2 Rock The Vote
-![Downloads](https://img.shields.io/github/downloads/abnerfs/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/abnerfs/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/abnerfs/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/abnerfs/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
+![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/abnerfs/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/abnerfs/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
 
-![image](https://github.com/abnerfs/cs2-rockthevote/assets/14078661/a603d1b6-ba35-4d5a-b887-1b14058a8050)
+![image](https://github.com/Oz-Lin/cs2-rockthevote/assets/14078661/a603d1b6-ba35-4d5a-b887-1b14058a8050)
 
 General purpose map voting plugin, started as a simple RTV and now has more features
 
@@ -13,7 +13,7 @@ Please drop a ⭐ star in the repository
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
 
 # Instalation
-- Download the latest release from https://github.com/abnerfs/cs2-rockthevote/releases
+- Download the latest release from https://github.com/Oz-Lin/cs2-rockthevote/releases
 - Extract the .zip file into `addons/counterstrikesharp/plugins`
 - Enjoy
 
@@ -27,6 +27,11 @@ Please drop a ⭐ star in the repository
 - Nextmap command
 - Fully configurable
 - Translated by the community
+
+# Work in Progress
+- Vote to extend current map by time limit and/or maximum rounds
+- Ignore players in Spectators from vote count
+- Cooldown to start another RTV after the last vote
 
 # Translations
 | Language             | Contributor          |
@@ -68,6 +73,9 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | MapsToShow          | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
 | VoteDuration        | Seconds the RTV should can last                                                                                        | 30            | 1     |                                      |
 | VotePercentage      | Percentage of players that should type RTV in order to start a vote                                                    | 60            | 0     | 100                                  |
+| DontChangeRtv       | Enable/Disable option not to change the current map                                                                    | true          | false | true                                 |
+| IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
+| VoteCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | -                                 |
 
 
 ## End of map vote
@@ -84,6 +92,11 @@ Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote 
 | TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, only used when mp_timelimit is greater than 0    | 120           | 1     |                                      |
 | TriggerRoundsBeforEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
+| AllowExtend             | Option to extend the current map                                                                                       | true          | false | true                                 |
+| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15f           | 0     |                                      |
+| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
+
 
 ## Votemap
 Players can vote to change to an specific map by using the votemap <mapname> command
@@ -96,6 +109,8 @@ Players can vote to change to an specific map by using the votemap <mapname> com
 | EnabledInWarmup     | Enable/Disable votemap during warmup                                     | true          | false | true |
 | MinRounds           | Minimum rounds to enable votemap                                         | 0             |       |      |
 | MinPlayers          | Minimum amount of players to enable votemap                              |               |       |      |
+| HudMenu             | Whether to use HudMenu or just the chat one                              | true          | false | true |
+| IgnoreSpec          | Ignore spectators from vote count                                        | true          | false | true |
 
 
 ## Timeleft
