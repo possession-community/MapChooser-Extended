@@ -18,6 +18,7 @@
   "general.invalid-map": "错误地图",
   "nominate.nominated": "玩家 {green}{0}{default} 指定地图 {green}{1}{default}, 现在有 {2} 票",
   "nominate.already-nominated": "你已经指定地图为 {green}{0}{default}, 现在有 {1} 票",
+  "nominate.multiple-maps-containing-name": "找到多个具有指定名称的地图",
   "general.validation.current-map": "你不能选择当前地图",
   "general.validation.minimum-rounds": "使用此命令的最小回合数为 {0}",
   "general.validation.warmup": "热身时不可用.",

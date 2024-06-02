@@ -18,6 +18,7 @@
   "general.invalid-map": "Carte invalide",
   "nominate.nominated": "Le joueur {green}{0}{default} a proposé la carte {green}{1}{default}, elle a maintenant {2} vote(s)",
   "nominate.already-nominated": "Vous avez déjà proposé la carte {green}{0}{default}, elle a {1} vote(s)",
+  "nominate.multiple-maps-containing-name": "Il existe plusieurs cartes portant le nom donné",
   "general.validation.current-map": "Vous ne pouvez pas choisir la carte actuelle",
   "general.validation.minimum-rounds": "Le nombre minimum de tours pour utiliser cette commande est de {0}",
   "general.validation.warmup": "Commande désactivée pendant l'échauffement.",
