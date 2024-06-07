@@ -65,12 +65,16 @@ namespace cs2_rockthevote
 
     public class ExtendConfig : ICommandConfig, IVoteConfig
     {
+        public bool Enabled { get; set; } = true;
         public bool EnabledInWarmup { get; set; } = true;
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
         public int VotePercentage { get; set; } = 60;
         public bool ChangeMapImmediatly { get; set; } = false;
         public bool IgnoreSpec { get; set; } = true;
+        public float ExtendTimeStep { get; set; } = 15f;
+        public int ExtendRoundStep { get; set; } = 5;
+        public int ExtendLimit { get; set; } = 3;
     }
 
     public class VotemapConfig : ICommandConfig, IVoteConfig

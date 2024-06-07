@@ -97,6 +97,22 @@ Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote 
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 
+## Extend map vote
+Players can extend the current map by using the !ext command. Extends the mp_timelimit and mp_maxrounds cvar
+
+| Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
+| Enabled                 | Enable/Disable extend map vote functionality                                                                           | true          | false | true                                 |
+| EnabledInWarmup         | Enable/Disable EXT during warmup                                                                                       | true          | false | true                                 |
+| MinRounds               | Minimum rounds to enable ext                                         | 0             |       |      |
+| MinPlayers              | Minimum amount of players to enable ext                              |               |       |      |
+| VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
+| ChangeMapImmediatly     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
+| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15f           | 0     |                                      |
+| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
+| IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
+
 
 ## Votemap
 Players can vote to change to an specific map by using the votemap <mapname> command
