@@ -31,6 +31,7 @@ namespace cs2_rockthevote
         private readonly ChangeMapManager _changeMapManager;
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
+        private readonly ExtendCommand _extManager;
         private readonly TimeLeftCommand _timeLeft;
         private readonly NextMapCommand _nextMap;
 
@@ -47,6 +48,7 @@ namespace cs2_rockthevote
             _changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
+            _extManager = extManager;
             _timeLeft = timeLeft;
             _nextMap = nextMap;
         }
@@ -73,6 +75,10 @@ namespace cs2_rockthevote
                 if (text == "rtv")
                 {
                     _rtvManager.CommandHandler(player);
+                }
+                else if (text == "ext")
+                {
+                    _extManager.CommandHandler(player);
                 }
                 else if (text.StartsWith("nominate"))
                 {
@@ -102,10 +108,10 @@ namespace cs2_rockthevote
         {
             Config = config;
 
-            if (Config.Version < 10)
+            if (Config.Version < 11)
                 Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
-            if (Config.Version < 7)
+            if (Config.Version < 9)
                 throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
             _dependencyManager.OnConfigParsed(config);

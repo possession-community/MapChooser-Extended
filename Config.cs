@@ -63,6 +63,16 @@ namespace cs2_rockthevote
 
     }
 
+    public class ExtendConfig : ICommandConfig, IVoteConfig
+    {
+        public bool EnabledInWarmup { get; set; } = true;
+        public int MinPlayers { get; set; } = 0;
+        public int MinRounds { get; set; } = 0;
+        public int VotePercentage { get; set; } = 60;
+        public bool ChangeMapImmediatly { get; set; } = false;
+        public bool IgnoreSpec { get; set; } = true;
+    }
+
     public class VotemapConfig : ICommandConfig, IVoteConfig
     {
         public bool Enabled { get; set; } = true;
@@ -89,10 +99,11 @@ namespace cs2_rockthevote
 
     public class Config : IBasePluginConfig
     {
-        public int Version { get; set; } = 10;
+        public int Version { get; set; } = 11;
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
+        public ExtendConfig ExtendMapVote { get; set; } = new();
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
         public ushort MapsInCoolDown { get; set; } = 3;
