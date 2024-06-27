@@ -150,8 +150,9 @@ namespace cs2_rockthevote
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
+                _pluginState.MapChangeScheduled = false;
+                _pluginState.EofVoteHappening = false;
             }
-
 
             _pluginState.ExtendTimeVoteHappening = false;
         }
