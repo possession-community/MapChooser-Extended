@@ -59,7 +59,14 @@ namespace cs2_rockthevote
             if (!_timeLimitManager.UnlimitedTime)
             {
                 // Initialize the extend map vote
-                _extendRoundTimeManager.StartVote(_config);
+                if (!_pluginState.ExtendTimeVoteHappening)
+                {
+                    _extendRoundTimeManager.StartVote(_config);
+                }
+                else
+                {
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.notapplicable"));
+                }
             }
             else
             {
