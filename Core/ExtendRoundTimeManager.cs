@@ -150,8 +150,6 @@ namespace cs2_rockthevote
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
-                _pluginState.MapChangeScheduled = false;
-                _pluginState.EofVoteHappening = false;
             }
 
             _pluginState.ExtendTimeVoteHappening = false;
@@ -206,6 +204,9 @@ namespace cs2_rockthevote
                 // Update TimeRemaining in timeLimitManager
                 // TimeRemaining is in minutes, divide round time by 60
                 _timeLimitManager.TimeRemaining = _gameRules.RoundTime / 60;
+
+                _pluginState.MapChangeScheduled = false;
+                _pluginState.EofVoteHappening = false;
 
                 return true;
             }
