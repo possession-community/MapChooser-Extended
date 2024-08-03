@@ -50,5 +50,19 @@ namespace cs2_rockthevote
         public bool WarmupRunning => _gameRules?.WarmupPeriod ?? false;
 
         public int TotalRoundsPlayed => _gameRules?.TotalRoundsPlayed ?? 0;
+
+        public int RoundTime
+        {
+            get
+            {
+                return _gameRules?.RoundTime ?? 0;
+            }
+
+            set 
+            {
+                _gameRules.RoundTime = value;
+            }
+
+        }
     }
 }

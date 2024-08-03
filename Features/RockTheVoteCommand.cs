@@ -51,7 +51,10 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
-            _voteManager!.OnMapStart(map);
+            var newMapWaitingPeriod = new CounterStrikeSharp.API.Modules.Timers.Timer(20.0f, () =>
+            {
+                _voteManager!.OnMapStart(map);
+            });
         }
 
         public void CommandServerHandler(CCSPlayerController? player, CommandInfo command)
