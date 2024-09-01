@@ -14,8 +14,9 @@ namespace cs2_rockthevote
     {
         [ConsoleCommand("css_voteextend", "Extends time for the current map")]
         [ConsoleCommand("css_ve", "Extends time for the current map")]
+        [ConsoleCommand("css_ext", "Extends time for the current map")]
         [CommandHelper(whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
-        [RequiresPermissions("@css/vip")]
+        //[RequiresPermissions("@css/vip")]
         public void OnVoteExtendRoundTimeCommandCommand(CCSPlayerController? player, CommandInfo commandInfo)
         {
             _voteExtendRoundTime.CommandHandler(player!, commandInfo);

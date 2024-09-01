@@ -1,5 +1,4 @@
-﻿
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -33,6 +32,30 @@ namespace cs2_rockthevote
     }
     public class ExtendCommand : IPluginDependency<Plugin, Config>
     {
+        private readonly StringLocalizer _localizer;
+        private readonly GameRules _gameRules;
+        //private ExtManager _extManager;
+        private PluginState _pluginState;
+        private RtvConfig _config = new();
+        private AsyncVoteManager? _voteManager;
+
+        public void CommandServerHandler(CCSPlayerController? player, CommandInfo command)
+        {
+            // Only handle command from server
+            if (player is not null)
+                return;
+
+            // more todo later
+        }
+
+        public void CommandHandler(CCSPlayerController? player)
+        {
+            if (player is null)
+                return;
+
+            // more todo later
+        }
+
         public void PlayerDisconnected(CCSPlayerController? player)
         {
             if (player?.UserId != null)
@@ -41,7 +64,7 @@ namespace cs2_rockthevote
 
         public void OnConfigParsed(Config config)
         {
-            _config = config.Ext;
+           // _config = config.Ext;
             _voteManager = new AsyncVoteManager(_config);
         }
     }

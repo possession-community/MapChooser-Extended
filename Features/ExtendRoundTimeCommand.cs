@@ -11,7 +11,7 @@ namespace cs2_rockthevote
 {
     public partial class Plugin
     {
-        [ConsoleCommand("css_extend", "Extends time for the current map")]
+        [ConsoleCommand("css_extend", "Extends time for the current map")] // admin extend time
         [CommandHelper(minArgs: 1, usage: "<number of minutes to extend the map time ex. 30>", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
         [RequiresPermissions("@css/changemap")]
         public void OnExtendRoundTimeCommand(CCSPlayerController? player, CommandInfo commandInfo)
