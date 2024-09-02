@@ -32,6 +32,7 @@ namespace cs2_rockthevote
 
         Dictionary<string, int> Votes = new();
         int timeLeft = -1;
+        int _extendTimeMinutes = 20;
 
         private IEndOfMapConfig? _config = null;
 
@@ -113,7 +114,7 @@ namespace cs2_rockthevote
             KillTimer();
 
             // TODO: Move this into the cfg
-            var minutesToExtend = 15;
+            var minutesToExtend = _extendTimeMinutes; // use editable extend timer
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
