@@ -1,8 +1,8 @@
-﻿
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Utils;
 
 namespace cs2_rockthevote
 {
@@ -11,7 +11,8 @@ namespace cs2_rockthevote
         [ConsoleCommand("rtv", "Votes to rock the vote")]
         public void OnRTV(CCSPlayerController? player, CommandInfo? command)
         {
-            if (player is null) {
+            if (player is null)
+            {
                 // Handle server command
                 _rtvManager.CommandServerHandler(player, command);
             }
@@ -140,6 +141,13 @@ namespace cs2_rockthevote
                 return;
             }
 
+            // ignore spectators
+            if (player.Team == CsTeam.Spectator)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator"));
+                return;
+            }
+
             VoteResult result = _voteManager!.AddVote(player.UserId!.Value);
             switch (result.Result)
             {
@@ -191,6 +199,13 @@ namespace cs2_rockthevote
                 return;
             }
 
+            // ignore spectators
+            if (player.Team == CsTeam.Spectator)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator"));
+                return;
+            }
+
             _voteManager!.RemoveVote(player.UserId!.Value);
             player.PrintToChat(_localizer.LocalizeWithPrefix("rtv.vote-removed"));
         }
@@ -205,6 +220,9 @@ namespace cs2_rockthevote
         {
             _config = config.Rtv;
             _voteManager = new AsyncVoteManager(_config);
+
+            // set if ignore spectators
+            ServerManager.SetIgnoreSpectators(_config.IgnoreSpec);
         }
     }
 }

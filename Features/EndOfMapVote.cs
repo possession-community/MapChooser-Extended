@@ -35,7 +35,7 @@ namespace cs2_rockthevote
         }
         public EndOfMapVote(TimeLimitManager timeLimit, MaxRoundsManager maxRounds, PluginState pluginState, GameRules gameRules, EndMapVoteManager voteManager)
         {
-            _localizer = new StringLocalizer();
+            //_localizer = new StringLocalizer();
             _timeLimit = timeLimit;
             _maxRounds = maxRounds;
             _pluginState = pluginState;

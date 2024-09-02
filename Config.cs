@@ -25,6 +25,7 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; }
         public bool HudMenu { get; set; }
         public bool HideHudAfterVote { get; set; }
+        public int ExtendTimeStep { get; set; } 
     }
 
     public class EndOfMapConfig : IEndOfMapConfig
@@ -60,7 +61,7 @@ namespace cs2_rockthevote
         public bool DontChangeRtv { get; set; } = true;
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
-
+        public int ExtendTimeStep { get; set; } = 15; 
     }
 
     public class ExtendConfig : ICommandConfig, IVoteConfig
@@ -87,7 +88,6 @@ namespace cs2_rockthevote
         public int MinRounds { get; set; } = 0;
         public bool HudMenu { get; set; } = false;
         public bool IgnoreSpec { get; set; } = true;
-
     }
 
     public class TimeleftConfig
