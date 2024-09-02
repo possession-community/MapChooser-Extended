@@ -39,7 +39,7 @@ namespace cs2_rockthevote
         public int TriggerRoundsBeforEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
         public bool AllowExtend { get; set; } = true;
-        public float ExtendTimeStep { get; set; } = 15f;
+        public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
         public int ExtendLimit { get; set; } = 3;
     }
@@ -72,7 +72,7 @@ namespace cs2_rockthevote
         public int VotePercentage { get; set; } = 60;
         public bool ChangeMapImmediatly { get; set; } = false;
         public bool IgnoreSpec { get; set; } = true;
-        public float ExtendTimeStep { get; set; } = 15f;
+        public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
         public int ExtendLimit { get; set; } = 3;
     }
