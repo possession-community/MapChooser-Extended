@@ -146,7 +146,7 @@ namespace cs2_rockthevote
             }
             else
             {
-                // Extend round time
+                // Extend mp_timelimit
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));

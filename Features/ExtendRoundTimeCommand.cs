@@ -29,7 +29,7 @@ namespace cs2_rockthevote
             }
             else
             {
-                commandInfo.ReplyToCommand("You entered an incorrect integer for the roundtime. Try a number between 1 and 60.");
+                commandInfo.ReplyToCommand("You entered an incorrect integer for the map time limit. Try a number between 1 and 60.");
             }
         }
     }
@@ -61,10 +61,10 @@ namespace cs2_rockthevote
             {
                 if (_timeLimitManager.TimeRemaining > 1)
                 {
-                    // Update the round time
+                    // Update the mp_timelimit
                     _extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
 
-                    commandInfo.ReplyToCommand($"Increased round time by {timeToExtend} minute(s)");
+                    commandInfo.ReplyToCommand($"Increased map time limit by {timeToExtend} minute(s)");
 
                     return true;
                 }
