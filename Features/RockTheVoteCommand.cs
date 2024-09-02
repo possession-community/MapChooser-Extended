@@ -22,6 +22,21 @@ namespace cs2_rockthevote
             }
         }
 
+        [ConsoleCommand("unrtv", "Removes a vote to rock the vote")]
+        public void OnUnRTV(CCSPlayerController? player, CommandInfo? command)
+        {
+            if (player is null)
+            {
+                // Handle server command
+                _rtvManager.CommandServerHandler(player, command);
+            }
+            else
+            {
+                // Handle player command
+                _rtvManager.UnRTVCommandHandler(player!);
+            }
+        }
+
         [GameEventHandler(HookMode.Pre)]
         public HookResult EventPlayerDisconnectRTV(EventPlayerDisconnect @event, GameEventInfo @eventInfo)
         {
@@ -143,6 +158,41 @@ namespace cs2_rockthevote
                     _endmapVoteManager.StartVote(_config);
                     break;
             }
+        }
+
+        public void UnRTVCommandHandler(CCSPlayerController? player)
+        {
+            if (player is null)
+                return;
+
+            if (_pluginState.DisableCommands || !_config.Enabled)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
+                return;
+            }
+
+            if (_gameRules.WarmupRunning)
+            {
+                if (!_config.EnabledInWarmup)
+                {
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.warmup"));
+                    return;
+                }
+            }
+            else if (_config.MinRounds > 0 && _config.MinRounds > _gameRules.TotalRoundsPlayed)
+            {
+                player!.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.minimum-rounds", _config.MinRounds));
+                return;
+            }
+
+            if (ServerManager.ValidPlayerCount() < _config!.MinPlayers)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.minimum-players", _config!.MinPlayers));
+                return;
+            }
+
+            _voteManager!.RemoveVote(player.UserId!.Value);
+            player.PrintToChat(_localizer.LocalizeWithPrefix("rtv.vote-removed"));
         }
 
         public void PlayerDisconnected(CCSPlayerController? player)
