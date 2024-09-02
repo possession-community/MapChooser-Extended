@@ -59,5 +59,10 @@ namespace cs2_rockthevote.Core
         {
             LoadCvar();
         }
+
+        public void ExtendTime(int minutes)
+        {
+            // TODO: implement extending time
+        }
     }
 }

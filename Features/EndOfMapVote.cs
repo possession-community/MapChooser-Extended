@@ -3,12 +3,15 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Timers;
 using cs2_rockthevote.Core;
+using CounterStrikeSharp.API.Core.Attributes.Registration;
+using Microsoft.Extensions.DependencyInjection;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
 namespace cs2_rockthevote
 {
     public class EndOfMapVote : IPluginDependency<Plugin, Config>
     {
+        private readonly StringLocalizer? _localizer;
         private TimeLimitManager _timeLimit;
         private MaxRoundsManager _maxRounds;
         private PluginState _pluginState;
@@ -20,8 +23,19 @@ namespace cs2_rockthevote
         private ConVar? _gameType;
         private ConVar? _gameMode;
 
+        // overload for multilang support
+        public EndOfMapVote(StringLocalizer localizer, TimeLimitManager timeLimit, MaxRoundsManager maxRounds, PluginState pluginState, GameRules gameRules, EndMapVoteManager voteManager)
+        {
+            _localizer = localizer;
+            _timeLimit = timeLimit;
+            _maxRounds = maxRounds;
+            _pluginState = pluginState;
+            _gameRules = gameRules;
+            _voteManager = voteManager;
+        }
         public EndOfMapVote(TimeLimitManager timeLimit, MaxRoundsManager maxRounds, PluginState pluginState, GameRules gameRules, EndMapVoteManager voteManager)
         {
+            _localizer = new StringLocalizer();
             _timeLimit = timeLimit;
             _maxRounds = maxRounds;
             _pluginState = pluginState;
@@ -51,7 +65,9 @@ namespace cs2_rockthevote
         {
             KillTimer();
             if (_config.Enabled)
+            {        
                 _voteManager.StartVote(_config);
+            }
         }
 
         public void OnMapStart(string map)
