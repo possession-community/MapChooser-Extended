@@ -53,5 +53,11 @@
             if (index > -1)
                 votes.RemoveAt(index);
         }
+
+        public void ResetVotes()
+        {
+            votes.Clear();
+            VotesAlreadyReached = false;
+        }
     }
 }

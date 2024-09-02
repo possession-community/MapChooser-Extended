@@ -171,6 +171,9 @@ namespace cs2_rockthevote
                 if (_config != null)
                 {
                     _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
+                    _pluginState.MapChangeScheduled = false;
+                    _pluginState.EofVoteHappening = false;
+                    _pluginState.MapChangeScheduled = false;
                 }
             }
             else

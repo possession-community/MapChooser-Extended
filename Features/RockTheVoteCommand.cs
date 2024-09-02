@@ -144,7 +144,7 @@ namespace cs2_rockthevote
             // ignore spectators
             if (player.Team == CsTeam.Spectator)
             {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator"));
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator-blocked"));
                 return;
             }
 
@@ -164,6 +164,9 @@ namespace cs2_rockthevote
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("rtv.rocked-the-vote", player.PlayerName)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.votes-reached"));
                     _endmapVoteManager.StartVote(_config);
+
+                    // reset vote status
+                    _voteManager.ResetVotes();
                     break;
             }
         }
@@ -202,7 +205,7 @@ namespace cs2_rockthevote
             // ignore spectators
             if (player.Team == CsTeam.Spectator)
             {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator"));
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.spectator-blocked"));
                 return;
             }
 
