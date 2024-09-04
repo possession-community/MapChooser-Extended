@@ -1,7 +1,7 @@
 # CS2 Rock The Vote
 ![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/abnerfs/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/abnerfs/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
 
-![image](https://github.com/Oz-Lin/cs2-rockthevote/assets/14078661/a603d1b6-ba35-4d5a-b887-1b14058a8050)
+![image](https://media.discordapp.net/attachments/1159544596431376465/1280140956137685180/image.png?ex=66d8f9eb&is=66d7a86b&hm=82beee5e739f419f601050dac9bb686520a9fb7781baa938d4871215a8b5a172&=&format=webp&quality=lossless&width=1091&height=425)
 
 General purpose map voting plugin, started as a simple RTV and now has more features
 
@@ -12,45 +12,53 @@ Please drop a ⭐ star in the repository
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
 
-# Instalation
+# Installation
 - Download the latest release from https://github.com/Oz-Lin/cs2-rockthevote/releases
 - Extract the .zip file into `addons/counterstrikesharp/plugins`
 - Enjoy
 
 # Features
 - Reads from a custom maplist
-- RTV Command
+- RTV/unrtv Command
 - Timeleft command
-- Nominate command
+- Nominate command (with partial map name matching [#31](https://github.com/abnerfs/cs2-rockthevote/pull/31))
 - Votemap command
 - Supports workshop maps
 - Nextmap command
+- Ignore players in Spectators from vote count
+- Added "Extend current map" in end of map vote
+- [VIP flag] Vote to extend current map by time limit
+- [Admin flag] Extend current map time limit
+- Force RTV from the server side [#70](https://github.com/abnerfs/cs2-rockthevote/pull/70)
 - Fully configurable
 - Translated by the community
+- **Fixed issue where players were prevented from using RTV command again after "extend next map" wins**
 
 # Work in Progress
-- Vote to extend current map by time limit and/or maximum rounds
-- Ignore players in Spectators from vote count
+- Vote to extend current map by maximum rounds as well
 - Cooldown to start another RTV after the last vote
+- Nomlist command to see who nominated which map
+- Allow players to type !revote to change the option if they made a mistake during votes
 
 # Translations
 | Language             | Contributor          |
 | -------------------- | -------------------- |
-| Brazilian Portuguese | abnerfs              |
-| English              | abnerfs              |
-| Ukrainian            | panikajo             |
-| Turkish              | brkvlr               |
-| Russian              | Auttend              |
-| Latvian              | rcon420              |
-| Hungarian            | Chickender, lovasatt |
-| Polish               | D3X                  |
-| French               | o3LL                 |
-| Chinese (zh-Hans)    | himenekocn           |
+| Brazilian Portuguese (outdated)| abnerfs              |
+| English              | abnerfs + Oz-Lin             |
+| Ukrainian (outdated) | panikajo             |
+| Turkish (outdated)             | brkvlr               |
+| Russian (outdated)             | Auttend              |
+| Latvian (outdated)             | rcon420              |
+| Hungarian (outdated)           | Chickender, lovasatt |
+| Polish (outdated)              | D3X                  |
+| French (outdated)              | o3LL                 |
+| Chinese (zh-Hans)    | himenekocn + Oz-Lin          |
+| Chinese (zh-Hant)    | himenekocn + Oz-Lin          |
 
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
 - Changes in the config file will require you to reload the plugin or restart the server (change the map won't work).
-- Maps that will be used in RTV/nominate/votemap/end of map vote are located in addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt
+- Maps that will be used in RTV/nominate/votemap/end of map vote are located in addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt (rename maplist.example.txt to maplist.txt)
 
 ## General config
 | Config         | Description                                                                      | Default Value | Min | Max |
@@ -93,7 +101,7 @@ Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote 
 | TriggerRoundsBeforEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
 | AllowExtend             | Option to extend the current map                                                                                       | true          | false | true                                 |
-| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15f           | 0     |                                      |
+| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 
@@ -108,7 +116,7 @@ Players can extend the current map by using the !ext command. Extends the mp_tim
 | MinPlayers              | Minimum amount of players to enable ext                              |               |       |      |
 | VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
 | ChangeMapImmediatly     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
-| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15f           | 0     |                                      |
+| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 | IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
@@ -157,6 +165,13 @@ de_dust2
 # Server commands
 
 - rtv [seconds] - Trigger a map vote externally that will change the map immediately with an optional seconds parameter for voting duration (useful for gamemodes like GunGame)
+
+# Admin commands
+- css_extend [minutes] - Extend the current map time limit mp_timelimit by minutes 
+
+# Vip commands
+Requires "@css/vip" permission
+- css_ve or css_voteextend - Vote to initialise extending the current map
 
 # Limitations
  - Plugins is still under development and a lot of functionality is still going to be added in the future.
