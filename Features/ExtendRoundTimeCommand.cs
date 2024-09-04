@@ -64,7 +64,7 @@ namespace cs2_rockthevote
                     // Update the mp_timelimit
                     _extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
 
-                    commandInfo.ReplyToCommand($"Increased map time limit by {timeToExtend} minute(s)");
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.admin-extend-time", timeToExtend));
 
                     return true;
                 }
