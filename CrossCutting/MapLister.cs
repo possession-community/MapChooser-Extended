@@ -54,14 +54,14 @@ namespace cs2_rockthevote
                 LoadMaps();
         }
 
-
         public void OnLoad(Plugin plugin)
         {
             _plugin = plugin;
             LoadMaps();
         }
 
-        // returns "" if there's no matching or if there's more than one
+        // returns "" if there's no matching
+        // if there's more than one matching name, list all the matching names for players to choose
         // otherwise, returns the matching name
         public string GetSingleMatchingMapName(string map, CCSPlayerController player, StringLocalizer _localizer)
         {
@@ -81,11 +81,12 @@ namespace cs2_rockthevote
             else if (matchingMaps.Count > 1)
             {
                 player!.PrintToChat(_localizer.LocalizeWithPrefix("nominate.multiple-maps-containing-name"));
+                player!.PrintToChat(string.Join(", ", matchingMaps));
+                //return matchingMaps;
                 return "";
             }
 
             return matchingMaps[0];
         }
-
     }
 }
