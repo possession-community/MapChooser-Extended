@@ -37,6 +37,8 @@ namespace cs2_rockthevote
         private MapCooldown _mapCooldown;
         private MapLister _mapLister;
 
+        public Dictionary<int, List<string>> Nomlist => Nominations;
+
         public NominationCommand(MapLister mapLister, GameRules gamerules, StringLocalizer localizer, PluginState pluginState, MapCooldown mapCooldown)
         {
             _mapLister = mapLister;
