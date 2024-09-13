@@ -188,6 +188,9 @@ namespace cs2_rockthevote
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("general.changing-map-next-round", winner.Key));
                 }
             }
+
+            _pluginState.EofVoteHappening = false;
+            _pluginState.CommandsDisabled = true;
         }
 
         IList<T> Shuffle<T>(Random rng, IList<T> array)

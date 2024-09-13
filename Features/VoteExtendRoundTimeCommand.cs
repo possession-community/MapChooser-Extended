@@ -38,7 +38,7 @@ namespace cs2_rockthevote
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
         private PluginState _pluginState;
-        private RtvConfig _config = new();
+        private ExtendMapConfig _config = new();
 
         public VoteExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer, PluginState pluginState)
         {
@@ -51,6 +51,18 @@ namespace cs2_rockthevote
 
         public void CommandHandler(CCSPlayerController player, CommandInfo commandInfo)
         {
+            if (_pluginState.VoteExtendsLeft == 0)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.extend-limit-met"));
+                return;
+            }
+
+            if (_pluginState.EofVoteHappening)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
+                return;
+            }
+
             if (_gameRules.WarmupRunning)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.warmup"));
@@ -77,7 +89,8 @@ namespace cs2_rockthevote
 
         public void OnConfigParsed(Config config)
         {
-            _config = config.Rtv;
+            _config = config.ExtendMapVote;
+            _pluginState.VoteExtendsLeft = config.ExtendMapVote.VoteExtendLimit;
         }
     }
 }

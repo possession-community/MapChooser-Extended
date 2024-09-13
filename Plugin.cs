@@ -36,6 +36,7 @@ namespace cs2_rockthevote
         private readonly ExtendRoundTimeCommand _extendRoundTime;
         private readonly VoteExtendRoundTimeCommand _voteExtendRoundTime;
         private readonly NextMapCommand _nextMap;
+        private readonly EndMapVoteManager _endMapVoteManager;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
@@ -46,7 +47,8 @@ namespace cs2_rockthevote
             TimeLeftCommand timeLeft,
             ExtendRoundTimeCommand extendRoundTime,
             VoteExtendRoundTimeCommand voteExtendRoundTime,
-            NextMapCommand nextMap)
+            NextMapCommand nextMap,
+            EndMapVoteManager endMapVoteManager)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
@@ -58,6 +60,7 @@ namespace cs2_rockthevote
             _extendRoundTime = extendRoundTime;
             _voteExtendRoundTime = voteExtendRoundTime;
             _nextMap = nextMap;
+            _endMapVoteManager = endMapVoteManager;
         }
 
         public Config? Config { get; set; }
@@ -107,6 +110,10 @@ namespace cs2_rockthevote
                 {
                     _nextMap.CommandHandler(player);
                 }
+                else if (text == "revote")
+                {
+                    _endMapVoteManager.HandleRevoteCommand(player);
+                }
             }
             return HookResult.Continue;
         }
@@ -115,10 +122,10 @@ namespace cs2_rockthevote
         {
             Config = config;
 
-            if (Config.Version < 11)
+            if (Config.Version < 12)
                 Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
-            if (Config.Version < 9)
+            if (Config.Version < 10)
                 throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
             _dependencyManager.OnConfigParsed(config);

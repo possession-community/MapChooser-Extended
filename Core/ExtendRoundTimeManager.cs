@@ -34,7 +34,7 @@ namespace cs2_rockthevote
         int timeLeft = -1;
         public int extendTimeMinutes = 20;
 
-        private IEndOfMapConfig? _config = null;
+        private IExtendMapConfig? _config = null;
 
         private int _canVote = 0;
         private Plugin? _plugin;
@@ -47,6 +47,7 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
+            _pluginState.VoteExtendsLeft = _config!.VoteExtendLimit;
             Votes.Clear();
             timeLeft = 0;
             KillTimer();
@@ -110,11 +111,14 @@ namespace cs2_rockthevote
 
         void ExtendTimeVote()
         {
-            bool mapEnd = _config is EndOfMapConfig;
             KillTimer();
 
             // TODO: Move this into the cfg
+<<<<<<< HEAD
             var minutesToExtend = extendTimeMinutes; // use editable extend timer
+=======
+            var minutesToExtend = _config!.ExtendAmount;
+>>>>>>> razpberry/v1.5.1-dev
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
@@ -151,12 +155,14 @@ namespace cs2_rockthevote
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
+                _pluginState.VoteExtendsLeft -= 1;
+                _pluginState.CommandsDisabled = false;
             }
 
             _pluginState.ExtendTimeVoteHappening = false;
         }
 
-        public void StartVote(IEndOfMapConfig config)
+        public void StartVote(IExtendMapConfig config)
         {
             Votes.Clear();
             _pluginState.ExtendTimeVoteHappening = true;
