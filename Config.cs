@@ -32,7 +32,7 @@ namespace cs2_rockthevote
         public bool Enabled { get; set; }
         public int VoteDuration { get; set; }
         public int VotePercentage { get; set; }
-        public int ExtendAmount { get; set; }
+        public int ExtendTimeStep { get; set; }
         public bool HudMenu { get; set; }
         public int VoteExtendLimit { get; set; }
     }
@@ -109,12 +109,12 @@ namespace cs2_rockthevote
         public bool ShowToAll { get; set; } = false;
     }
 
-    public class ExtendMapConfig : IExtendMapConfig
+    public class VipExtendMapConfig : IExtendMapConfig
     {
         public bool Enabled { get; set; } = true;
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
-        public int ExtendAmount { get; set; } = 15;
+        public int ExtendTimeStep { get; set; } = 15;
         public int VoteExtendLimit { get; set; } = 3;
         public bool HudMenu { get; set; } = true;
     }
@@ -122,21 +122,15 @@ namespace cs2_rockthevote
 
     public class Config : IBasePluginConfig
     {
-<<<<<<< HEAD
-        public int Version { get; set; } = 11;
+        public int Version { get; set; } = 12;
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
         public ExtendConfig ExtendMapVote { get; set; } = new();
+        public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
+
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
         public ushort MapsInCoolDown { get; set; } = 3;
-=======
-        public int Version { get; set; } = 9;
-        public RtvConfig Rtv { get; set; } = new();
-        public VotemapConfig Votemap { get; set; } = new();
-        public EndOfMapConfig EndOfMapVote { get; set; } = new();
-        public ExtendMapConfig ExtendMapVote { get; set; } = new();
->>>>>>> razpberry/v1.5.1-dev
     }
 }

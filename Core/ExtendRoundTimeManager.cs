@@ -114,11 +114,7 @@ namespace cs2_rockthevote
             KillTimer();
 
             // TODO: Move this into the cfg
-<<<<<<< HEAD
-            var minutesToExtend = extendTimeMinutes; // use editable extend timer
-=======
-            var minutesToExtend = _config!.ExtendAmount;
->>>>>>> razpberry/v1.5.1-dev
+            var minutesToExtend = _config!.ExtendTimeStep; // use editable extend timer
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);

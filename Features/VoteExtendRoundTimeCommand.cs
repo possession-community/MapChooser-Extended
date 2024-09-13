@@ -38,7 +38,7 @@ namespace cs2_rockthevote
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
         private PluginState _pluginState;
-        private ExtendMapConfig _config = new();
+        private VipExtendMapConfig _config = new();
 
         public VoteExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer, PluginState pluginState)
         {
@@ -89,8 +89,8 @@ namespace cs2_rockthevote
 
         public void OnConfigParsed(Config config)
         {
-            _config = config.ExtendMapVote;
-            _pluginState.VoteExtendsLeft = config.ExtendMapVote.VoteExtendLimit;
+            _config = config.VipExtendMapVote;
+            _pluginState.VoteExtendsLeft = config.VipExtendMapVote.VoteExtendLimit;
         }
     }
 }
