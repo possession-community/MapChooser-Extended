@@ -1,7 +1,7 @@
 # CS2 Rock The Vote
 ![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/abnerfs/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/abnerfs/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
 
-![image](https://media.discordapp.net/attachments/1159544596431376465/1280140956137685180/image.png?ex=66d8f9eb&is=66d7a86b&hm=82beee5e739f419f601050dac9bb686520a9fb7781baa938d4871215a8b5a172&=&format=webp&quality=lossless&width=1091&height=425)
+![image](https://github.com/Oz-Lin/cs2-rockthevote/blob/main/example_image.png)
 
 General purpose map voting plugin, started as a simple RTV and now has more features
 
