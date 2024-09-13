@@ -46,6 +46,7 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
+            _pluginState.VoteExtendsLeft = _config!.VoteExtendLimit;
             Votes.Clear();
             timeLeft = 0;
             KillTimer();
@@ -149,6 +150,7 @@ namespace cs2_rockthevote
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
+                _pluginState.VoteExtendsLeft -= 1;
                 _pluginState.CommandsDisabled = false;
             }
 

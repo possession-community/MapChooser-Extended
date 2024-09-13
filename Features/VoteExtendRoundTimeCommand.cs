@@ -50,7 +50,12 @@ namespace cs2_rockthevote
 
         public void CommandHandler(CCSPlayerController player, CommandInfo commandInfo)
         {
-            player.PrintToChat($"_pluginState.EofVoteHappening{_pluginState.EofVoteHappening}");
+            if (_pluginState.VoteExtendsLeft == 0)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.extend-limit-met"));
+                return;
+            }
+
             if (_pluginState.EofVoteHappening)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
@@ -84,6 +89,7 @@ namespace cs2_rockthevote
         public void OnConfigParsed(Config config)
         {
             _config = config.ExtendMapVote;
+            _pluginState.VoteExtendsLeft = config.ExtendMapVote.VoteExtendLimit;
         }
     }
 }

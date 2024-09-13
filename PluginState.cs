@@ -6,6 +6,7 @@
         public bool EofVoteHappening { get; set; }
         public bool ExtendTimeVoteHappening { get; set; }
         public bool CommandsDisabled { get; set; }
+        public int VoteExtendsLeft { get; set; }
 
         public PluginState()
         {

@@ -30,6 +30,7 @@ namespace cs2_rockthevote
         public int VotePercentage { get; set; }
         public int ExtendAmount { get; set; }
         public bool HudMenu { get; set; }
+        public int VoteExtendLimit { get; set; }
     }
 
     public class EndOfMapConfig : IEndOfMapConfig
@@ -71,6 +72,7 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
         public int ExtendAmount { get; set; } = 15;
+        public int VoteExtendLimit { get; set; } = 3;
         public bool HudMenu { get; set; } = true;
     }
 
