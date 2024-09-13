@@ -28,7 +28,7 @@ namespace cs2_rockthevote
 
     public class NominationCommand : IPluginDependency<Plugin, Config>
     {
-        Dictionary<int, List<string>> Nominations = new();
+        Dictionary<int, (string PlayerName, List<string> Maps)> Nominations = new();
         ChatMenu? nominationMenu = null;
         private RtvConfig _config = new();
         private GameRules _gamerules;
@@ -37,7 +37,7 @@ namespace cs2_rockthevote
         private MapCooldown _mapCooldown;
         private MapLister _mapLister;
 
-        public Dictionary<int, List<string>> Nomlist => Nominations;
+        public Dictionary<int, (string PlayerName, List<string> Maps)> Nomlist => Nominations;
 
         public NominationCommand(MapLister mapLister, GameRules gamerules, StringLocalizer localizer, PluginState pluginState, MapCooldown mapCooldown)
         {
@@ -48,7 +48,6 @@ namespace cs2_rockthevote
             _mapCooldown = mapCooldown;
             _mapCooldown.EventCooldownRefreshed += OnMapsLoaded;
         }
-
 
         public void OnMapStart(string map)
         {
@@ -140,13 +139,13 @@ namespace cs2_rockthevote
 
             var userId = player.UserId!.Value;
             if (!Nominations.ContainsKey(userId))
-                Nominations[userId] = new();
+                Nominations[userId] = (player.PlayerName, new List<string>());
 
-            bool alreadyVoted = Nominations[userId].IndexOf(matchingMap) != -1;
+            bool alreadyVoted = Nominations[userId].Maps.IndexOf(matchingMap) != -1;
             if (!alreadyVoted)
-                Nominations[userId].Add(matchingMap);
+                Nominations[userId].Maps.Add(matchingMap);
 
-            var totalVotes = Nominations.Select(x => x.Value.Where(y => y == matchingMap).Count())
+            var totalVotes = Nominations.Select(x => x.Value.Maps.Where(y => y == matchingMap).Count())
                 .Sum();
 
             if (!alreadyVoted)
@@ -154,7 +153,6 @@ namespace cs2_rockthevote
             else
                 player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated", matchingMap, totalVotes));
         }
-    
 
         public List<string> NominationWinners()
         {
@@ -162,7 +160,7 @@ namespace cs2_rockthevote
                 return new List<string>();
 
             var rawNominations = Nominations
-                .Select(x => x.Value)
+                .Select(x => x.Value.Maps)
                 .Aggregate((acc, x) => acc.Concat(x).ToList());
 
             return rawNominations
@@ -176,7 +174,7 @@ namespace cs2_rockthevote
         public void PlayerDisconnected(CCSPlayerController player)
         {
             int userId = player.UserId!.Value;
-            if (!Nominations.ContainsKey(userId))
+            if (Nominations.ContainsKey(userId))
                 Nominations.Remove(userId);
         }
     }

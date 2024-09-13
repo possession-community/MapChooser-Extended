@@ -8,8 +8,6 @@ using CounterStrikeSharp.API.Core.Plugin;
 using CounterStrikeSharp.API.Modules.Commands;
 using cs2_rockthevote.Core;
 
-
-// public class NominationListCommand : IPluginDependency<Plugin, Config>
 public partial class Plugin
 {
 
@@ -20,10 +18,14 @@ public partial class Plugin
     {
 
         var Nomlist = _nominationManager.Nomlist
-            .Values
-            .SelectMany(list => list)
+            .SelectMany(kvp => kvp.Value.Maps.Select(map => new { PlayerName = kvp.Key, Map = map }))
             .Distinct()
-            .Select((map, index) => $"{index + 1}. {map}");
+            .Select((entry, index) =>
+            {
+                var playerName = ServerManager.ValidPlayers()
+                    .FirstOrDefault(p => p.UserId == entry.PlayerName)?.PlayerName ?? "Unknown";
+                return $"{index + 1}. {entry.Map} - {playerName}";
+            });
 
         string Maplist = string.Join(NewLine.ToString(), Nomlist);
 
