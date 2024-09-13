@@ -15,12 +15,20 @@ namespace cs2_rockthevote
         public bool ChangeMapImmediatly { get; set; }
     }
 
-
     public interface IEndOfMapConfig
     {
         public int MapsToShow { get; set; }
         public bool ChangeMapImmediatly { get; set; }
         public int VoteDuration { get; set; }
+        public bool HudMenu { get; set; }
+    }
+
+    public interface IExtendMapConfig
+    {
+        public bool Enabled { get; set; }
+        public int VoteDuration { get; set; }
+        public int VotePercentage { get; set; }
+        public int ExtendAmount { get; set; }
         public bool HudMenu { get; set; }
     }
 
@@ -57,12 +65,22 @@ namespace cs2_rockthevote
         public int MinRounds { get; set; } = 0;
     }
 
+    public class ExtendMapConfig : IExtendMapConfig
+    {
+        public bool Enabled { get; set; } = true;
+        public int VoteDuration { get; set; } = 30;
+        public int VotePercentage { get; set; } = 60;
+        public int ExtendAmount { get; set; } = 15;
+        public bool HudMenu { get; set; } = true;
+    }
+
 
     public class Config : IBasePluginConfig
     {
-        public int Version { get; set; } = 8;
+        public int Version { get; set; } = 9;
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
+        public ExtendMapConfig ExtendMapVote { get; set; } = new();
     }
 }
