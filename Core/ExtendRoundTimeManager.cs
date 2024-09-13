@@ -33,7 +33,7 @@ namespace cs2_rockthevote
         Dictionary<string, int> Votes = new();
         int timeLeft = -1;
 
-        private IEndOfMapConfig? _config = null;
+        private IExtendMapConfig? _config = null;
 
         private int _canVote = 0;
         private Plugin? _plugin;
@@ -109,11 +109,10 @@ namespace cs2_rockthevote
 
         void ExtendTimeVote()
         {
-            bool mapEnd = _config is EndOfMapConfig;
             KillTimer();
 
             // TODO: Move this into the cfg
-            var minutesToExtend = 15;
+            var minutesToExtend = _config!.ExtendAmount;
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
@@ -156,7 +155,7 @@ namespace cs2_rockthevote
             _pluginState.ExtendTimeVoteHappening = false;
         }
 
-        public void StartVote(IEndOfMapConfig config)
+        public void StartVote(IExtendMapConfig config)
         {
             Votes.Clear();
             _pluginState.ExtendTimeVoteHappening = true;

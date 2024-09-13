@@ -37,7 +37,7 @@ namespace cs2_rockthevote
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
         private PluginState _pluginState;
-        private RtvConfig _config = new();
+        private ExtendMapConfig _config = new();
 
         public VoteExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer, PluginState pluginState)
         {
@@ -83,7 +83,7 @@ namespace cs2_rockthevote
 
         public void OnConfigParsed(Config config)
         {
-            _config = config.Rtv;
+            _config = config.ExtendMapVote;
         }
     }
 }
