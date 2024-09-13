@@ -50,6 +50,13 @@ namespace cs2_rockthevote
 
         public void CommandHandler(CCSPlayerController player, CommandInfo commandInfo)
         {
+            player.PrintToChat($"_pluginState.EofVoteHappening{_pluginState.EofVoteHappening}");
+            if (_pluginState.EofVoteHappening)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
+                return;
+            }
+
             if (_gameRules.WarmupRunning)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.warmup"));
