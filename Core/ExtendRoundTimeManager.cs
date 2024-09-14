@@ -47,7 +47,7 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
-            _pluginState.VoteExtendsLeft = _config!.VoteExtendLimit;
+            _pluginState.VoteExtendsLeft = _config!.ExtendLimit;
             Votes.Clear();
             timeLeft = 0;
             KillTimer();

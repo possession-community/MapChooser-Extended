@@ -90,7 +90,7 @@ namespace cs2_rockthevote
         public void OnConfigParsed(Config config)
         {
             _config = config.VipExtendMapVote;
-            _pluginState.VoteExtendsLeft = config.VipExtendMapVote.VoteExtendLimit;
+            _pluginState.VoteExtendsLeft = config.VipExtendMapVote.ExtendLimit;
         }
     }
 }

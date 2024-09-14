@@ -8,6 +8,7 @@ namespace cs2_rockthevote
 {
     public partial class Plugin
     {
+        [ConsoleCommand("css_rtv", "Votes to rock the vote")]
         [ConsoleCommand("rtv", "Votes to rock the vote")]
         public void OnRTV(CCSPlayerController? player, CommandInfo? command)
         {
@@ -23,6 +24,7 @@ namespace cs2_rockthevote
             }
         }
 
+        [ConsoleCommand("css_unrtv", "Removes a vote to rock the vote")]
         [ConsoleCommand("unrtv", "Removes a vote to rock the vote")]
         public void OnUnRTV(CCSPlayerController? player, CommandInfo? command)
         {
@@ -51,7 +53,7 @@ namespace cs2_rockthevote
     {
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
-        private EndMapVoteManager _endmapVoteManager;
+        private EndMapVoteManager _endmapVoteManager, _extendConfig;
         private PluginState _pluginState;
         private RtvConfig _config = new();
         private AsyncVoteManager? _voteManager;

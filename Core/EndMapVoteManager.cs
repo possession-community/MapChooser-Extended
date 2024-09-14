@@ -36,8 +36,8 @@ namespace cs2_rockthevote
             _pluginState = pluginState;
             _mapCooldown = mapCooldown;
             _extendRoundTimeManager = extendRoundTimeManager;
-            _timeLimitManager = timeLimitManager; 
-            _gameRules = gameRules; 
+            _timeLimitManager = timeLimitManager;
+            _gameRules = gameRules;
         }
 
         private readonly MapLister _mapLister;
@@ -48,8 +48,8 @@ namespace cs2_rockthevote
         private MapCooldown _mapCooldown;
         private Timer? Timer;
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
-        private readonly TimeLimitManager _timeLimitManager; 
-        private readonly GameRules _gameRules; 
+        private readonly TimeLimitManager _timeLimitManager;
+        private readonly GameRules _gameRules;
 
         Dictionary<string, int> Votes = new();
         int timeLeft = -1;
@@ -171,10 +171,13 @@ namespace cs2_rockthevote
                 if (_config != null)
                 {
                     _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _extendRoundTimeManager.extendTimeMinutes, percent, totalVotes)); //variable extendTimeMinutes is still hard-coded
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _config.ExtendTimeStep, percent, totalVotes));
+
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;
                     _pluginState.MapChangeScheduled = false;
+                    _pluginState.CommandsDisabled = false;
+                    _pluginState.VoteExtendsLeft -= 1;
                 }
             }
             else
@@ -185,12 +188,13 @@ namespace cs2_rockthevote
                 else
                 {
                     if (!mapEnd)
+                    {
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("general.changing-map-next-round", winner.Key));
+                        _pluginState.CommandsDisabled = true;
+                    }
                 }
             }
-
             _pluginState.EofVoteHappening = false;
-            _pluginState.CommandsDisabled = true;
         }
 
         IList<T> Shuffle<T>(Random rng, IList<T> array)
@@ -206,7 +210,7 @@ namespace cs2_rockthevote
             return array;
         }
 
-        public void StartVote(IEndOfMapConfig config)
+        public void StartVote(IEndOfMapConfig config) 
         {
             Votes.Clear();
             _voted.Clear();

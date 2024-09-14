@@ -33,11 +33,12 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; }
         public int VotePercentage { get; set; }
         public int ExtendTimeStep { get; set; }
+        public int ExtendRoundStep { get; set; } 
         public bool HudMenu { get; set; }
-        public int VoteExtendLimit { get; set; }
+        public int ExtendLimit { get; set; }
     }
 
-    public class EndOfMapConfig : IEndOfMapConfig
+    public class EndOfMapConfig : IEndOfMapConfig, IExtendMapConfig
     {
         public bool Enabled { get; set; } = true;
         public int MapsToShow { get; set; } = 6;
@@ -51,6 +52,7 @@ namespace cs2_rockthevote
         public bool AllowExtend { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
+        public int VotePercentage { get; set; } = 60;
         public int ExtendLimit { get; set; } = 3;
     }
 
@@ -115,7 +117,8 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
         public int ExtendTimeStep { get; set; } = 15;
-        public int VoteExtendLimit { get; set; } = 3;
+        public int ExtendRoundStep { get; set; } = 5;
+        public int ExtendLimit { get; set; } = 3;
         public bool HudMenu { get; set; } = true;
     }
 
