@@ -177,7 +177,7 @@ namespace cs2_rockthevote
                     _pluginState.EofVoteHappening = false;
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.CommandsDisabled = false;
-                    _pluginState.VoteExtendsLeft -= 1;
+                    _pluginState.ExtendsLeft -= 1;
                 }
             }
             else

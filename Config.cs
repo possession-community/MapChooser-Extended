@@ -56,7 +56,7 @@ namespace cs2_rockthevote
         public int ExtendLimit { get; set; } = 3;
     }
 
-    public class RtvConfig : ICommandConfig, IVoteConfig, IEndOfMapConfig
+    public class RtvConfig : ICommandConfig, IVoteConfig, IEndOfMapConfig, IExtendMapConfig
     {
         public bool Enabled { get; set; } = true;
         public bool EnabledInWarmup { get; set; } = true;
@@ -73,6 +73,9 @@ namespace cs2_rockthevote
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
         public int ExtendTimeStep { get; set; } = 15; 
+        public int ExtendRoundStep { get; set; } = 5;
+        public int ExtendLimit { get; set; } = 3;
+
     }
 
     public class ExtendConfig : ICommandConfig, IVoteConfig

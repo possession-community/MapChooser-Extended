@@ -32,7 +32,6 @@ namespace cs2_rockthevote
 
         Dictionary<string, int> Votes = new();
         int timeLeft = -1;
-        public int extendTimeMinutes = 20;
 
         private IExtendMapConfig? _config = null;
 
@@ -47,7 +46,7 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
-            _pluginState.VoteExtendsLeft = _config!.ExtendLimit;
+            _pluginState.ExtendsLeft = _config!.ExtendLimit;
             Votes.Clear();
             timeLeft = 0;
             KillTimer();
@@ -113,7 +112,6 @@ namespace cs2_rockthevote
         {
             KillTimer();
 
-            // TODO: Move this into the cfg
             var minutesToExtend = _config!.ExtendTimeStep; // use editable extend timer
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
@@ -151,7 +149,7 @@ namespace cs2_rockthevote
                 ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
-                _pluginState.VoteExtendsLeft -= 1;
+                _pluginState.ExtendsLeft -= 1;
                 _pluginState.CommandsDisabled = false;
             }
 
@@ -162,18 +160,19 @@ namespace cs2_rockthevote
         {
             Votes.Clear();
             _pluginState.ExtendTimeVoteHappening = true;
-            _config = config;
+            _config = config ?? throw new ArgumentNullException(nameof(config));
 
             _canVote = ServerManager.ValidPlayerCount();
 
             ChatMenu menu = new(_localizer.Localize("extendtime.hud.menu-title"));
 
-            var answers = new List<string>(){"Yes", "No"};
+            var answers = new List<string>() { "Yes", "No" };
 
             foreach (var answer in answers)
             {
                 Votes[answer] = 0;
-                menu.AddMenuOption(answer, (player, option) => {
+                menu.AddMenuOption(answer, (player, option) =>
+                {
                     ExtendTimeVoted(player, answer);
                     MenuManager.CloseActiveMenu(player);
                 });

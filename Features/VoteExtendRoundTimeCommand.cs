@@ -51,7 +51,7 @@ namespace cs2_rockthevote
 
         public void CommandHandler(CCSPlayerController player, CommandInfo commandInfo)
         {
-            if (_pluginState.VoteExtendsLeft == 0)
+            if (_pluginState.ExtendsLeft == 0)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.extend-limit-met"));
                 return;
@@ -90,7 +90,7 @@ namespace cs2_rockthevote
         public void OnConfigParsed(Config config)
         {
             _config = config.VipExtendMapVote;
-            _pluginState.VoteExtendsLeft = config.VipExtendMapVote.ExtendLimit;
+            _pluginState.ExtendsLeft = config.VipExtendMapVote.ExtendLimit;
         }
     }
 }
