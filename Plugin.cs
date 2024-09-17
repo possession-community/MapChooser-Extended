@@ -99,6 +99,12 @@ namespace cs2_rockthevote
                     var map = split.Length > 1 ? split[1].Trim() : "";
                     _nominationManager.CommandHandler(player, map);
                 }
+                else if (text.StartsWith("nom"))
+                {
+                    var split = text.Split("nom");
+                    var map = split.Length > 1 ? split[1].Trim() : "";
+                    _nominationManager.CommandHandler(player, map);
+                }
                 else if (text.StartsWith("votemap"))
                 {
                     var split = text.Split("votemap");
@@ -113,6 +119,7 @@ namespace cs2_rockthevote
                 {
                     _nextMap.CommandHandler(player);
                 }
+                // TODO: Implement this later
                 //else if (text == "revote")
                 //{
                 //    _endMapVoteManager.HandleRevoteCommand(player);
