@@ -171,6 +171,11 @@ namespace cs2_rockthevote
                 .ToList();
         }
 
+        public void ResetNominations()
+        {
+            Nominations.Clear();
+        }
+
         public void PlayerDisconnected(CCSPlayerController player)
         {
             int userId = player.UserId!.Value;
