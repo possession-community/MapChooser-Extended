@@ -1,4 +1,6 @@
-﻿namespace cs2_rockthevote
+﻿using CounterStrikeSharp.API;
+
+namespace cs2_rockthevote
 {
     public class PluginState : IPluginDependency<Plugin, Config>
     {
@@ -21,6 +23,10 @@
             EofVoteHappening = false;
             ExtendTimeVoteHappening = false;
             CommandsDisabled = false;
+            if (MapChangeScheduled || EofVoteHappening || ExtendTimeVoteHappening || CommandsDisabled)
+            {
+                Server.ExecuteCommand("css_plugins reload RockTheVote");
+            }
         }
     }
 }

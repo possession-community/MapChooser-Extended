@@ -175,7 +175,6 @@ namespace cs2_rockthevote
 
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;
-                    _pluginState.MapChangeScheduled = false;
                     _pluginState.CommandsDisabled = false;
                     _pluginState.ExtendsLeft -= 1;
 
