@@ -24,7 +24,7 @@ namespace cs2_rockthevote
             Maps = null;
         }
 
-        void LoadMaps()
+        public void LoadMaps()
         {
             Clear();
             string mapsFile = Path.Combine(_plugin!.ModulePath, "../maplist.txt");
@@ -87,6 +87,11 @@ namespace cs2_rockthevote
             }
 
             return matchingMaps[0];
+        }
+
+        public IEnumerable<Map> GetMaps()
+        {
+            return Maps ?? Enumerable.Empty<Map>();
         }
     }
 }
