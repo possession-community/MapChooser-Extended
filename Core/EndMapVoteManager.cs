@@ -50,6 +50,8 @@ namespace cs2_rockthevote
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly TimeLimitManager _timeLimitManager;
         private readonly GameRules _gameRules;
+        //private int _extendTimeStep;
+
 
         Dictionary<string, int> Votes = new();
         int timeLeft = -1;
@@ -75,6 +77,7 @@ namespace cs2_rockthevote
             timeLeft = 0;
             mapsEllected.Clear();
             KillTimer();
+            //_extendTimeStep = _config.ExtendTimeStep;
 
             // Restore the config if it was changed by the server command
             if (_configBackup is not null)
@@ -170,7 +173,7 @@ namespace cs2_rockthevote
             {
                 if (_config != null)
                 {
-                    _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
+                    _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
                     Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _config.ExtendTimeStep, percent, totalVotes));
 
                     _pluginState.MapChangeScheduled = false;

@@ -208,6 +208,13 @@ namespace cs2_rockthevote
         {
             try
             {
+                /* IDK why, razpberry decided to sync the mp_timelimit by current mp_roundtime here.
+                 Maybe suits the use case for bhup/surf/kz, but bugged the use case that depends on rounds.
+
+                 Case 1: When !timeleft is around 10 minutes and the current round time is 55 minutes remaining, after !rtv extends by 20 minutes, the current map round time is 75 minutes left, and !timeleft also sets to 75 minutes. 
+                   
+                 Case 2: When !timeleft is around 55 minutes and the current round time is 2 minutes left, after rtv extends it by 20 minutes, the current map round is 22 minutes left, and !timeleft also follows 22 minutes.
+                */
                 // RoundTime is in seconds, so multiply by 60 to convert to minutes
                 gameRules.RoundTime += (minutesToExtendBy * 60);
 
@@ -217,6 +224,30 @@ namespace cs2_rockthevote
                 // Update TimeRemaining in timeLimitManager
                 // TimeRemaining is in minutes, divide round time by 60
                 _timeLimitManager.TimeRemaining = _gameRules.RoundTime / 60;
+
+                _pluginState.MapChangeScheduled = false;
+                _pluginState.EofVoteHappening = false;
+                _pluginState.CommandsDisabled = false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //Logger.LogWarning("Something went wrong when updating the round time {message}", ex.Message);
+
+                return false;
+            }
+        }
+
+
+        public bool ExtendMapTimeLimit(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
+        {
+            try
+            {
+                timeLimitManager.TimeLimitValue += (minutesToExtendBy * 60); //convert to seconds
+
+                // Update TimeRemaining
+                timeLimitManager.TimeRemaining = (timeLimitManager.TimeLimitValue/60) - (timeLimitManager.TimePlayed/60);
 
                 _pluginState.MapChangeScheduled = false;
                 _pluginState.EofVoteHappening = false;
