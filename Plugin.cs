@@ -25,7 +25,6 @@ namespace cs2_rockthevote
         public override string ModuleAuthor => "abnerfs, Oz-Lin";
         public override string ModuleDescription => "https://github.com/oz-lin/cs2-rockthevote";
 
-
         private readonly DependencyManager<Plugin, Config> _dependencyManager;
         private readonly NominationCommand _nominationManager;
         private readonly ChangeMapManager _changeMapManager;
@@ -38,6 +37,7 @@ namespace cs2_rockthevote
         private readonly NextMapCommand _nextMap;
         private readonly EndMapVoteManager _endMapVoteManager;
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
+        private readonly MapLister _mapLister;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
@@ -50,7 +50,8 @@ namespace cs2_rockthevote
             VoteExtendRoundTimeCommand voteExtendRoundTime,
             NextMapCommand nextMap,
             EndMapVoteManager endMapVoteManager,
-            DisplayMapListCommandHandler displayMapListCommandHandler)
+            DisplayMapListCommandHandler displayMapListCommandHandler,
+            MapLister mapLister)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
@@ -64,6 +65,7 @@ namespace cs2_rockthevote
             _nextMap = nextMap;
             _endMapVoteManager = endMapVoteManager;
             _displayMapListCommandHandler = displayMapListCommandHandler;
+            _mapLister = mapLister;
         }
 
         public Config? Config { get; set; }
@@ -72,9 +74,11 @@ namespace cs2_rockthevote
         {
             return $"{Localizer[prefix]} {Localizer[key, values]}";
         }
+
         public override void Load(bool hotReload)
         {
             _dependencyManager.OnPluginLoad(this);
+            _mapLister.OnLoad(this); // ensure map is loaded
             RegisterListener<OnMapStart>(_dependencyManager.OnMapStart);
         }
 
@@ -132,10 +136,10 @@ namespace cs2_rockthevote
         {
             Config = config;
 
-            if (Config.Version < 12)
+            if (Config.Version < 13)
                 Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
-            if (Config.Version < 10)
+            if (Config.Version < 11)
                 throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
             _dependencyManager.OnConfigParsed(config);
