@@ -46,7 +46,18 @@ namespace cs2_rockthevote
 
         public void OnMapStart(string map)
         {
-            _pluginState.ExtendsLeft = _config!.ExtendLimit;
+            try
+            {
+                _pluginState.ExtendsLeft = _config!.ExtendLimit;
+            }
+            catch (Exception)
+            {
+                // Waiting for Razpberry to fix the null reference exception issue
+                //Server.PrintToConsole(_localizer.LocalizeWithPrefix("") + "Null Reference Exception happened, default to 3 extends.");
+                //_pluginState.ExtendsLeft = 3; // default to 3
+                Server.ExecuteCommand("css_plugins reload RockTheVote");
+            }
+
             Votes.Clear();
             timeLeft = 0;
             KillTimer();
