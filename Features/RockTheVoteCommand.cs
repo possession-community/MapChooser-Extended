@@ -99,17 +99,17 @@ namespace cs2_rockthevote
 
             Console.WriteLine($"[RockTheVote] Starting vote with {VoteDuration} seconds duration");
 
-            //RtvConfig config = new RtvConfig
-            //{
-            //    Enabled = true,
-            //    EnabledInWarmup = true,
-            //    MinPlayers = 0,
-            //    MinRounds = 0,
-            //    ChangeMapImmediatly = true,
-            //    VoteDuration = VoteDuration,
-            //    VotePercentage = 1
-            //};
-            _endmapVoteManager.StartVote(_config);
+            RtvConfig config = new RtvConfig
+            {
+                Enabled = true,
+                EnabledInWarmup = true,
+                MinPlayers = 0,
+                MinRounds = 0,
+                ChangeMapImmediatly = true,
+                VoteDuration = VoteDuration,
+                VotePercentage = 1
+            };
+            _endmapVoteManager.StartVote(config);
         }
 
         public void CommandHandler(CCSPlayerController? player)
