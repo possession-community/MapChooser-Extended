@@ -157,7 +157,8 @@ namespace cs2_rockthevote
             else
             {
                 // Extend mp_timelimit
-                ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
+                //ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
+                ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
                 _pluginState.ExtendsLeft -= 1;

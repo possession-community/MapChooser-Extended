@@ -62,7 +62,8 @@ namespace cs2_rockthevote
                 if (_timeLimitManager.TimeRemaining > 1)
                 {
                     // Update the mp_timelimit
-                    _extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
+                    //_extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
+                    _extendRoundTimeManager.ExtendMapTimeLimit(timeToExtend, _timeLimitManager, _gameRules);
 
                     player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.admin-extend-time", timeToExtend));
 
