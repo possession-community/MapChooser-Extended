@@ -10,7 +10,10 @@ namespace cs2_rockthevote
 {
     public partial class Plugin
     {
+        [ConsoleCommand("css_nominate", "nominate a map to rtv")]
         [ConsoleCommand("nominate", "nominate a map to rtv")]
+        [ConsoleCommand("css_nom", "nominate a map to rtv")]
+        [ConsoleCommand("nom", "nominate a map to rtv")]
         public void OnNominate(CCSPlayerController? player, CommandInfo command)
         {
             string map = command.GetArg(1).Trim().ToLower();
