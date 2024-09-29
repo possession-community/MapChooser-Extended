@@ -248,7 +248,7 @@ namespace cs2_rockthevote
                 _timeLimitManager.TimeLimitValue += (minutesToExtendBy * 60); //convert to seconds
 
                 // Update TimeRemaining
-                _timeLimitManager.TimeRemaining = (_timeLimitManager.TimeLimitValue/60) - (_timeLimitManager.TimePlayed/60);
+                //_timeLimitManager.TimeRemaining = (_timeLimitManager.TimeLimitValue/60) - (_timeLimitManager.TimePlayed/60);
 
                 _pluginState.MapChangeScheduled = false;
                 _pluginState.EofVoteHappening = false;
