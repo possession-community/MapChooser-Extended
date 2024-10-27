@@ -10,7 +10,7 @@ namespace cs2_rockthevote.Core
         private ConVar? _maxRounds; // move to RoundLimitManager.cs?
 
         //private decimal TimeLimitValue => (decimal)(_timeLimit?.GetPrimitiveValue<float>() ?? 0F) * 60M;
-        private int RoundLimitValue => _maxRounds?.GetPrimitiveValue<int>() ?? 0;
+        public int RoundLimitValue => _maxRounds?.GetPrimitiveValue<int>() ?? 0;
 
         public bool UnlimitedRound => RoundLimitValue <= 0;
 
@@ -38,7 +38,7 @@ namespace cs2_rockthevote.Core
 
             set
             {
-                _maxRounds.SetValue((int)value);
+                _maxRounds?.SetValue((int)value);
             }
         }
 
