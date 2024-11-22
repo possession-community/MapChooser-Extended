@@ -46,6 +46,7 @@
   "extendtime.you-voted": "你投票了 {0}",
   "extendtime.vote-ended.failed": "投票结束，地图不会延长 ({0:N2}% 的 {1} 票)",
   "extendtime.vote-ended.passed": "投票结束，地图将延长 {green}{0}{default} 分钟 ({1:N2}% 的 {2} 票)",
+  "extendtime.vote-ended.passed.rounds": "投票结束，地图将延长 {green}{0}{default} 回合 ({1:N2}% 的 {2} 票)",
   "extendtime.vote-ended-no-votes": "没有票数，地图不会延长",
   "extendtime.extend-limit-met": "已到达地图延长次数上限",
   "general.changing-map": "更换地图为 {green}{0}",
