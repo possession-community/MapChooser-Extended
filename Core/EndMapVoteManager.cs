@@ -27,7 +27,7 @@ namespace cs2_rockthevote
     public class EndMapVoteManager : IPluginDependency<Plugin, Config>
     {
         const int MAX_OPTIONS_HUD_MENU = 6;
-        public EndMapVoteManager(MapLister mapLister, ChangeMapManager changeMapManager, NominationCommand nominationManager, StringLocalizer localizer, PluginState pluginState, MapCooldown mapCooldown, ExtendRoundTimeManager extendRoundTimeManager, TimeLimitManager timeLimitManager, GameRules gameRules)
+        public EndMapVoteManager(MapLister mapLister, ChangeMapManager changeMapManager, NominationCommand nominationManager, StringLocalizer localizer, PluginState pluginState, MapCooldown mapCooldown, ExtendRoundTimeManager extendRoundTimeManager, TimeLimitManager timeLimitManager, RoundLimitManager roundLimitManager, GameRules gameRules)
         {
             _mapLister = mapLister;
             _changeMapManager = changeMapManager;
@@ -37,6 +37,7 @@ namespace cs2_rockthevote
             _mapCooldown = mapCooldown;
             _extendRoundTimeManager = extendRoundTimeManager;
             _timeLimitManager = timeLimitManager;
+            _roundLimitManager = roundLimitManager;
             _gameRules = gameRules;
         }
 
@@ -49,6 +50,7 @@ namespace cs2_rockthevote
         private Timer? Timer;
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly TimeLimitManager _timeLimitManager;
+        private readonly RoundLimitManager _roundLimitManager;
         private readonly GameRules _gameRules;
         //private int _extendTimeStep;
 
@@ -173,8 +175,16 @@ namespace cs2_rockthevote
             {
                 if (_config != null)
                 {
-                    _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _config.ExtendTimeStep, percent, totalVotes));
+                    if(_config.ExtendTimeStep > 0 && !_timeLimitManager.UnlimitedTime)
+                    {
+                        _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _config.ExtendTimeStep, percent, totalVotes));
+                    }
+                    else if(_config.ExtendRoundStep > 0 && !_roundLimitManager.UnlimitedRound)
+                    {
+                        _roundLimitManager.RoundsRemaining = _roundLimitManager.RoundLimitValue+_config.ExtendRoundStep;
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed.rounds", _config.ExtendRoundStep, percent, totalVotes));
+                    }
 
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;

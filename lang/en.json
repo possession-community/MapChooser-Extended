@@ -46,6 +46,7 @@
   "extendtime.you-voted": "You voted {0}",
   "extendtime.vote-ended.failed": "Vote ended, the map will be not extended ({0:N2}% of {1} vote(s))",
   "extendtime.vote-ended.passed": "Vote ended, the map will be extended for {green}{0}{default} minutes ({1:N2}% of {2} vote(s))",
+  "extendtime.vote-ended.passed.rounds": "Vote ended, the map will be extended for {green}{0}{default} rounds ({1:N2}% of {2} vote(s))",
   "extendtime.vote-ended-no-votes": "No votes, will not be extended",
   "extendtime.extend-limit-met": "Map time extension limit has been reached",
   "general.changing-map": "Changing map to {green}{0}",

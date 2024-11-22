@@ -25,6 +25,7 @@ namespace cs2_rockthevote
         public bool HudMenu { get; set; }
         public bool HideHudAfterVote { get; set; }
         public int ExtendTimeStep { get; set; } 
+        public int ExtendRoundStep { get; set; } 
     }
 
     public interface IExtendMapConfig
