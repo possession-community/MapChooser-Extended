@@ -1,5 +1,5 @@
 # CS2 Rock The Vote
-![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/abnerfs/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/abnerfs/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
+![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/Oz-Lin/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/Oz-Lin/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
 
 ![image](https://github.com/Oz-Lin/cs2-rockthevote/blob/main/example_image.png)
 
@@ -32,13 +32,18 @@ Please drop a ⭐ star in the repository
 - Force RTV from the server side [#70](https://github.com/abnerfs/cs2-rockthevote/pull/70)
 - Fully configurable
 - Translated by the community
+- Nomlist command to see who nominated which map
+- Vote to extend current map by maximum rounds as well (Thanks Cruze03 [#3](https://github.com/Oz-Lin/cs2-rockthevote/pull/3))
 - **Fixed issue where players were prevented from using RTV command again after "extend next map" wins**
 
 # Work in Progress
-- Vote to extend current map by maximum rounds as well
+- Add another way to extend the current map (ext command from players)
 - Cooldown to start another RTV after the last vote
-- Nomlist command to see who nominated which map
 - Allow players to type !revote to change the option if they made a mistake during votes
+- Extend limits in RTV vote
+- Bug fix on "allow extends" checker
+- Bug fix on "ignore specs" checker
+- Proper bug fix on "null reference exception" in extend limits ([issue #4](https://github.com/Oz-Lin/cs2-rockthevote/issues/4))
 
 # Translations
 | Language             | Contributor          |
@@ -58,7 +63,7 @@ Please drop a ⭐ star in the repository
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
 - Changes in the config file will require you to reload the plugin or restart the server (change the map won't work).
-- Maps that will be used in RTV/nominate/votemap/end of map vote are located in addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt (rename maplist.example.txt to maplist.txt)
+- Maps that will be used in RTV/nominate/votemap/end of map vote are located in `addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt` (rename `maplist.example.txt` to `maplist.txt`)
 
 ## General config
 | Config         | Description                                                                      | Default Value | Min | Max |
@@ -79,15 +84,17 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | HudMenu             | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | HideHudAfterVote    | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow          | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
-| VoteDuration        | Seconds the RTV should can last                                                                                        | 30            | 1     |                                      |
+| VoteDuration        | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
 | VotePercentage      | Percentage of players that should type RTV in order to start a vote                                                    | 60            | 0     | 100                                  |
 | DontChangeRtv       | Enable/Disable option not to change the current map                                                                    | true          | false | true                                 |
 | IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
 | VoteCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | -                                 |
-
+| ExtendTimeStep        | How long (in minutes) should the mp_timelimit to be extended                                                             | 15         | 0       | -                                |
+| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 
 ## End of map vote
-Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote will start to define the next map, it can be configured to change immediatly or only when the map actually ends
+Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like vote will start to define the next map, it can be configured to change immediatly or only when the map actually ends
 
 | Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
@@ -95,7 +102,7 @@ Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote 
 | ChangeMapImmediatly     | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
 | HideHudAfterVote        | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow              | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
-| VoteDuration            | Seconds the RTV should can last                                                                                        | 30            | 1     |                                      |
+| VoteDuration            | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
 | HudMenu                 | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, only used when mp_timelimit is greater than 0    | 120           | 1     |                                      |
 | TriggerRoundsBeforEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
@@ -106,7 +113,7 @@ Based on mp_timelimit and mp_maxrounds cvar before the map ends a RTV like vote 
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 
 ## Extend map vote
-Players can extend the current map by using the !ext command. Extends the mp_timelimit and mp_maxrounds cvar
+Players can extend the current map by using the `!ext` command. Extends the `mp_timelimit` and `mp_maxrounds` cvar
 
 | Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
@@ -120,6 +127,20 @@ Players can extend the current map by using the !ext command. Extends the mp_tim
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
 | IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
+
+
+## VIP Extend map vote
+Players can extend the current map by using the `!ve` or `!voteextend` command. Requires `@css/vip` flag permission. Extends the `mp_timelimit` and `mp_maxrounds` cvar
+
+| Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
+| Enabled                 | Enable/Disable extend map vote functionality                                                                           | true          | false | true                                 |
+| VoteDuration            | Seconds the VIP extend vote should last                                                                                | 30            | 1     |                                      |
+| VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
+| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
+| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
+| HudMenu                 | Whether to use HudMenu or just the chat one                                                                            | true          | false | true                                 |
 
 
 ## Votemap
@@ -155,7 +176,8 @@ Players can type `nextmap` to see which map is going to be played next
   
 # Adding workshop maps
 - If you are not hosting a collection in order to add workshop maps you need to know it's id and add as following in the maplist.txt file: `<mapname>:<workshop-id>`.
-- If you are already hosting a collection and can change to workshop maps using the command `ds_workshop_changelevel <map-name>` you don't need the id, just put the actual map name and it will work.
+- If you are already hosting a collection and can change to workshop maps using the command `ds_workshop_changelevel <map-name>` you don't need the ID, just put the actual map name and it will work.
+    - However, it's still recommended to add the ID	if you plan to modify the display map name.
 
 ```
 de_thera:3121217565
