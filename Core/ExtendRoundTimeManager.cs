@@ -45,18 +45,24 @@ namespace cs2_rockthevote
             plugin.RegisterListener<OnTick>(VoteDisplayTick);
         }
 
+        /*
+         *  Need a better way to handle this, as the plugin reload approach breaks map cooldown.
+         *
+         */
         public void OnMapStart(string map)
         {
             try
             {
-                _pluginState.ExtendsLeft = _config!.ExtendLimit;
+                // _pluginState.ExtendsLeft = _config!.ExtendLimit; //Null ref happened! Maplist broken!
+                _pluginState.ExtendsLeft = new Config().ExtendMapVote.ExtendLimit; // try this approach
+
             }
             catch (Exception)
             {
-                // Waiting for Razpberry to fix the null reference exception issue
+                // Screw it, Oz-Lin is fixing the null reference exception issue for razpberry.
                 //Server.PrintToConsole(_localizer.LocalizeWithPrefix("") + "Null Reference Exception happened, default to 3 extends.");
-                //_pluginState.ExtendsLeft = 3; // default to 3
-                Server.ExecuteCommand("css_plugins reload RockTheVote");
+
+                Server.ExecuteCommand("css_plugins reload RockTheVote"); // screw it!
             }
 
             Votes.Clear();
@@ -239,6 +245,7 @@ namespace cs2_rockthevote
 
                 return false;
             }
+
         }
 
 
