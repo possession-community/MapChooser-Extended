@@ -8,6 +8,7 @@ using cs2_rockthevote.Core;
 using Microsoft.Extensions.Localization;
 using System.Data;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
@@ -232,7 +233,7 @@ namespace cs2_rockthevote
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception) //(Exception ex)
             {
                 //Logger.LogWarning("Something went wrong when updating the round time {message}", ex.Message);
 
@@ -256,7 +257,7 @@ namespace cs2_rockthevote
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception) //(Exception ex)
             {
                 //Logger.LogWarning("Something went wrong when updating the round time {message}", ex.Message);
 

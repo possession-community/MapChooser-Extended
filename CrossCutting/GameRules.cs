@@ -14,10 +14,11 @@ namespace cs2_rockthevote
         public void SetGameRulesAsync()
         {
             _gameRules = null;
-            new Timer(1.0F, () =>
-            {
-                SetGameRules();
-            });
+            //new Timer(1.0F, () =>
+            //{
+            //    SetGameRules();
+            //});
+            new Timer(1.0F, SetGameRules); //change to method group
         }
 
         public void OnLoad(Plugin plugin)
@@ -58,9 +59,9 @@ namespace cs2_rockthevote
                 return _gameRules?.RoundTime ?? 0;
             }
 
-            set 
+            set
             {
-                _gameRules.RoundTime = value;
+                if (_gameRules != null) _gameRules.RoundTime = value;
             }
 
         }

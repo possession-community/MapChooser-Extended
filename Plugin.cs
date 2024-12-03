@@ -68,7 +68,7 @@ namespace cs2_rockthevote
             _mapLister = mapLister;
         }
 
-        public Config? Config { get; set; }
+        public Config Config { get; set; } = null!;
 
         public string Localize(string prefix, string key, params object[] values)
         {

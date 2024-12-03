@@ -13,7 +13,7 @@ namespace cs2_rockthevote
             if (player is null)
             {
                 // Handle server command
-                _extManager.CommandServerHandler(player, command);
+                _extManager.CommandServerHandler(player, command!);
             }
             else
             {
@@ -32,12 +32,27 @@ namespace cs2_rockthevote
     }
     public class ExtendCommand : IPluginDependency<Plugin, Config>
     {
-        private readonly StringLocalizer _localizer;
-        private readonly GameRules _gameRules;
+        private readonly StringLocalizer? _localizer;
+        private readonly GameRules? _gameRules;
         //private ExtManager _extManager;
-        private PluginState _pluginState;
+        private PluginState? _pluginState;
         private RtvConfig _config = new();
         private AsyncVoteManager? _voteManager;
+
+        public ExtendCommand(StringLocalizer localizer)
+        {
+            _localizer = localizer;
+        }
+
+        public ExtendCommand(GameRules gameRules)
+        {
+            _gameRules = gameRules;
+        }
+        
+        public ExtendCommand(PluginState pluginState)
+        {
+            _pluginState = pluginState;
+        }
 
         public void CommandServerHandler(CCSPlayerController? player, CommandInfo command)
         {

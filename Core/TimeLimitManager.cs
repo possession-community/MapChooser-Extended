@@ -39,7 +39,7 @@ namespace cs2_rockthevote.Core
 
             set
             {
-                _timeLimit.SetValue((float)value);
+                _timeLimit?.SetValue((float)value);
             }
         }
 

@@ -15,7 +15,7 @@ namespace cs2_rockthevote
             if (player is null)
             {
                 // Handle server command
-                _rtvManager.CommandServerHandler(player, command);
+                _rtvManager.CommandServerHandler(player, command!);
             }
             else
             {
@@ -31,7 +31,7 @@ namespace cs2_rockthevote
             if (player is null)
             {
                 // Handle server command
-                _rtvManager.CommandServerHandler(player, command);
+                _rtvManager.CommandServerHandler(player, command!);
             }
             else
             {
@@ -65,6 +65,7 @@ namespace cs2_rockthevote
             _gameRules = gameRules;
             _endmapVoteManager = endmapVoteManager;
             _pluginState = pluginState;
+            //_extendConfig = new EndMapVoteManager(); // Initialize _extendConfig (added from copilot, need to check later)
         }
 
         public void OnMapStart(string map)

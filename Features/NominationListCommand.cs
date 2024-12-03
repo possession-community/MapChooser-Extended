@@ -29,8 +29,8 @@ public partial class Plugin
 
         string Maplist = string.Join(NewLine.ToString(), Nomlist);
 
-        player.PrintToChat(Localize("","nominate.nominate-list"));
-        player.PrintToChat(Maplist);
+        player?.PrintToChat(Localize("","nominate.nominate-list"));
+        player?.PrintToChat(Maplist);
         //player.PrintToChat("********************************");
     }
 
