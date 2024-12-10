@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
 using cs2_rockthevote.Core;
 using System.Data;
+using System.Linq.Expressions;
 using System.Text;
 using static CounterStrikeSharp.API.Core.Listeners;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
@@ -64,6 +65,7 @@ namespace cs2_rockthevote
         private IEndOfMapConfig? _configBackup = null;
         private int _canVote = 0;
         private Plugin? _plugin;
+        private EndOfMapConfig? _eomConfig = new();
 
         HashSet<int> _voted = new();
 
@@ -71,6 +73,12 @@ namespace cs2_rockthevote
         {
             _plugin = plugin;
             plugin.RegisterListener<OnTick>(VoteDisplayTick);
+        }
+
+        public void OnConfigParsed(Config config)
+        {
+            _eomConfig = config.EndOfMapVote;
+
         }
 
         public void OnMapStart(string map)
@@ -175,17 +183,24 @@ namespace cs2_rockthevote
             {
                 if (_config != null)
                 {
-                    if(_config.ExtendTimeStep > 0 && !_timeLimitManager.UnlimitedTime)
+                    if (_config.ExtendTimeStep > 0 && !_timeLimitManager.UnlimitedTime)
                     {
-                        _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
-                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", _config.ExtendTimeStep, percent, totalVotes));
+                        _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager,
+                            _gameRules);
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed",
+                            _config.ExtendTimeStep, percent, totalVotes));
                     }
-                    else if(_config.ExtendRoundStep > 0 && !_roundLimitManager.UnlimitedRound)
+                    else if (_config.ExtendRoundStep > 0 && !_roundLimitManager.UnlimitedRound)
                     {
-                        _roundLimitManager.RoundsRemaining = _roundLimitManager.RoundLimitValue+_config.ExtendRoundStep;
-                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed.rounds", _config.ExtendRoundStep, percent, totalVotes));
+                        _roundLimitManager.RoundsRemaining =
+                            _roundLimitManager.RoundLimitValue + _config.ExtendRoundStep;
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed.rounds",
+                            _config.ExtendRoundStep, percent, totalVotes));
                     }
 
+                    _eomConfig!.ExtendLimit--;
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit));
+                    
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;
                     _pluginState.CommandsDisabled = false;
@@ -242,21 +257,27 @@ namespace cs2_rockthevote
             if (config.HudMenu && mapsToShow > MAX_OPTIONS_HUD_MENU)
                 mapsToShow = MAX_OPTIONS_HUD_MENU;
 
-            var mapsScrambled = Shuffle(new Random(), _mapLister.Maps!.Select(x => x.Name).Where(x => x != Server.MapName && !_mapCooldown.IsMapInCooldown(x)).ToList());
+            var mapsScrambled = Shuffle(new Random(),
+                _mapLister.Maps!.Select(x => x.Name).Where(x => x != Server.MapName && !_mapCooldown.IsMapInCooldown(x))
+                    .ToList());
             mapsEllected = _nominationManager.NominationWinners().Concat(mapsScrambled).Distinct().ToList();
 
             _canVote = ServerManager.ValidPlayerCount();
             ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
 
-            // add "extend map" option
-            Votes["Extend Current Map"] = 0;
-            menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
+            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit >= 0)
             {
-                MapVoted(player, "Extend Current Map");
-                MenuManager.CloseActiveMenu(player);
-            });
+                // add "extend map" option
+                Votes["Extend Current Map"] = 0;
+                menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
+                {
+                    MapVoted(player, "Extend Current Map");
+                    MenuManager.CloseActiveMenu(player);
+                });
+            }
+        
 
-            foreach (var map in mapsEllected.Take(mapsToShow - 1)) // extend map takes a slot
+            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit >= 0) ? (mapsToShow - 1) : mapsToShow)) // extend map takes a slot
             {
                 Votes[map] = 0;
                 menu.AddMenuOption(map, (player, option) =>

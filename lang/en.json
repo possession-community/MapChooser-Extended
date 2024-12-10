@@ -49,6 +49,7 @@
   "extendtime.vote-ended.passed.rounds": "Vote ended, the map will be extended for {green}{0}{default} rounds ({1:N2}% of {2} vote(s))",
   "extendtime.vote-ended-no-votes": "No votes, will not be extended",
   "extendtime.extend-limit-met": "Map time extension limit has been reached",
+  "extendtime.extendsleft": "Extends left: {green}{0}",
   "general.changing-map": "Changing map to {green}{0}",
   "general.changing-map-next-round": "The map will be changed to {green}{0}{default} in the next round...",
   "emv.hud.menu-title": "Vote for the next map:",
