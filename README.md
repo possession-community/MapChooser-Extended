@@ -68,7 +68,7 @@ Please drop a ⭐ star in the repository
 | French (outdated)              | o3LL                 |
 | Chinese (zh-Hans)    | himenekocn + Oz-Lin          |
 | Chinese (zh-Hant)    | himenekocn + Oz-Lin          |
-| Korean             | wjdrkfka3              |
+| Korean (outdated)      | wjdrkfka3              |
 
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
