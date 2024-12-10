@@ -44,15 +44,15 @@ namespace cs2_rockthevote
             _localizer = localizer;
         }
 
-        public ExtendCommand(GameRules gameRules)
-        {
-            _gameRules = gameRules;
-        }
+        //public ExtendCommand(GameRules gameRules)
+        //{
+        //    _gameRules = gameRules;
+        //}
         
-        public ExtendCommand(PluginState pluginState)
-        {
-            _pluginState = pluginState;
-        }
+        //public ExtendCommand(PluginState pluginState)
+        //{
+        //    _pluginState = pluginState;
+        //}
 
         public void CommandServerHandler(CCSPlayerController? player, CommandInfo command)
         {
