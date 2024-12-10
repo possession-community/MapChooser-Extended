@@ -8,6 +8,12 @@ General purpose map voting plugin, started as a simple RTV and now has more feat
 # Enjoying the plugin?
 Please drop a ⭐ star in the repository 
 
+> [!WARNING]
+> Notes from Oz-Lin:
+> 
+> This fork of the plugin mainly considers ZE/ZM/ZR Zombie Escape/Survival/Riot, or any round-based game modes.
+>
+> For non-round-based modes such as bhop/surf/kz/mg-course, I cannot guarantee your use case. Please double-check your server cvar configs (such as `mp_timelimit`, `mp_maxrounds` etc, along with `TriggerSecondsBeforeEnd` and `TriggerRoundsBeforeEnd` in config.json) in case of compatibility issues.
   
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
@@ -44,6 +50,9 @@ Please drop a ⭐ star in the repository
 - Bug fix on "allow extends" checker
 - Bug fix on "ignore specs" checker
 - Proper bug fix on "null reference exception" in extend limits ([issue #4](https://github.com/Oz-Lin/cs2-rockthevote/issues/4))
+
+# ⚠️ Help Wanted
+- WASD menu - a lot of code refactoring must be done before implementing this feature. Can't give guarantee about this feature. 
 
 # Translations
 | Language             | Contributor          |
