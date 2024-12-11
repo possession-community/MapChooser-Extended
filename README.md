@@ -46,10 +46,10 @@ Please drop a ⭐ star in the repository
 - Add another way to extend the current map (ext command from players)
 - Cooldown to start another RTV after the last vote
 - Allow players to type !revote to change the option if they made a mistake during votes
-- Extend limits in RTV vote
-- Bug fix on "allow extends" checker
+- ~~Extend limits in RTV vote~~ Testing
+- ~~Bug fix on "allow extends" checker~~ Testing
 - Bug fix on "ignore specs" checker
-- Proper bug fix on "null reference exception" in extend limits ([issue #4](https://github.com/Oz-Lin/cs2-rockthevote/issues/4))
+- ~~Proper bug fix on "null reference exception" in extend limits ([issue #4](https://github.com/Oz-Lin/cs2-rockthevote/issues/4))~~ testing
 
 # ⚠️ Help Wanted
 - WASD menu - a lot of code refactoring must be done before implementing this feature. Can't give guarantee about this feature. 
