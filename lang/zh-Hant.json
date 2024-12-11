@@ -48,7 +48,7 @@
 	"extendtime.vote-ended.passed": "投票結束，地圖將延長 {green}{0}{default} 分鐘 ({1:N2}% 的 {2} 票)",
 	"extendtime.vote-ended.passed.rounds": "投票结束，地圖將延長 {green}{0}{default} 回合 ({1:N2}% 的 {2} 票)",
 	"extendtime.vote-ended-no-votes": "沒有票數，地圖不會延長",
-	"extendtime.extendsleft": "剩餘延長次數: {green}{0}",
+	"extendtime.extendsleft": "剩餘延長次數: {green}{0} / {1}",
 	"extendtime.extend-limit-met": "已抵達地圖延長次數上限",
 	"general.changing-map": "更換地圖為 {green}{0}",
 	"general.changing-map-next-round": "地圖將在下一回合改為 {green}{0}{default}...",

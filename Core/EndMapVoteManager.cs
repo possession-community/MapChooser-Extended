@@ -66,6 +66,7 @@ namespace cs2_rockthevote
         private int _canVote = 0;
         private Plugin? _plugin;
         private EndOfMapConfig? _eomConfig = new();
+        private int _totalExtendLimit;
 
         HashSet<int> _voted = new();
 
@@ -78,7 +79,7 @@ namespace cs2_rockthevote
         public void OnConfigParsed(Config config)
         {
             _eomConfig = config.EndOfMapVote;
-
+            _totalExtendLimit = config.EndOfMapVote.ExtendLimit;
         }
 
         public void OnMapStart(string map)
@@ -87,6 +88,7 @@ namespace cs2_rockthevote
             timeLeft = 0;
             mapsEllected.Clear();
             KillTimer();
+            _eomConfig.ExtendLimit = _totalExtendLimit;
             //_extendTimeStep = _config.ExtendTimeStep;
 
             // Restore the config if it was changed by the server command
@@ -199,13 +201,12 @@ namespace cs2_rockthevote
                     }
 
                     _eomConfig!.ExtendLimit--;
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit));
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit));
                     
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;
                     _pluginState.CommandsDisabled = false;
                     _pluginState.ExtendTimeVoteHappening = false;
-                    //_pluginState.ExtendsLeft -= 1;
 
                     // Make sure to clear nomination list
                     _nominationManager.ResetNominations();
@@ -265,7 +266,7 @@ namespace cs2_rockthevote
             _canVote = ServerManager.ValidPlayerCount();
             ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
 
-            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit >= 0)
+            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0)
             {
                 // add "extend map" option
                 Votes["Extend Current Map"] = 0;
@@ -277,7 +278,7 @@ namespace cs2_rockthevote
             }
         
 
-            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit >= 0) ? (mapsToShow - 1) : mapsToShow)) // extend map takes a slot
+            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0) ? (mapsToShow - 1) : mapsToShow)) // extend map takes a slot
             {
                 Votes[map] = 0;
                 menu.AddMenuOption(map, (player, option) =>

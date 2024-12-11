@@ -36,6 +36,7 @@ namespace cs2_rockthevote
 
         private IExtendMapConfig? _config = null;
 
+        private int _totalExtendLimit;
         private int _canVote = 0;
         private Plugin? _plugin;
 
@@ -54,8 +55,8 @@ namespace cs2_rockthevote
             try
             {
                 // _pluginState.ExtendsLeft = _config!.ExtendLimit; //Null ref happened! Maplist broken!
-                _pluginState.ExtendsLeft = new Config().ExtendMapVote.ExtendLimit; // try this approach
-
+                _pluginState.ExtendsLeft = new Config().VipExtendMapVote.ExtendLimit; // try this approach
+                _totalExtendLimit = new Config().VipExtendMapVote.ExtendLimit;
             }
             catch (Exception)
             {
@@ -70,6 +71,7 @@ namespace cs2_rockthevote
             KillTimer();
         }
 
+        // VIP Extend Start
         public void ExtendTimeVoted(CCSPlayerController player, string voteResponse)
         {
             Votes[voteResponse] += 1;
@@ -169,7 +171,7 @@ namespace cs2_rockthevote
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
                 _pluginState.ExtendsLeft -= 1;
-                Server.PrintToChatAll(_localizer.Localize("extendtime.extendsleft", _pluginState.ExtendsLeft));
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _pluginState.ExtendsLeft, _totalExtendLimit));
                 _pluginState.CommandsDisabled = false;
             }
 
@@ -212,7 +214,7 @@ namespace cs2_rockthevote
                     timeLeft--;
             }, TimerFlags.REPEAT);
         }
-
+        // VIP Extend End
         public bool ExtendRoundTime(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
         {
             try
