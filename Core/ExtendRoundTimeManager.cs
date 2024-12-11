@@ -169,6 +169,7 @@ namespace cs2_rockthevote
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
                 _pluginState.ExtendsLeft -= 1;
+                Server.PrintToChatAll(_localizer.Localize("extendtime.extendsleft", _pluginState.ExtendsLeft));
                 _pluginState.CommandsDisabled = false;
             }
 
