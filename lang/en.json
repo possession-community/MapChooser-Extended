@@ -1,6 +1,7 @@
 {
   "rtv.prefix": "{red}[RockTheVote]{default}",
   "votemap.prefix": "{red}[Votemap]{default}",
+  "extendmap.prefix": "{red}[Extend]{default}",
   "extendtime.prefix": "{red}[VoteExtend]{default}",
   "extendtime.notapplicable": "Voting to extend is not applicable right now.",
   "timeleft.prefix": "{red}[Timeleft]{default}",
@@ -60,5 +61,9 @@
   "extendtime.hud.finished": "Vote finished, map will {0}",
   "nextmap": "Next map will be {green}{0}",
   "nextmap.decided-by-vote": "Next map will be decided by vote",
-  "general.validation.map-played-recently": "Map has been played recently"
+  "general.validation.map-played-recently": "Map has been played recently",
+  "extendmap.player-voted": "Player {green}{0}{default} voted to extend the map",
+  "extendmap.already-voted": "You already voted to extend",
+  "extendmap.map-extended": "Number of votes reached, map extended for {0} minutes",
+  "extendmap.already-extended": "Already extended map for {0} minutes, try again later"
 }

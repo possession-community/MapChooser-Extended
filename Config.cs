@@ -105,15 +105,18 @@ namespace cs2_rockthevote
         public bool IgnoreSpec { get; set; } = true;
     }
 
-    public class TimeleftConfig
+    public class ExtendmapConfig : ICommandConfig, IVoteConfig
     {
-        public bool ShowToAll { get; set; } = false;
+        public bool Enabled { get; set; } = true;
+        public int VotePercentage { get; set; } = 60;
+        public bool ChangeMapImmediatly { get; set; } = true;
+        public bool EnabledInWarmup { get; set; } = true;
+        public int MinPlayers { get; set; } = 0;
+        public int MinRounds { get; set; } = 0;
+        public int ExtendLength { get; set; } = 10;
     }
 
-    public class NextmapConfig
-    {
-        public bool ShowToAll { get; set; } = false;
-    }
+
 
     public class VipExtendMapConfig : IExtendMapConfig
     {
@@ -126,6 +129,15 @@ namespace cs2_rockthevote
         public bool HudMenu { get; set; } = true;
     }
 
+    public class TimeleftConfig
+    {
+        public bool ShowToAll { get; set; } = false;
+    }
+
+    public class NextmapConfig
+    {
+        public bool ShowToAll { get; set; } = false;
+    }
 
     public class Config : IBasePluginConfig
     {
@@ -135,7 +147,7 @@ namespace cs2_rockthevote
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
         public ExtendConfig ExtendMapVote { get; set; } = new();
         public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
-
+        public ExtendmapConfig Extendmap { get; set; } = new();
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
         public ushort MapsInCoolDown { get; set; } = 3;

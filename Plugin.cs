@@ -38,6 +38,7 @@ namespace cs2_rockthevote
         private readonly EndMapVoteManager _endMapVoteManager;
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
         private readonly MapLister _mapLister;
+        private readonly ExtendMapCommand _extendMapManager;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
@@ -51,7 +52,8 @@ namespace cs2_rockthevote
             NextMapCommand nextMap,
             EndMapVoteManager endMapVoteManager,
             DisplayMapListCommandHandler displayMapListCommandHandler,
-            MapLister mapLister)
+            MapLister mapLister,
+            ExtendMapCommand extendMapManager)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
@@ -66,6 +68,7 @@ namespace cs2_rockthevote
             _endMapVoteManager = endMapVoteManager;
             _displayMapListCommandHandler = displayMapListCommandHandler;
             _mapLister = mapLister;
+            _extendMapManager = extendMapManager;
         }
 
         public Config Config { get; set; } = null!;
@@ -122,6 +125,10 @@ namespace cs2_rockthevote
                 else if (text.StartsWith("nextmap"))
                 {
                     _nextMap.CommandHandler(player);
+                }
+                else if (text.StartsWith("extend"))
+                {
+                    _extendMapManager.CommandHandler(player);
                 }
                 // TODO: Implement this later
                 //else if (text == "revote")
