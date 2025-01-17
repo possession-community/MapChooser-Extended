@@ -53,7 +53,7 @@ namespace cs2_rockthevote
     {
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
-        private EndMapVoteManager _endmapVoteManager, _extendConfig;
+        private EndMapVoteManager _endMapVoteManager, _extendConfig;
         private PluginState _pluginState;
         private RtvConfig _config = new();
         private AsyncVoteManager? _voteManager;
@@ -63,7 +63,7 @@ namespace cs2_rockthevote
         {
             _localizer = localizer;
             _gameRules = gameRules;
-            _endmapVoteManager = endmapVoteManager;
+            _endMapVoteManager = endmapVoteManager;
             _pluginState = pluginState;
             //_extendConfig = new EndMapVoteManager(); // Initialize _extendConfig (added from copilot, need to check later)
         }
@@ -110,7 +110,7 @@ namespace cs2_rockthevote
                 VoteDuration = VoteDuration,
                 VotePercentage = 1
             };
-            _endmapVoteManager.StartVote(config);
+            _endMapVoteManager.StartVote(config);
         }
 
         public void CommandHandler(CCSPlayerController? player)
@@ -166,7 +166,7 @@ namespace cs2_rockthevote
                 case VoteResultEnum.VotesReached:
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("rtv.rocked-the-vote", player.PlayerName)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.votes-reached"));
-                    _endmapVoteManager.StartVote(_config);
+                    _endMapVoteManager.StartVote(_config);
 
                     // reset vote status
                     _voteManager.ResetVotes();

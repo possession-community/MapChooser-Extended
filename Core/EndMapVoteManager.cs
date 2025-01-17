@@ -20,7 +20,7 @@ namespace cs2_rockthevote
     //        var bot = ServerManager.ValidPlayers().FirstOrDefault(x => x.IsBot);
     //        if (bot is not null)
     //        {
-    //            _endmapVoteManager.MapVoted(bot, "de_dust2");
+    //            _endMapVoteManager.MapVoted(bot, "de_dust2");
     //        }
     //    }
     //}
@@ -88,7 +88,7 @@ namespace cs2_rockthevote
             timeLeft = 0;
             mapsEllected.Clear();
             KillTimer();
-            _eomConfig.ExtendLimit = _totalExtendLimit;
+            _eomConfig!.ExtendLimit = _totalExtendLimit;
             //_extendTimeStep = _config.ExtendTimeStep;
 
             // Restore the config if it was changed by the server command
