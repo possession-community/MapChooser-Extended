@@ -10,8 +10,12 @@ namespace cs2_rockthevote
 {
     public partial class Plugin
     {
-        [ConsoleCommand("extend", "")]
-        [ConsoleCommand("extendmap", "")]
+        [ConsoleCommand("ext", "Vote to extend current map")]
+        [ConsoleCommand("css_ext", "Vote to extend current map")]
+        [ConsoleCommand("extend", "Vote to extend current map")]
+        [ConsoleCommand("css_extend", "Vote to extend current map")]
+        [ConsoleCommand("extendmap", "Vote to extend current map")]
+        [ConsoleCommand("css_extendmap", "Vote to extend current map")]
         public void OnExtend(CCSPlayerController? player, CommandInfo? command)
         {
             _extendMapManager.CommandHandler(player!);
@@ -23,7 +27,7 @@ namespace cs2_rockthevote
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
         private PluginState _pluginState;
-        private ExtendmapConfig _config = new();
+        private ExtendMapConfig _config = new();
         private AsyncVoteManager? _voteManager;
         private Plugin _ = null;
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
@@ -110,12 +114,12 @@ namespace cs2_rockthevote
                 var timelimit = mp_timelimit.GetPrimitiveValue<float>();
                 if (timelimit > 0)
                 {
-                    float newTimeLimit = timelimit + _config.ExtendLength;
+                    float newTimeLimit = timelimit + _config.ExtendTimeStep;
                     mp_timelimit.SetValue(newTimeLimit);
 
                     if (_ != null && _voteManager != null)
                     {
-                        _.AddTimer(_config.ExtendLength / 4, () =>
+                        _.AddTimer(_config.ExtendTimeStep / 4, () =>
                         {
                             _voteManager.OnMapStart("");
                         });
@@ -139,7 +143,7 @@ namespace cs2_rockthevote
         }
         public void OnConfigParsed(Config config)
         {
-            _config = config.Extendmap;
+            _config = config.ExtendMapVote;
             _voteManager = new AsyncVoteManager(_config);
         }
     }
