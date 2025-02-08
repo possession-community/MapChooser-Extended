@@ -52,6 +52,7 @@ namespace cs2_rockthevote
         public int TriggerRoundsBeforeEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
         public bool AllowExtend { get; set; } = true;
+        public bool RoundBased { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
         public int VotePercentage { get; set; } = 60;
@@ -89,6 +90,8 @@ namespace cs2_rockthevote
         public int VotePercentage { get; set; } = 60;
         public bool ChangeMapImmediately { get; set; } = false;
         public bool IgnoreSpec { get; set; } = true;
+        public bool RoundBased { get; set; } = true;
+
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
         public int ExtendLimit { get; set; } = 3;
@@ -128,6 +131,7 @@ namespace cs2_rockthevote
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
         public int ExtendLimit { get; set; } = 3;
+        public bool RoundBased { get; set; } = true;
         public bool HudMenu { get; set; } = true;
     }
 
@@ -143,7 +147,7 @@ namespace cs2_rockthevote
 
     public class Config : IBasePluginConfig
     {
-        public int Version { get; set; } = 14;
+        public int Version { get; set; } = 15;
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();

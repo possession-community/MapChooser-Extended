@@ -13,7 +13,9 @@ Please drop a ⭐ star in the repository
 > 
 > This fork of the plugin mainly considers ZE/ZM/ZR Zombie Escape/Survival/Riot, or any round-based game modes.
 >
-> For non-round-based modes such as bhop/surf/kz/mg-course, I cannot guarantee your use case. Please double-check your server cvar configs (such as `mp_timelimit`, `mp_maxrounds` etc, along with `TriggerSecondsBeforeEnd` and `TriggerRoundsBeforeEnd` in config.json) in case of compatibility issues.
+> Now testing for non-round-based modes such as bhop/surf/kz/mg-course! Make sure both `mp_timelimit` and `mp_roundtime` has the same value. 
+>
+> ~~For non-round-based modes such as bhop/surf/kz/mg-course, I cannot guarantee your use case.~~ Please double-check your server cvar configs (such as `mp_timelimit`, `mp_maxrounds` etc, along with `TriggerSecondsBeforeEnd` and `TriggerRoundsBeforeEnd` in config.json) in case of compatibility issues.
   
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
@@ -40,16 +42,14 @@ Please drop a ⭐ star in the repository
 - Translated by the community
 - Nomlist command to see who nominated which map
 - Vote to extend current map by maximum rounds as well (Thanks Cruze03 [#3](https://github.com/Oz-Lin/cs2-rockthevote/pull/3))
-- **Fixed issue where players were prevented from using RTV command again after "extend next map" wins**
+- "Allow extends" checker and extend limits in RTV vote
+- Compatibility for non-round-based game mode during map time extension
 
 # Work in Progress
 - Add another way to extend the current map (ext command from players)
 - Cooldown to start another RTV after the last vote
 - Allow players to type !revote to change the option if they made a mistake during votes
-- ~~Extend limits in RTV vote~~ Testing
-- ~~Bug fix on "allow extends" checker~~ Testing
 - Bug fix on "ignore specs" checker
-- ~~Proper bug fix on "null reference exception" in extend limits ([issue #4](https://github.com/Oz-Lin/cs2-rockthevote/issues/4))~~ testing
 
 # ⚠️ Help Wanted
 - WASD menu - a lot of code refactoring must be done before implementing this feature. Can't give guarantee about this feature. 
@@ -118,6 +118,7 @@ Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like v
 | TriggerRoundsBeforeEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
 | AllowExtend             | Option to extend the current map                                                                                       | true          | false | true                                 |
+| RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
 | ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
@@ -136,6 +137,7 @@ Players can extend the current map by using the `!ext` command. Extends the `mp_
 | ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
+| RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
 | IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
 
 
@@ -150,6 +152,7 @@ Players can extend the current map by using the `!ve` or `!voteextend` command. 
 | ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
+| RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
 | HudMenu                 | Whether to use HudMenu or just the chat one                                                                            | true          | false | true                                 |
 
 

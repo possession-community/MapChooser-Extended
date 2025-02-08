@@ -39,6 +39,7 @@ namespace cs2_rockthevote
         private int _totalExtendLimit;
         private int _canVote = 0;
         private Plugin? _plugin;
+        private VipExtendMapConfig _veConfig = new();
 
         public void OnLoad(Plugin plugin)
         {
@@ -166,8 +167,15 @@ namespace cs2_rockthevote
             else
             {
                 // Extend mp_timelimit
-                //ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
-                ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
+                // Use ExtendMapTimeLimit for round-based gamemodes (ze/zm/normal gunfights etc), and ExtendRoundTime for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
+                if (_veConfig.RoundBased == true)
+                {
+                    ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
+                }
+                else
+                {
+                    ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
+                }
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
                 _pluginState.ExtendsLeft -= 1;
@@ -215,6 +223,8 @@ namespace cs2_rockthevote
             }, TimerFlags.REPEAT);
         }
         // VIP Extend End
+
+        // ExtendRoundTime: Extend the current round time for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
         public bool ExtendRoundTime(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
         {
             try

@@ -187,8 +187,16 @@ namespace cs2_rockthevote
                 {
                     if (_config.ExtendTimeStep > 0 && !_timeLimitManager.UnlimitedTime)
                     {
-                        _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager,
-                            _gameRules);
+                        if (_eomConfig!.RoundBased == true)
+                        {
+                            // Use ExtendMapTimeLimit for round-based gamemodes (ze/zm/normal gunfights etc), and ExtendRoundTime for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
+                            _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
+
+                        }
+                        else
+                        {
+                            _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
+                        }
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed",
                             _config.ExtendTimeStep, percent, totalVotes));
                     }

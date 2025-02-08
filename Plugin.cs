@@ -143,10 +143,10 @@ namespace cs2_rockthevote
         {
             Config = config;
 
-            if (Config.Version < 14)
+            if (Config.Version < 15)
                 Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
-            if (Config.Version < 12)
+            if (Config.Version < 13)
                 throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
 
             _dependencyManager.OnConfigParsed(config);
