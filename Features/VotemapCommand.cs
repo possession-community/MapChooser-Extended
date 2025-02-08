@@ -176,7 +176,7 @@ namespace cs2_rockthevote
                 case VoteResultEnum.VotesReached:
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("votemap.player-voted", player.PlayerName, map)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     _changeMapManager.ScheduleMapChange(map, prefix: "votemap.prefix");
-                    if (_config!.ChangeMapImmediatly)
+                    if (_config!.ChangeMapImmediately)
                         _changeMapManager.ChangeNextMap();
                     else
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("general.changing-map-next-round", map));

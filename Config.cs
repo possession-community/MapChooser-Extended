@@ -13,19 +13,20 @@ namespace cs2_rockthevote
     public interface IVoteConfig
     {
         public int VotePercentage { get; set; }
-        public bool ChangeMapImmediatly { get; set; }
+        public bool ChangeMapImmediately { get; set; }
         public bool IgnoreSpec { get; set; }
     }
 
     public interface IEndOfMapConfig
     {
         public int MapsToShow { get; set; }
-        public bool ChangeMapImmediatly { get; set; }
+        public bool ChangeMapImmediately { get; set; }
         public int VoteDuration { get; set; }
         public bool HudMenu { get; set; }
         public bool HideHudAfterVote { get; set; }
         public int ExtendTimeStep { get; set; } 
-        public int ExtendRoundStep { get; set; } 
+        public int ExtendRoundStep { get; set; }
+
     }
 
     public interface IExtendMapConfig
@@ -44,11 +45,11 @@ namespace cs2_rockthevote
         public bool Enabled { get; set; } = true;
         public int MapsToShow { get; set; } = 6;
         public bool HudMenu { get; set; } = true;
-        public bool ChangeMapImmediatly { get; set; } = false;
+        public bool ChangeMapImmediately { get; set; } = false;
         public int VoteDuration { get; set; } = 30;
         public bool HideHudAfterVote { get; set; } = false;
         public int TriggerSecondsBeforeEnd { get; set; } = 120;
-        public int TriggerRoundsBeforEnd { get; set; } = 2;
+        public int TriggerRoundsBeforeEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
         public bool AllowExtend { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
@@ -64,7 +65,7 @@ namespace cs2_rockthevote
         public bool NominationEnabled { get; set; } = true;
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
-        public bool ChangeMapImmediatly { get; set; } = true;
+        public bool ChangeMapImmediately { get; set; } = true;
         public bool HideHudAfterVote { get; set; } = false;
         public int MapsToShow { get; set; } = 6;
         public int VoteDuration { get; set; } = 30;
@@ -86,7 +87,7 @@ namespace cs2_rockthevote
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
         public int VotePercentage { get; set; } = 60;
-        public bool ChangeMapImmediatly { get; set; } = false;
+        public bool ChangeMapImmediately { get; set; } = false;
         public bool IgnoreSpec { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
@@ -97,7 +98,7 @@ namespace cs2_rockthevote
     {
         public bool Enabled { get; set; } = true;
         public int VotePercentage { get; set; } = 60;
-        public bool ChangeMapImmediatly { get; set; } = true;
+        public bool ChangeMapImmediately { get; set; } = true;
         public bool EnabledInWarmup { get; set; } = true;
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
@@ -110,7 +111,7 @@ namespace cs2_rockthevote
     {
         public bool Enabled { get; set; } = true;
         public int VotePercentage { get; set; } = 60;
-        public bool ChangeMapImmediatly { get; set; } = true;
+        public bool ChangeMapImmediately { get; set; } = true;
         public bool EnabledInWarmup { get; set; } = true;
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;

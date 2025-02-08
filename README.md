@@ -90,7 +90,7 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | NominationEnabled   | Enable/Disable nomination                                                                                              | true          | false | true                                 |
 | MinPlayers          | Minimum amount of players to enable RTV/Nominate                                                                       | 0             | 0     |                                      |
 | MinRounds           | Minimum rounds to enable RTV/Nominate                                                                                  | 0             | 0     |                                      |
-| ChangeMapImmediatly | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
+| ChangeMapImmediately | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
 | HudMenu             | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | HideHudAfterVote    | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow          | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
@@ -109,13 +109,13 @@ Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like v
 | Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
 | Enabled                 | Enable/Disable end of map vote functionality                                                                           | true          | false | true                                 |
-| ChangeMapImmediatly     | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
+| ChangeMapImmediately     | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
 | HideHudAfterVote        | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow              | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
 | VoteDuration            | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
 | HudMenu                 | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, only used when mp_timelimit is greater than 0    | 120           | 1     |                                      |
-| TriggerRoundsBeforEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
+| TriggerRoundsBeforeEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
 | AllowExtend             | Option to extend the current map                                                                                       | true          | false | true                                 |
 | ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
@@ -132,7 +132,7 @@ Players can extend the current map by using the `!ext` command. Extends the `mp_
 | MinRounds               | Minimum rounds to enable ext                                         | 0             |       |      |
 | MinPlayers              | Minimum amount of players to enable ext                              |               |       |      |
 | VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
-| ChangeMapImmediatly     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
+| ChangeMapImmediately     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
 | ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
 | ExtendLimit             | How many times the current map can be extended                                                                         | 3             | 0     |                                      |
@@ -160,7 +160,7 @@ Players can vote to change to an specific map by using the votemap <mapname> com
 | ------------------- | ------------------------------------------------------------------------ | ------------- | ----- | ---- |
 | Enabled             | Enable/disable votemap funtionality                                      | true          | false | tru  |
 | VotePercentage      | Percentage of players that should vote in a map in order to change to it | 60            | 1     | 100  |
-| ChangeMapImmediatly | Whether to change the map immediatly when vote ends or not               | true          | false | true |
+| ChangeMapImmediately | Whether to change the map immediatly when vote ends or not               | true          | false | true |
 | EnabledInWarmup     | Enable/Disable votemap during warmup                                     | true          | false | true |
 | MinRounds           | Minimum rounds to enable votemap                                         | 0             |       |      |
 | MinPlayers          | Minimum amount of players to enable votemap                              |               |       |      |

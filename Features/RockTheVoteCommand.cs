@@ -106,7 +106,7 @@ namespace cs2_rockthevote
                 EnabledInWarmup = true,
                 MinPlayers = 0,
                 MinRounds = 0,
-                ChangeMapImmediatly = true,
+                ChangeMapImmediately = true,
                 VoteDuration = VoteDuration,
                 VotePercentage = 1
             };
