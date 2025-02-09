@@ -40,7 +40,7 @@ namespace cs2_rockthevote
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
-        private VipExtendMapConfig _veConfig = new();
+        private EndOfMapConfig _eomConfig = new();
 
         public ExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer)
         {
@@ -62,7 +62,7 @@ namespace cs2_rockthevote
             {
                 if (_timeLimitManager.TimeRemaining > 1)
                 {
-                    if (_veConfig.RoundBased == true)
+                    if (_eomConfig.RoundBased == true)
                     {
                         _extendRoundTimeManager.ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
                     }
@@ -71,7 +71,7 @@ namespace cs2_rockthevote
                         _extendRoundTimeManager.ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
                     }
 
-                    player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.admin-extend-time", timeToExtend));
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.admin-extend-time", minutesToExtend));
 
                     return true;
                 }
