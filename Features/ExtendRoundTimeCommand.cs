@@ -40,6 +40,7 @@ namespace cs2_rockthevote
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly GameRules _gameRules;
         private StringLocalizer _localizer;
+        private VipExtendMapConfig _veConfig = new();
 
         public ExtendRoundTimeCommand(TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, GameRules gameRules, IStringLocalizer stringLocalizer)
         {
@@ -49,7 +50,7 @@ namespace cs2_rockthevote
             _extendRoundTimeManager = extendRoundTimeManager;
         }
 
-        public bool CommandHandler(CCSPlayerController player, CommandInfo commandInfo, int timeToExtend)
+        public bool CommandHandler(CCSPlayerController player, CommandInfo commandInfo, int minutesToExtend)
         {
             if (_gameRules.WarmupRunning)
             {
@@ -61,9 +62,14 @@ namespace cs2_rockthevote
             {
                 if (_timeLimitManager.TimeRemaining > 1)
                 {
-                    // Update the mp_timelimit
-                    //_extendRoundTimeManager.ExtendRoundTime(timeToExtend, _timeLimitManager, _gameRules);
-                    _extendRoundTimeManager.ExtendMapTimeLimit(timeToExtend, _timeLimitManager, _gameRules);
+                    if (_veConfig.RoundBased == true)
+                    {
+                        _extendRoundTimeManager.ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
+                    }
+                    else
+                    {
+                        _extendRoundTimeManager.ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
+                    }
 
                     player.PrintToChat(_localizer.LocalizeWithPrefix("extendtime.admin-extend-time", timeToExtend));
 
