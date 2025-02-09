@@ -54,6 +54,7 @@ namespace cs2_rockthevote
         private readonly RoundLimitManager _roundLimitManager;
         private readonly GameRules _gameRules;
         //private int _extendTimeStep;
+        private VotemapConfig _votemapConfig = new(); // dealing with votemap overrides endmapvote nextmap
 
 
         Dictionary<string, int> Votes = new();
@@ -225,6 +226,7 @@ namespace cs2_rockthevote
             else
             {
                 _changeMapManager.ScheduleMapChange(winner.Key, mapEnd: mapEnd);
+                _votemapConfig.Enabled = false;
                 if (_config != null && _config.ChangeMapImmediately)
                     _changeMapManager.ChangeNextMap(mapEnd);
                 else
