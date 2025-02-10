@@ -94,7 +94,7 @@ namespace cs2_rockthevote
 
         public int ExtendTimeStep { get; set; } = 15;
         public int ExtendRoundStep { get; set; } = 5;
-        public int ExtendLimit { get; set; } = 3;
+        //public int ExtendLimit { get; set; } = 3; // share with EndOfMapConfig ExtendLimit
     }
 
     public class VotemapConfig : ICommandConfig, IVoteConfig

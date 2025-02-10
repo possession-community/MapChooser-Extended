@@ -53,7 +53,7 @@ namespace cs2_rockthevote
     {
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
-        private EndMapVoteManager _endMapVoteManager, _extendConfig;
+        private EndMapVoteManager _endMapVoteManager;//, _extendConfig;
         private PluginState _pluginState;
         private RtvConfig _config = new();
         private AsyncVoteManager? _voteManager;

@@ -30,7 +30,9 @@ namespace cs2_rockthevote
         private ExtendRoundTimeManager _extendRoundTimeManager;
         private PluginState _pluginState;
         private ExtendMapConfig _config = new();
+        private EndOfMapConfig? _eomConfig = new();
         private AsyncVoteManager? _voteManager;
+        private int _totalExtendLimit;
 
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
 
@@ -85,6 +87,12 @@ namespace cs2_rockthevote
                 return;
             }
 
+            if (_eomConfig!.ExtendLimit <= 0)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("extendmap.no-extends-left") + _localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit)));
+                return;
+            }
+
             VoteResult result = _voteManager!.AddVote(player.UserId!.Value);
             switch (result.Result)
             {
@@ -115,6 +123,9 @@ namespace cs2_rockthevote
             {
                 _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
             }
+            _eomConfig!.ExtendLimit--;
+            Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit)}");
+            _voteManager!.ResetVotes();
         }
 
         public void PlayerDisconnected(CCSPlayerController? player)
@@ -127,6 +138,8 @@ namespace cs2_rockthevote
         {
             _config = config.ExtendMapVote;
             _voteManager = new AsyncVoteManager(_config);
+            _eomConfig = config.EndOfMapVote;
+            _totalExtendLimit = config.EndOfMapVote.ExtendLimit;
         }
     }
 }
