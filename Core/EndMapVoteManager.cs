@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Timers;
 using cs2_rockthevote.Core;
 using System.Data;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using static CounterStrikeSharp.API.Core.Listeners;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
@@ -182,7 +183,8 @@ namespace cs2_rockthevote
 
             PrintCenterTextAll(_localizer.Localize("emv.hud.finished", winner.Key));
 
-            if (winner.Key == "Extend Current Map")
+            //if (winner.Key == "Extend Current Map")
+            if (winner.Key == _localizer.Localize("general.extend-current-map"))
             {
                 if (_config != null)
                 {
@@ -279,10 +281,12 @@ namespace cs2_rockthevote
             if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0)
             {
                 // add "extend map" option
-                Votes["Extend Current Map"] = 0;
+                //Votes["Extend Current Map"] = 0;
+                Votes[_localizer.Localize("general.extend-current-map")] = 0;
                 menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
                 {
-                    MapVoted(player, "Extend Current Map");
+                    //MapVoted(player, "Extend Current Map");
+                    MapVoted(player, _localizer.Localize("general.extend-current-map"));
                     MenuManager.CloseActiveMenu(player);
                 });
             }
