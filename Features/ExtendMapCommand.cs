@@ -27,6 +27,7 @@ namespace cs2_rockthevote
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
         private TimeLimitManager _timeLimitManager;
+        private RoundLimitManager _roundLimitManager;
         private ExtendRoundTimeManager _extendRoundTimeManager;
         private PluginState _pluginState;
         private ExtendMapConfig _config = new();
@@ -36,12 +37,13 @@ namespace cs2_rockthevote
 
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
 
-        public ExtendMapCommand(GameRules gameRules, StringLocalizer localizer, PluginState pluginState, TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager)
+        public ExtendMapCommand(GameRules gameRules, IStringLocalizer localizer, PluginState pluginState, TimeLimitManager timeLimitManager, RoundLimitManager roundLimitManager, ExtendRoundTimeManager extendRoundTimeManager)
         {
-            _localizer = localizer;
+            _localizer = new StringLocalizer(localizer, "extendmap.prefix");
             _gameRules = gameRules;
             _pluginState = pluginState;
             _timeLimitManager = timeLimitManager;
+            _roundLimitManager = roundLimitManager;
             _extendRoundTimeManager = extendRoundTimeManager;
         }
 
@@ -89,10 +91,10 @@ namespace cs2_rockthevote
 
             if (_eomConfig!.ExtendLimit <= 0)
             {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("extendmap.no-extends-left") + _localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit)));
+                player.PrintToChat(_localizer.LocalizeWithPrefix("extendmap.no-extends-left") + _localizer.Localize("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit));
                 return;
             }
-
+            
             VoteResult result = _voteManager!.AddVote(player.UserId!.Value);
             switch (result.Result)
             {
@@ -115,7 +117,11 @@ namespace cs2_rockthevote
 
         void ApplyExtend()
         {
-            if (_config.RoundBased)
+            if (_config.ExtendRoundStep > 0)
+            {
+                _roundLimitManager.RoundsRemaining = _roundLimitManager.RoundLimitValue + _config.ExtendRoundStep;
+            }
+            if (_config.ExtendTimeStep > 0 && _config.RoundBased)
             {
                 _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
             }

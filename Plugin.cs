@@ -30,7 +30,7 @@ namespace cs2_rockthevote
         private readonly ChangeMapManager _changeMapManager;
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
-        private readonly ExtendMapCommand _extManager;
+        //private readonly ExtendCommand _extManager;
         private readonly TimeLeftCommand _timeLeft;
         private readonly ExtendRoundTimeCommand _extendRoundTime;
         private readonly VoteExtendRoundTimeCommand _voteExtendRoundTime;
@@ -45,7 +45,7 @@ namespace cs2_rockthevote
             ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
-            ExtendMapCommand extManager,
+            //ExtendCommand extManager,
             TimeLeftCommand timeLeft,
             ExtendRoundTimeCommand extendRoundTime,
             VoteExtendRoundTimeCommand voteExtendRoundTime,
@@ -60,7 +60,7 @@ namespace cs2_rockthevote
             _changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
-            _extManager = extManager;
+            //_extManager = extManager;
             _timeLeft = timeLeft;
             _extendRoundTime = extendRoundTime;
             _voteExtendRoundTime = voteExtendRoundTime;
@@ -98,7 +98,8 @@ namespace cs2_rockthevote
                 }
                 else if (text == "ext")
                 {
-                    _extManager.CommandHandler(player);
+                    //_extManager.CommandHandler(player);
+                    _extendMapManager.CommandHandler(player);
                 }
                 else if (text.StartsWith("nominate"))
                 {

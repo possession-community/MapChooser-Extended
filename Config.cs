@@ -109,20 +109,6 @@ namespace cs2_rockthevote
         public bool IgnoreSpec { get; set; } = true;
     }
 
-    /*
-    public class ExtendmapConfig : ICommandConfig, IVoteConfig
-    {
-        public bool Enabled { get; set; } = true;
-        public int VotePercentage { get; set; } = 60;
-        public bool ChangeMapImmediately { get; set; } = true;
-        public bool EnabledInWarmup { get; set; } = true;
-        public int MinPlayers { get; set; } = 0;
-        public int MinRounds { get; set; } = 0;
-        public int ExtendLength { get; set; } = 10;
-    }
-    */
-
-
     public class VipExtendMapConfig : IExtendMapConfig
     {
         public bool Enabled { get; set; } = true;

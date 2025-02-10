@@ -65,5 +65,6 @@
   "extendmap.player-voted": "Player {green}{0}{default} voted to extend the map",
   "extendmap.already-voted": "You already voted to extend",
   "extendmap.map-extended": "Number of votes reached, map extended for {0} minutes",
-  "extendmap.already-extended": "Already extended map for {0} minutes, try again later"
+  "extendmap.already-extended": "Already extended map for {0} minutes, try again later",
+  "extendmap.no-extends-left": "No more extends."
 }
