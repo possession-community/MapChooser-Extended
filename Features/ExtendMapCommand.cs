@@ -1,9 +1,9 @@
-﻿
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Cvars;
+using cs2_rockthevote.Core;
 using Microsoft.Extensions.Localization;
 
 namespace cs2_rockthevote
@@ -26,22 +26,21 @@ namespace cs2_rockthevote
     {
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
+        private TimeLimitManager _timeLimitManager;
+        private ExtendRoundTimeManager _extendRoundTimeManager;
         private PluginState _pluginState;
         private ExtendMapConfig _config = new();
         private AsyncVoteManager? _voteManager;
-        private Plugin _ = null;
+
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
 
-        public ExtendMapCommand(GameRules gameRules, EndMapVoteManager endmapVoteManager, StringLocalizer localizer, PluginState pluginState, IStringLocalizer stringLocalizer)
+        public ExtendMapCommand(GameRules gameRules, StringLocalizer localizer, PluginState pluginState, TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager)
         {
-            _localizer = new StringLocalizer(stringLocalizer, "extendmap.prefix");
+            _localizer = localizer;
             _gameRules = gameRules;
             _pluginState = pluginState;
-        }
-
-        public void Onload(Plugin plugin)
-        {
-            _ = plugin;
+            _timeLimitManager = timeLimitManager;
+            _extendRoundTimeManager = extendRoundTimeManager;
         }
 
         public void OnMapStart(string map)
@@ -96,11 +95,11 @@ namespace cs2_rockthevote
                     player.PrintToChat($"{_localizer.LocalizeWithPrefix("extendmap.already-voted")} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     break;
                 case VoteResultEnum.VotesAlreadyReached:
-                    player.PrintToChat($"{_localizer.LocalizeWithPrefix("extendmap.already-extended", _config.ExtendLength)}");
+                    player.PrintToChat($"{_localizer.LocalizeWithPrefix("extendmap.already-extended", _config.ExtendTimeStep)}");
                     break;
                 case VoteResultEnum.VotesReached:
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendmap.player-voted", player.PlayerName)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
-                    Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendmap.map-extended", _config.ExtendLength)}");
+                    Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendmap.map-extended", _config.ExtendTimeStep)}");
                     ApplyExtend();
                     break;
             }
@@ -108,31 +107,13 @@ namespace cs2_rockthevote
 
         void ApplyExtend()
         {
-            var mp_timelimit = ConVar.Find("mp_timelimit");
-            if (mp_timelimit != null)
+            if (_config.RoundBased)
             {
-                var timelimit = mp_timelimit.GetPrimitiveValue<float>();
-                if (timelimit > 0)
-                {
-                    float newTimeLimit = timelimit + _config.ExtendTimeStep;
-                    mp_timelimit.SetValue(newTimeLimit);
-
-                    if (_ != null && _voteManager != null)
-                    {
-                        _.AddTimer(_config.ExtendTimeStep / 4, () =>
-                        {
-                            _voteManager.OnMapStart("");
-                        });
-                    }
-                }
-                else
-                {
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendmap.cannot-extend-timelimit-zero"));
-                }
+                _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
             }
             else
             {
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendmap.cannot-extend-no-cvar"));
+                _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
             }
         }
 
@@ -141,6 +122,7 @@ namespace cs2_rockthevote
             if (player?.UserId != null)
                 _voteManager!.RemoveVote(player.UserId.Value);
         }
+
         public void OnConfigParsed(Config config)
         {
             _config = config.ExtendMapVote;
