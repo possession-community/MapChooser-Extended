@@ -30,7 +30,7 @@ namespace cs2_rockthevote
         private readonly ChangeMapManager _changeMapManager;
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
-        private readonly ExtendCommand _extManager;
+        private readonly ExtendMapCommand _extManager;
         private readonly TimeLeftCommand _timeLeft;
         private readonly ExtendRoundTimeCommand _extendRoundTime;
         private readonly VoteExtendRoundTimeCommand _voteExtendRoundTime;
@@ -45,7 +45,7 @@ namespace cs2_rockthevote
             ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
-            ExtendCommand extManager,
+            ExtendMapCommand extManager,
             TimeLeftCommand timeLeft,
             ExtendRoundTimeCommand extendRoundTime,
             VoteExtendRoundTimeCommand voteExtendRoundTime,
