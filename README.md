@@ -57,18 +57,18 @@ Please drop a ⭐ star in the repository
 # Translations
 | Language             | Contributor          |
 | -------------------- | -------------------- |
-| Brazilian Portuguese (outdated)| abnerfs              |
+| Brazilian Portuguese | abnerfs + ChatGPT             |
 | English              | abnerfs + Oz-Lin             |
-| Ukrainian (outdated) | panikajo             |
-| Turkish (outdated)             | brkvlr               |
-| Russian (outdated)             | Auttend              |
-| Latvian (outdated)             | rcon420              |
-| Hungarian (outdated)           | Chickender, lovasatt |
-| Polish (outdated)              | D3X                  |
-| French (outdated)              | o3LL                 |
+| Ukrainian  | panikajo             |
+| Turkish              | brkvlr + ChatGPT              |
+| Russian              | Auttend + ChatGPT             |
+| Latvian              | rcon420 + ChatGPT             |
+| Hungarian            | Chickender, lovasatt + ChatGPT |
+| Polish               | D3X + ChatGPT                 |
+| French               | o3LL + ChatGPT                |
 | Chinese (zh-Hans)    | himenekocn + Oz-Lin          |
 | Chinese (zh-Hant)    | himenekocn + Oz-Lin          |
-| Korean (outdated)      | wjdrkfka3              |
+| Korean       | wjdrkfka3              |
 
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
