@@ -137,9 +137,8 @@ namespace cs2_rockthevote
         public RtvConfig Rtv { get; set; } = new();
         public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
-        //public ExtendConfig ExtendMapVote { get; set; } = new();
-        public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
         public ExtendMapConfig ExtendMapVote { get; set; } = new();
+        public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
         public ushort MapsInCoolDown { get; set; } = 3;

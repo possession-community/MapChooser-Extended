@@ -33,6 +33,7 @@ Please drop a ⭐ star in the repository
 - Votemap command
 - Supports workshop maps
 - Nextmap command
+- !ext map time limit extension command
 - Ignore players in Spectators from vote count
 - Added "Extend current map" in end of map vote
 - [VIP flag] Vote to extend current map by time limit
@@ -46,7 +47,6 @@ Please drop a ⭐ star in the repository
 - Compatibility for non-round-based game mode during map time extension
 
 # Work in Progress
-- Add another way to extend the current map (ext command from players)
 - Cooldown to start another RTV after the last vote
 - Allow players to type !revote to change the option if they made a mistake during votes
 - Bug fix on "ignore specs" checker
