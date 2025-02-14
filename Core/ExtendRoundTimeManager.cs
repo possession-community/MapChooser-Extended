@@ -228,8 +228,11 @@ namespace cs2_rockthevote
                 }
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
-                _pluginState.ExtendsLeft -= 1;
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _pluginState.ExtendsLeft, _totalExtendLimit));
+                if (_pluginState.ExtendsLeft != -1)
+                {
+                    _pluginState.ExtendsLeft -= 1;
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _pluginState.ExtendsLeft, _totalExtendLimit));
+                }
                 _pluginState.CommandsDisabled = false;
             }
 

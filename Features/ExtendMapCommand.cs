@@ -89,12 +89,12 @@ namespace cs2_rockthevote
                 return;
             }
 
-            if (_eomConfig!.ExtendLimit <= 0)
+            if (_eomConfig!.ExtendLimit <= 0 && _eomConfig.ExtendLimit != -1)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("extendmap.no-extends-left") + _localizer.Localize("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit));
                 return;
             }
-            
+
             VoteResult result = _voteManager!.AddVote(player.UserId!.Value);
             switch (result.Result)
             {
@@ -129,8 +129,11 @@ namespace cs2_rockthevote
             {
                 _extendRoundTimeManager.ExtendRoundTime(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
             }
-            _eomConfig!.ExtendLimit--;
-            Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit)}");
+            if (_eomConfig!.ExtendLimit != -1)
+            {
+                _eomConfig!.ExtendLimit--;
+                Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit)}");
+            }
             _voteManager!.ResetVotes();
         }
 

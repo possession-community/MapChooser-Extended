@@ -54,9 +54,7 @@ namespace cs2_rockthevote
         private readonly TimeLimitManager _timeLimitManager;
         private readonly RoundLimitManager _roundLimitManager;
         private readonly GameRules _gameRules;
-        //private int _extendTimeStep;
         private VotemapConfig _votemapConfig = new(); // dealing with votemap overrides endmapvote nextmap
-
 
         Dictionary<string, int> Votes = new();
         Dictionary<CCSPlayerController, string> PlayerVotes = new();
@@ -95,7 +93,6 @@ namespace cs2_rockthevote
             mapsEllected.Clear();
             KillTimer();
             _eomConfig!.ExtendLimit = _totalExtendLimit;
-            //_extendTimeStep = _config.ExtendTimeStep;
 
             // Restore the config if it was changed by the server command
             if (_configBackup is not null)
@@ -149,7 +146,7 @@ namespace cs2_rockthevote
         {
             ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
 
-            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0)
+            if (_eomConfig != null && _eomConfig.AllowExtend && (_eomConfig.ExtendLimit > 0 || _eomConfig.ExtendLimit == -1))
             {
                 Votes[_localizer.Localize("general.extend-current-map")] = 0;
                 menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
@@ -159,7 +156,7 @@ namespace cs2_rockthevote
                 });
             }
 
-            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
+            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && (_eomConfig.ExtendLimit > 0 || _eomConfig.ExtendLimit == -1)) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
             {
                 Votes[map] = 0;
                 menu.AddMenuOption(map, (player, option) =>
@@ -241,7 +238,6 @@ namespace cs2_rockthevote
 
             PrintCenterTextAll(_localizer.Localize("emv.hud.finished", winner.Key));
 
-            //if (winner.Key == "Extend Current Map")
             if (winner.Key == _localizer.Localize("general.extend-current-map"))
             {
                 if (_config != null)
@@ -250,9 +246,7 @@ namespace cs2_rockthevote
                     {
                         if (_eomConfig!.RoundBased == true)
                         {
-                            // Use ExtendMapTimeLimit for round-based gamemodes (ze/zm/normal gunfights etc), and ExtendRoundTime for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
                             _extendRoundTimeManager.ExtendMapTimeLimit(_config.ExtendTimeStep, _timeLimitManager, _gameRules);
-
                         }
                         else
                         {
@@ -269,18 +263,19 @@ namespace cs2_rockthevote
                             _config.ExtendRoundStep, percent, totalVotes));
                     }
 
-                    _eomConfig!.ExtendLimit--;
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit));
-                    
+                    if (_eomConfig!.ExtendLimit != -1)
+                    {
+                        _eomConfig!.ExtendLimit--;
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _eomConfig.ExtendLimit, _totalExtendLimit));
+                    }
+
                     _pluginState.MapChangeScheduled = false;
                     _pluginState.EofVoteHappening = false;
                     _pluginState.CommandsDisabled = false;
                     _pluginState.ExtendTimeVoteHappening = false;
 
-                    // Make sure to clear nomination list
                     _nominationManager.ResetNominations();
                     _nominationManager.Nomlist.Clear();
-                    
                 }
             }
             else
