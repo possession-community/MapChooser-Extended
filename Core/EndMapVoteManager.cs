@@ -131,11 +131,45 @@ namespace cs2_rockthevote
                 Votes[PlayerVotes[player]] -= 1;
                 PlayerVotes.Remove(player);
                 player.PrintToChat(_localizer.LocalizeWithPrefix("emv.vote-revoked"));
+                ShowMapVoteMenu(player); // Bring back the map vote menu
             }
             else
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("emv.no-vote-to-revoke"));
             }
+        }
+
+        private void ShowMapVoteMenu(CCSPlayerController player)
+        {
+            var menu = CreateMapVoteMenu();
+            MenuManager.OpenChatMenu(player, menu);
+        }
+
+        private ChatMenu CreateMapVoteMenu()
+        {
+            ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
+
+            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0)
+            {
+                Votes[_localizer.Localize("general.extend-current-map")] = 0;
+                menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
+                {
+                    MapVoted(player, _localizer.Localize("general.extend-current-map"));
+                    MenuManager.CloseActiveMenu(player);
+                });
+            }
+
+            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
+            {
+                Votes[map] = 0;
+                menu.AddMenuOption(map, (player, option) =>
+                {
+                    MapVoted(player, map);
+                    MenuManager.CloseActiveMenu(player);
+                });
+            }
+
+            return menu;
         }
 
         void KillTimer()
@@ -301,31 +335,7 @@ namespace cs2_rockthevote
             mapsEllected = _nominationManager.NominationWinners().Concat(mapsScrambled).Distinct().ToList();
 
             _canVote = ServerManager.ValidPlayerCount();
-            ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
-
-            if (_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0)
-            {
-                // add "extend map" option
-                //Votes["Extend Current Map"] = 0;
-                Votes[_localizer.Localize("general.extend-current-map")] = 0;
-                menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
-                {
-                    //MapVoted(player, "Extend Current Map");
-                    MapVoted(player, _localizer.Localize("general.extend-current-map"));
-                    MenuManager.CloseActiveMenu(player);
-                });
-            }
-        
-
-            foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && _eomConfig.ExtendLimit > 0) ? (mapsToShow - 1) : mapsToShow)) // extend map takes a slot
-            {
-                Votes[map] = 0;
-                menu.AddMenuOption(map, (player, option) =>
-                {
-                    MapVoted(player, map);
-                    MenuManager.CloseActiveMenu(player);
-                });
-            }
+            var menu = CreateMapVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
                 MenuManager.OpenChatMenu(player, menu);

@@ -100,11 +100,37 @@ namespace cs2_rockthevote
                 Votes[PlayerVotes[player]] -= 1;
                 PlayerVotes.Remove(player);
                 player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.vote-revoked"));
+                ShowVoteMenu(player); // Bring back the vote menu
             }
             else
             {
                 player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.no-vote-to-revoke"));
             }
+        }
+
+        private void ShowVoteMenu(CCSPlayerController player)
+        {
+            var menu = CreateVoteMenu();
+            MenuManager.OpenChatMenu(player, menu);
+        }
+
+        private ChatMenu CreateVoteMenu()
+        {
+            ChatMenu menu = new(_localizer.Localize("extendtime.hud.menu-title"));
+
+            var answers = new List<string>() { "Yes", "No" };
+
+            foreach (var answer in answers)
+            {
+                Votes[answer] = 0;
+                menu.AddMenuOption(answer, (player, option) =>
+                {
+                    ExtendTimeVoted(player, answer);
+                    MenuManager.CloseActiveMenu(player);
+                });
+            }
+
+            return menu;
         }
 
         void KillTimer()
@@ -219,19 +245,7 @@ namespace cs2_rockthevote
 
             _canVote = ServerManager.ValidPlayerCount();
 
-            ChatMenu menu = new(_localizer.Localize("extendtime.hud.menu-title"));
-
-            var answers = new List<string>() { "Yes", "No" };
-
-            foreach (var answer in answers)
-            {
-                Votes[answer] = 0;
-                menu.AddMenuOption(answer, (player, option) =>
-                {
-                    ExtendTimeVoted(player, answer);
-                    MenuManager.CloseActiveMenu(player);
-                });
-            }
+            var menu = CreateVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
                 MenuManager.OpenChatMenu(player, menu);
