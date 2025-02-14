@@ -32,6 +32,7 @@ namespace cs2_rockthevote
         private GameRules _gameRules;
 
         Dictionary<string, int> Votes = new();
+        Dictionary<CCSPlayerController, string> PlayerVotes = new();
         int timeLeft = -1;
 
         private IExtendMapConfig? _config = null;
@@ -40,6 +41,8 @@ namespace cs2_rockthevote
         private int _canVote = 0;
         private Plugin? _plugin;
         private VipExtendMapConfig _veConfig = new();
+
+        public bool VoteInProgress => timeLeft >= 0;
 
         public void OnLoad(Plugin plugin)
         {
@@ -68,6 +71,7 @@ namespace cs2_rockthevote
             }
 
             Votes.Clear();
+            PlayerVotes.Clear();
             timeLeft = 0;
             KillTimer();
         }
@@ -75,11 +79,31 @@ namespace cs2_rockthevote
         // VIP Extend Start
         public void ExtendTimeVoted(CCSPlayerController player, string voteResponse)
         {
+            if (PlayerVotes.ContainsKey(player))
+            {
+                Votes[PlayerVotes[player]] -= 1;
+            }
+
             Votes[voteResponse] += 1;
+            PlayerVotes[player] = voteResponse;
             player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.you-voted", voteResponse));
             if (Votes.Select(x => x.Value).Sum() >= _canVote)
             {
                 ExtendTimeVote();
+            }
+        }
+
+        public void RevokeVote(CCSPlayerController player)
+        {
+            if (PlayerVotes.ContainsKey(player))
+            {
+                Votes[PlayerVotes[player]] -= 1;
+                PlayerVotes.Remove(player);
+                player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.vote-revoked"));
+            }
+            else
+            {
+                player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.no-vote-to-revoke"));
             }
         }
 
@@ -189,6 +213,7 @@ namespace cs2_rockthevote
         public void StartVote(IExtendMapConfig config)
         {
             Votes.Clear();
+            PlayerVotes.Clear();
             _pluginState.ExtendTimeVoteHappening = true;
             _config = config ?? throw new ArgumentNullException(nameof(config));
 
@@ -233,7 +258,7 @@ namespace cs2_rockthevote
                  Maybe suits the use case for bhup/surf/kz, but bugged the use case that depends on rounds.
 
                  Case 1: When !timeleft is around 10 minutes and the current round time is 55 minutes remaining, after !rtv extends by 20 minutes, the current map round time is 75 minutes left, and !timeleft also sets to 75 minutes. 
-                   
+
                  Case 2: When !timeleft is around 55 minutes and the current round time is 2 minutes left, after rtv extends it by 20 minutes, the current map round is 22 minutes left, and !timeleft also follows 22 minutes.
                 */
                 // RoundTime is in seconds, so multiply by 60 to convert to minutes

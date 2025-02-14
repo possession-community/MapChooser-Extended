@@ -39,6 +39,7 @@ namespace cs2_rockthevote
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
         private readonly MapLister _mapLister;
         private readonly ExtendMapCommand _extendMapManager;
+        private readonly RevoteCommand _revoteCommand;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
@@ -53,7 +54,8 @@ namespace cs2_rockthevote
             EndMapVoteManager endMapVoteManager,
             DisplayMapListCommandHandler displayMapListCommandHandler,
             MapLister mapLister,
-            ExtendMapCommand extendMapManager)
+            ExtendMapCommand extendMapManager,
+            RevoteCommand revoteCommand)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
@@ -69,6 +71,7 @@ namespace cs2_rockthevote
             _displayMapListCommandHandler = displayMapListCommandHandler;
             _mapLister = mapLister;
             _extendMapManager = extendMapManager;
+            _revoteCommand = revoteCommand;
         }
 
         public Config Config { get; set; } = null!;

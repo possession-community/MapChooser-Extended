@@ -59,6 +59,7 @@ namespace cs2_rockthevote
 
 
         Dictionary<string, int> Votes = new();
+        Dictionary<CCSPlayerController, string> PlayerVotes = new();
         int timeLeft = -1;
 
         List<string> mapsEllected = new();
@@ -71,6 +72,8 @@ namespace cs2_rockthevote
         private int _totalExtendLimit;
 
         HashSet<int> _voted = new();
+
+        public bool VoteInProgress => timeLeft >= 0;
 
         public void OnLoad(Plugin plugin)
         {
@@ -87,6 +90,7 @@ namespace cs2_rockthevote
         public void OnMapStart(string map)
         {
             Votes.Clear();
+            PlayerVotes.Clear();
             timeLeft = 0;
             mapsEllected.Clear();
             KillTimer();
@@ -106,11 +110,31 @@ namespace cs2_rockthevote
             if (_config!.HideHudAfterVote)
                 _voted.Add(player.UserId!.Value);
 
+            if (PlayerVotes.ContainsKey(player))
+            {
+                Votes[PlayerVotes[player]] -= 1;
+            }
+
             Votes[mapName] += 1;
+            PlayerVotes[player] = mapName;
             player.PrintToChat(_localizer.LocalizeWithPrefix("emv.you-voted", mapName));
             if (Votes.Select(x => x.Value).Sum() >= _canVote)
             {
                 EndVote();
+            }
+        }
+
+        public void RevokeVote(CCSPlayerController player)
+        {
+            if (PlayerVotes.ContainsKey(player))
+            {
+                Votes[PlayerVotes[player]] -= 1;
+                PlayerVotes.Remove(player);
+                player.PrintToChat(_localizer.LocalizeWithPrefix("emv.vote-revoked"));
+            }
+            else
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("emv.no-vote-to-revoke"));
             }
         }
 
@@ -256,9 +280,10 @@ namespace cs2_rockthevote
             return array;
         }
 
-        public void StartVote(IEndOfMapConfig config) 
+        public void StartVote(IEndOfMapConfig config)
         {
             Votes.Clear();
+            PlayerVotes.Clear();
             _voted.Clear();
 
             // Backup the current config as if this is called via the server command, the config will be changed
