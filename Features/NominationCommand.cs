@@ -76,6 +76,11 @@ namespace cs2_rockthevote
                     Nominate(player, option.Text);
                 }, _mapCooldown.IsMapInCooldown(map.Name));
             }
+
+            nominationMenu.AddMenuOption("Exit", (CCSPlayerController player, ChatMenuOption option) =>
+            {
+                MenuManager.CloseActiveMenu(player);
+            });
         }
 
         public void CommandHandler(CCSPlayerController? player, string map)
@@ -156,9 +161,16 @@ namespace cs2_rockthevote
                 .Sum();
 
             if (!alreadyVoted)
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("nominate.nominated", player.PlayerName, matchingMap, totalVotes));
+            {
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("nominate.nominated", player.PlayerName,
+                    matchingMap, totalVotes));
+            }
             else
-                player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated", matchingMap, totalVotes));
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated", matchingMap,
+                    totalVotes));
+            }
+            MenuManager.CloseActiveMenu(player);
         }
 
         public List<string> NominationWinners()
