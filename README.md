@@ -36,6 +36,7 @@ Please drop a ⭐ star in the repository
 - !ext map time limit extension command
 - Ignore players in Spectators from vote count
 - Added "Extend current map" in end of map vote
+- !revote during RTV or VIPextend vote to change the option
 - [VIP flag] Vote to extend current map by time limit
 - [Admin flag] Extend current map time limit
 - Force RTV from the server side [#70](https://github.com/abnerfs/cs2-rockthevote/pull/70)
@@ -48,7 +49,6 @@ Please drop a ⭐ star in the repository
 
 # Work in Progress
 - Cooldown to start another RTV after the last vote
-- ~~Allow players to type !revote to change the option if they made a mistake during votes~~ Testing
 - Bug fix on "ignore specs" checker
 
 # ⚠️ Help Wanted
