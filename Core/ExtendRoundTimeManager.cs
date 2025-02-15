@@ -99,12 +99,12 @@ namespace cs2_rockthevote
             {
                 Votes[PlayerVotes[player]] -= 1;
                 PlayerVotes.Remove(player);
-                player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.vote-revoked"));
+                player.PrintToCenter(_localizer.LocalizeWithPrefix("general.vote-revoked-choose-again"));
                 ShowVoteMenu(player); // Bring back the vote menu
             }
             else
             {
-                player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.no-vote-to-revoke"));
+                player.PrintToCenter(_localizer.LocalizeWithPrefix("general.no-vote-to-revoke"));
             }
         }
 

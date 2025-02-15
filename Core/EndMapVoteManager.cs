@@ -127,12 +127,12 @@ namespace cs2_rockthevote
             {
                 Votes[PlayerVotes[player]] -= 1;
                 PlayerVotes.Remove(player);
-                player.PrintToChat(_localizer.LocalizeWithPrefix("emv.vote-revoked"));
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.vote-revoked-choose-again"));
                 ShowMapVoteMenu(player); // Bring back the map vote menu
             }
             else
             {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("emv.no-vote-to-revoke"));
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.no-vote-to-revoke"));
             }
         }
 
