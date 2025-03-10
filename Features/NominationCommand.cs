@@ -14,6 +14,8 @@ namespace cs2_rockthevote
         [ConsoleCommand("nominate", "nominate a map to rtv")]
         [ConsoleCommand("css_nom", "nominate a map to rtv")]
         [ConsoleCommand("nom", "nominate a map to rtv")]
+        [ConsoleCommand("css_yd", "nominate a map to rtv")]
+        [ConsoleCommand("yd", "nominate a map to rtv")]
         public void OnNominate(CCSPlayerController? player, CommandInfo command)
         {
             string map = command.GetArg(1).Trim().ToLower();

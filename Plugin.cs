@@ -116,9 +116,21 @@ namespace cs2_rockthevote
                     var map = split.Length > 1 ? split[1].Trim() : "";
                     _nominationManager.CommandHandler(player, map);
                 }
+                else if (text.StartsWith("yd"))
+                {
+                    var split = text.Split("yd");
+                    var map = split.Length > 1 ? split[1].Trim() : "";
+                    _nominationManager.CommandHandler(player, map);
+                }
                 else if (text.StartsWith("votemap"))
                 {
                     var split = text.Split("votemap");
+                    var map = split.Length > 1 ? split[1].Trim() : "";
+                    _votemapManager.CommandHandler(player, map);
+                }
+                else if (text.StartsWith("vm"))
+                {
+                    var split = text.Split("vm");
                     var map = split.Length > 1 ? split[1].Trim() : "";
                     _votemapManager.CommandHandler(player, map);
                 }

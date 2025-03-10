@@ -12,6 +12,7 @@ namespace cs2_rockthevote
     public partial class Plugin
     {
         [ConsoleCommand("votemap", "Vote to change to a map")]
+        [ConsoleCommand("vm", "Vote to change to a map")]
         public void OnVotemap(CCSPlayerController? player, CommandInfo command)
         {
             string map = command.GetArg(1).Trim().ToLower();
