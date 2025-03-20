@@ -1,6 +1,6 @@
-﻿using cs2_rockthevote.Core;
-using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities;
+using cs2_rockthevote.Core;
 
 namespace cs2_rockthevote
 {
@@ -12,10 +12,11 @@ namespace cs2_rockthevote
         public event EventHandler<Map[]>? EventMapsLoaded;
 
         private Plugin? _plugin;
+        private readonly MapSettingsManager _mapSettingsManager;
 
-        public MapLister()
+        public MapLister(MapSettingsManager mapSettingsManager)
         {
-
+            _mapSettingsManager = mapSettingsManager;
         }
 
         public void Clear()
@@ -27,28 +28,29 @@ namespace cs2_rockthevote
         public void LoadMaps()
         {
             Clear();
-            string mapsFile = Path.Combine(_plugin!.ModulePath, "../maplist.txt");
-            if (!File.Exists(mapsFile))
-                throw new FileNotFoundException(mapsFile);
 
-            Maps = File.ReadAllText(mapsFile)
-                .Replace("\r\n", "\n")
-                .Split("\n")
-                .Select(x => x.Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x) && !x.StartsWith("//"))
-                .Select(mapLine =>
-                {
-                    string[] args = mapLine.Split(":");
-                    return new Map(args[0], args.Length == 2 ? args[1] : null);
+            // Get available maps from MapSettingsManager
+            var availableMaps = _mapSettingsManager.GetAvailableMaps();
+            
+            // Convert to Map objects
+            Maps = availableMaps
+                .Select(mapName => {
+                    var meta = _mapSettingsManager.GetMapMeta(mapName);
+                    return new Map(
+                        meta.Name, 
+                        !string.IsNullOrEmpty(meta.WorkshopId) ? meta.WorkshopId : null
+                    );
                 })
                 .ToArray();
 
             MapsLoaded = true;
             if (EventMapsLoaded is not null)
                 EventMapsLoaded.Invoke(this, Maps!);
+            
+            Console.WriteLine($"[RockTheVote] Loaded {Maps.Length} maps from settings");
         }
 
-        public void OnMapStart(string _map)
+        public void OnMapStart(string mapName)
         {
             if (_plugin is not null)
                 LoadMaps();
@@ -60,9 +62,14 @@ namespace cs2_rockthevote
             LoadMaps();
         }
 
-        // returns "" if there's no matching
-        // if there's more than one matching name, list all the matching names for players to choose
-        // otherwise, returns the matching name
+        public void OnConfigParsed(Config config)
+        {
+            // Nothing to do here
+        }
+
+        // Returns "" if there's no matching
+        // If there's more than one matching name, list all the matching names for players to choose
+        // Otherwise, returns the matching name
         public string GetSingleMatchingMapName(string map, CCSPlayerController player, StringLocalizer _localizer)
         {
             if (this.Maps!.Select(x => x.Name).FirstOrDefault(x => x.ToLower() == map) is not null)
@@ -82,7 +89,6 @@ namespace cs2_rockthevote
             {
                 player!.PrintToChat(_localizer.LocalizeWithPrefix("nominate.multiple-maps-containing-name"));
                 player!.PrintToChat(string.Join(", ", matchingMaps));
-                //return matchingMaps;
                 return "";
             }
 

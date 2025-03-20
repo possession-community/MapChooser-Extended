@@ -1,6 +1,7 @@
-﻿using CounterStrikeSharp.API;
+﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
+using cs2_rockthevote.Core;
 using cs2_rockthevote.Features;
 using Microsoft.Extensions.DependencyInjection;
 using static CounterStrikeSharp.API.Core.Listeners;
@@ -14,7 +15,6 @@ namespace cs2_rockthevote
             var di = new DependencyManager<Plugin, Config>();
             di.LoadDependencies(typeof(Plugin).Assembly);
             di.AddIt(serviceCollection);
-            serviceCollection.AddScoped<StringLocalizer>();
         }
     }
 
@@ -27,7 +27,11 @@ namespace cs2_rockthevote
 
         private readonly DependencyManager<Plugin, Config> _dependencyManager;
         private readonly NominationCommand _nominationManager;
+        private readonly MapSettingsManager _mapSettingsManager;
+        private readonly MapLister _mapLister;
+        private readonly MapCooldown _mapCooldown;
         private readonly ChangeMapManager _changeMapManager;
+        private readonly EndMapVoteManager _endMapVoteManager;
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
         //private readonly ExtendCommand _extManager;
@@ -35,15 +39,13 @@ namespace cs2_rockthevote
         private readonly ExtendRoundTimeCommand _extendRoundTime;
         private readonly VoteExtendRoundTimeCommand _voteExtendRoundTime;
         private readonly NextMapCommand _nextMap;
-        private readonly EndMapVoteManager _endMapVoteManager;
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
-        private readonly MapLister _mapLister;
         private readonly ExtendMapCommand _extendMapManager;
         private readonly RevoteCommand _revoteCommand;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
-            ChangeMapManager changeMapManager,
+            //ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
             //ExtendCommand extManager,
@@ -59,7 +61,7 @@ namespace cs2_rockthevote
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
-            _changeMapManager = changeMapManager;
+            //_changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
             //_extManager = extManager;
@@ -84,7 +86,10 @@ namespace cs2_rockthevote
         public override void Load(bool hotReload)
         {
             _dependencyManager.OnPluginLoad(this);
-            _mapLister.OnLoad(this); // ensure map is loaded
+            _mapSettingsManager.OnLoad(this); // Initialize map settings
+            _mapLister.OnLoad(this);       // Load maps from settings
+            // TODO: Remove
+            //_mapLister.OnLoad(this); // ensure map is loaded (legacy)
             RegisterListener<OnMapStart>(_dependencyManager.OnMapStart);
         }
 

@@ -3,33 +3,28 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
 using cs2_rockthevote.Core;
-using System.Data;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using static CounterStrikeSharp.API.Core.Listeners;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
+using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace cs2_rockthevote
 {
-    //public partial class Plugin
-    //{
-
-    //    [ConsoleCommand("votebot", "Votes to rock the vote")]
-    //    public void VoteBot(CCSPlayerController? player, CommandInfo? command)
-    //    {
-    //        var bot = ServerManager.ValidPlayers().FirstOrDefault(x => x.IsBot);
-    //        if (bot is not null)
-    //        {
-    //            _endMapVoteManager.MapVoted(bot, "de_dust2");
-    //        }
-    //    }
-    //}
-
     public class EndMapVoteManager : IPluginDependency<Plugin, Config>
     {
         const int MAX_OPTIONS_HUD_MENU = 6;
-        public EndMapVoteManager(MapLister mapLister, ChangeMapManager changeMapManager, NominationCommand nominationManager, StringLocalizer localizer, PluginState pluginState, MapCooldown mapCooldown, ExtendRoundTimeManager extendRoundTimeManager, TimeLimitManager timeLimitManager, RoundLimitManager roundLimitManager, GameRules gameRules)
+
+        public EndMapVoteManager(
+            MapLister mapLister, 
+            ChangeMapManager changeMapManager, 
+            NominationCommand nominationManager, 
+            StringLocalizer localizer, 
+            PluginState pluginState, 
+            MapCooldown mapCooldown, 
+            ExtendRoundTimeManager extendRoundTimeManager, 
+            TimeLimitManager timeLimitManager, 
+            RoundLimitManager roundLimitManager, 
+            GameRules gameRules,
+            MapSettingsManager mapSettingsManager)
         {
             _mapLister = mapLister;
             _changeMapManager = changeMapManager;
@@ -41,14 +36,16 @@ namespace cs2_rockthevote
             _timeLimitManager = timeLimitManager;
             _roundLimitManager = roundLimitManager;
             _gameRules = gameRules;
+            _mapSettingsManager = mapSettingsManager;
         }
 
         private readonly MapLister _mapLister;
         private readonly ChangeMapManager _changeMapManager;
         private readonly NominationCommand _nominationManager;
         private readonly StringLocalizer _localizer;
-        private PluginState _pluginState;
-        private MapCooldown _mapCooldown;
+        private readonly PluginState _pluginState;
+        private readonly MapCooldown _mapCooldown;
+        private readonly MapSettingsManager _mapSettingsManager;
         private Timer? Timer;
         private readonly ExtendRoundTimeManager _extendRoundTimeManager;
         private readonly TimeLimitManager _timeLimitManager;
@@ -146,6 +143,7 @@ namespace cs2_rockthevote
         {
             ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
 
+            // Add extend option if allowed
             if (_eomConfig != null && _eomConfig.AllowExtend && (_eomConfig.ExtendLimit > 0 || _eomConfig.ExtendLimit == -1))
             {
                 Votes[_localizer.Localize("general.extend-current-map")] = 0;
@@ -156,6 +154,7 @@ namespace cs2_rockthevote
                 });
             }
 
+            // Add map options
             foreach (var map in mapsEllected.Take((_eomConfig != null && _eomConfig.AllowExtend && (_eomConfig.ExtendLimit > 0 || _eomConfig.ExtendLimit == -1)) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
             {
                 Votes[map] = 0;
@@ -324,10 +323,30 @@ namespace cs2_rockthevote
             if (config.HudMenu && mapsToShow > MAX_OPTIONS_HUD_MENU)
                 mapsToShow = MAX_OPTIONS_HUD_MENU;
 
-            var mapsScrambled = Shuffle(new Random(),
-                _mapLister.Maps!.Select(x => x.Name).Where(x => x != Server.MapName && !_mapCooldown.IsMapInCooldown(x))
-                    .ToList());
-            mapsEllected = _nominationManager.NominationWinners().Concat(mapsScrambled).Distinct().ToList();
+            // Get maps that meet cycle conditions
+            var availableMaps = _mapSettingsManager.GetAvailableMaps()
+                .Where(m => m != Server.MapName && !_mapCooldown.IsMapInCooldown(m) && _mapSettingsManager.IsMapAvailableForCycle(m))
+                .ToList();
+
+            // If no maps meet cycle conditions, use all maps except current and cooldown
+            if (availableMaps.Count == 0)
+            {
+                Console.WriteLine("[RockTheVote] No maps meet cycle conditions, using all available maps");
+                availableMaps = _mapLister.Maps!
+                    .Select(x => x.Name)
+                    .Where(x => x != Server.MapName && !_mapCooldown.IsMapInCooldown(x))
+                    .ToList();
+            }
+
+            // Shuffle available maps
+            var mapsScrambled = Shuffle(new Random(), availableMaps);
+            
+            // Combine nominations with available maps
+            mapsEllected = _nominationManager.NominationWinners()
+                .Where(m => _mapSettingsManager.IsMapAvailableForCycle(m)) // Only include nominations that meet cycle conditions
+                .Concat(mapsScrambled)
+                .Distinct()
+                .ToList();
 
             _canVote = ServerManager.ValidPlayerCount();
             var menu = CreateMapVoteMenu();
@@ -345,6 +364,17 @@ namespace cs2_rockthevote
                 else
                     timeLeft--;
             }, TimerFlags.REPEAT);
+        }
+
+        /// <summary>
+        /// Get the extend settings for the current map
+        /// </summary>
+        /// <returns>Extend settings</returns>
+        public ExtendSettings GetCurrentMapExtendSettings()
+        {
+            string currentMap = Server.MapName;
+            var settings = _mapSettingsManager.GetMapSettings(currentMap);
+            return settings.Settings.Extend;
         }
     }
 }

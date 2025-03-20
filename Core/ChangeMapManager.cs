@@ -1,7 +1,8 @@
 ﻿using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Menu;
+using cs2_rockthevote.Core;
 
 namespace cs2_rockthevote
 {
@@ -25,23 +26,32 @@ namespace cs2_rockthevote
     public class ChangeMapManager : IPluginDependency<Plugin, Config>
     {
         private Plugin? _plugin;
-        private StringLocalizer _localizer;
-        private PluginState _pluginState;
-        private MapLister _mapLister;
+        private readonly StringLocalizer _localizer;
+        private readonly PluginState _pluginState;
+        private readonly MapLister _mapLister;
+        private readonly MapSettingsManager _mapSettingsManager;
+        private readonly MapCooldown _mapCooldown;
 
         public string? NextMap { get; private set; } = null;
         private string _prefix = DEFAULT_PREFIX;
         private const string DEFAULT_PREFIX = "rtv.prefix";
         private bool _mapEnd = false;
 
-        private Map[] _maps = new Map[0];
+        private Map[] _maps = Array.Empty<Map>();
         private Config? _config;
 
-        public ChangeMapManager(StringLocalizer localizer, PluginState pluginState, MapLister mapLister)
+        public ChangeMapManager(
+            StringLocalizer localizer, 
+            PluginState pluginState, 
+            MapLister mapLister,
+            MapSettingsManager mapSettingsManager,
+            MapCooldown mapCooldown)
         {
             _localizer = localizer;
             _pluginState = pluginState;
             _mapLister = mapLister;
+            _mapSettingsManager = mapSettingsManager;
+            _mapCooldown = mapCooldown;
             _mapLister.EventMapsLoaded += OnMapsLoaded;
         }
 
@@ -50,16 +60,38 @@ namespace cs2_rockthevote
             _maps = maps;
         }
 
-
         public void ScheduleMapChange(string map, bool mapEnd = false, string prefix = DEFAULT_PREFIX)
         {
+            // Check if the map meets cycle conditions
+            if (!IsMapAvailableForCycle(map))
+            {
+                Console.WriteLine($"[RockTheVote] Map {map} does not meet cycle conditions, finding alternative...");
+                
+                // Find an alternative map that meets cycle conditions
+                var availableMaps = _mapSettingsManager.GetAvailableMaps()
+                    .Where(m => !_mapCooldown.IsMapInCooldown(m))
+                    .ToList();
+                
+                if (availableMaps.Count > 0)
+                {
+                    // Select a random map from available maps
+                    var random = new Random();
+                    map = availableMaps[random.Next(availableMaps.Count)];
+                    Console.WriteLine($"[RockTheVote] Selected alternative map: {map}");
+                }
+                else
+                {
+                    Console.WriteLine($"[RockTheVote] No alternative maps available, using original map: {map}");
+                }
+            }
+
             NextMap = map;
             _prefix = prefix;
             _pluginState.MapChangeScheduled = true;
             _mapEnd = mapEnd;
         }
 
-        public void OnMapStart(string _map)
+        public void OnMapStart(string mapName)
         {
             NextMap = null;
             _prefix = DEFAULT_PREFIX;
@@ -115,6 +147,29 @@ namespace cs2_rockthevote
                 }
                 return HookResult.Continue;
             });
+        }
+
+        /// <summary>
+        /// Check if a map is available for the cycle
+        /// </summary>
+        /// <param name="mapName">Map name</param>
+        /// <returns>Whether the map is available</returns>
+        private bool IsMapAvailableForCycle(string mapName)
+        {
+            // Check if the map meets cycle conditions
+            return _mapSettingsManager.IsMapAvailableForCycle(mapName) && 
+                   !_mapCooldown.IsMapInCooldown(mapName);
+        }
+
+        /// <summary>
+        /// Get a list of maps available for the cycle
+        /// </summary>
+        /// <returns>List of available maps</returns>
+        public List<string> GetAvailableMapsForCycle()
+        {
+            return _mapSettingsManager.GetAvailableMaps()
+                .Where(m => !_mapCooldown.IsMapInCooldown(m))
+                .ToList();
         }
     }
 }
