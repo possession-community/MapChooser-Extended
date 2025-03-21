@@ -54,9 +54,13 @@ namespace cs2_rockthevote
         public bool AllowExtend { get; set; } = true;
         public bool RoundBased { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
+ //TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;
+ //TODO: Remove - Using map settings instead
         public int VotePercentage { get; set; } = 60;
+ //TODO: Remove - Using map settings instead
         public int ExtendLimit { get; set; } = 3;
+ //TODO: Remove - Using map settings instead
     }
 
     public class RtvConfig : ICommandConfig, IVoteConfig, IEndOfMapConfig, IExtendMapConfig
@@ -76,8 +80,11 @@ namespace cs2_rockthevote
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
         public int ExtendTimeStep { get; set; } = 15; 
+//TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;
+ //TODO: Remove - Using map settings instead
         public int ExtendLimit { get; set; } = 3;
+ //TODO: Remove - Using map settings instead
 
     }
 
@@ -93,7 +100,9 @@ namespace cs2_rockthevote
         public bool RoundBased { get; set; } = true;
 
         public int ExtendTimeStep { get; set; } = 15;
+ //TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;
+ //TODO: Remove - Using map settings instead
         //public int ExtendLimit { get; set; } = 3; // share with EndOfMapConfig ExtendLimit
     }
 
@@ -115,8 +124,11 @@ namespace cs2_rockthevote
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
         public int ExtendTimeStep { get; set; } = 15;
+ //TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;
+ //TODO: Remove - Using map settings instead
         public int ExtendLimit { get; set; } = 3;
+ //TODO: Remove - Using map settings instead
         public bool RoundBased { get; set; } = true;
         public bool HudMenu { get; set; } = true;
     }
@@ -131,6 +143,10 @@ namespace cs2_rockthevote
         public bool ShowToAll { get; set; } = false;
     }
 
+    public class WorkshopConfig {
+        public string[] collection_ids { get; set; } = [];
+    }
+
     public class Config : IBasePluginConfig
     {
         public int Version { get; set; } = 15;
@@ -141,6 +157,7 @@ namespace cs2_rockthevote
         public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
+        public WorkshopConfig Workshop { get; set; } = new();
         public ushort MapsInCoolDown { get; set; } = 3;
     }
 }

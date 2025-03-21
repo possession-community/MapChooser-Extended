@@ -17,17 +17,19 @@ namespace cs2_rockthevote
     public class ExtendRoundTimeManager : IPluginDependency<Plugin, Config>
     {
         const int MAX_OPTIONS_HUD_MENU = 6;
-        public ExtendRoundTimeManager(IStringLocalizer stringLocalizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules)
+        public ExtendRoundTimeManager(IStringLocalizer stringLocalizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules, MapSettingsManager mapSettingsManager)
         {
             _localizer = new StringLocalizer(stringLocalizer, "extendtime.prefix");
             _pluginState = pluginState;
             _timeLimitManager = timeLimitManager;
             _gameRules = gameRules;
+            _mapSettingsManager = mapSettingsManager;
         }
 
         private readonly StringLocalizer _localizer;
         private PluginState _pluginState;
         private TimeLimitManager _timeLimitManager;
+        private readonly MapSettingsManager _mapSettingsManager;
         private Timer? Timer;
         private GameRules _gameRules;
 
@@ -41,6 +43,9 @@ namespace cs2_rockthevote
         private int _canVote = 0;
         private Plugin? _plugin;
         private VipExtendMapConfig _veConfig = new();
+        
+        // Track the number of extends used for the current map
+        private int _extendsUsed = 0;
 
         public bool VoteInProgress => timeLeft >= 0;
 
@@ -58,9 +63,12 @@ namespace cs2_rockthevote
         {
             try
             {
-                // _pluginState.ExtendsLeft = _config!.ExtendLimit; //Null ref happened! Maplist broken!
-                _pluginState.ExtendsLeft = new Config().VipExtendMapVote.ExtendLimit; // try this approach
-                _totalExtendLimit = new Config().VipExtendMapVote.ExtendLimit;
+                // Reset extends used counter on map start
+                _extendsUsed = 0;
+                
+                // For backward compatibility, still set the plugin state
+                _pluginState.ExtendsLeft = GetCurrentMapExtendSettings().Times;
+                _totalExtendLimit = GetCurrentMapExtendSettings().Times;
             }
             catch (Exception)
             {
@@ -183,7 +191,12 @@ namespace cs2_rockthevote
         {
             KillTimer();
 
-            var minutesToExtend = _config!.ExtendTimeStep; // use editable extend timer
+            // Get current map extend settings
+            var extendSettings = GetCurrentMapExtendSettings();
+            var currentMap = Server.MapName;
+            var mapSettings = _mapSettingsManager.GetMapSettings(currentMap);
+            
+            var minutesToExtend = extendSettings.Number; // use map extend settings
 
             decimal maxVotes = Votes.Select(x => x.Value).Max();
             IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
@@ -218,21 +231,34 @@ namespace cs2_rockthevote
             {
                 // Extend mp_timelimit
                 // Use ExtendMapTimeLimit for round-based gamemodes (ze/zm/normal gunfights etc), and ExtendRoundTime for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
-                if (_veConfig.RoundBased == true)
+                if (mapSettings.Settings.Match.Type == 0) // Time limit
                 {
                     ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
                 }
                 else
+ // Round limit
                 {
                     ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
                 }
 
                 PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
-                if (_pluginState.ExtendsLeft != -1)
+                
+                // Increment extends used counter
+                _extendsUsed++;
+                
+                // For backward compatibility, still update the plugin state
+                if (_pluginState.ExtendsLeft > 0)
                 {
                     _pluginState.ExtendsLeft -= 1;
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", _pluginState.ExtendsLeft, _totalExtendLimit));
                 }
+                
+                // Show extends left message if there's a limit
+                if (extendSettings.Times != -1)
+                {
+                    int extendsLeft = extendSettings.Times - _extendsUsed;
+                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", extendsLeft, extendSettings.Times));
+                }
+                
                 _pluginState.CommandsDisabled = false;
             }
 
@@ -325,6 +351,17 @@ namespace cs2_rockthevote
 
                 return false;
             }
+        }
+        
+        /// <summary>
+        /// Get the extend settings for the current map
+        /// </summary>
+        /// <returns>Extend settings</returns>
+        public ExtendSettings GetCurrentMapExtendSettings()
+        {
+            string currentMap = Server.MapName;
+            var settings = _mapSettingsManager.GetMapSettings(currentMap);
+            return settings.Settings.Extend;
         }
     }
 }
