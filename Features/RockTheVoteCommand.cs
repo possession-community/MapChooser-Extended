@@ -57,6 +57,11 @@ namespace cs2_rockthevote
         private PluginState _pluginState;
         private RtvConfig _config = new();
         private AsyncVoteManager? _voteManager;
+        // Track the last time RTV was triggered
+        private DateTime _lastRtvTime = DateTime.MinValue;
+        private bool _firstRtvOfMap = true;
+        // Track when the map started
+        private DateTime _mapStartTime = DateTime.Now;
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
 
         public RockTheVoteCommand(GameRules gameRules, EndMapVoteManager endmapVoteManager, StringLocalizer localizer, PluginState pluginState)
@@ -74,6 +79,10 @@ namespace cs2_rockthevote
             {
                 _voteManager!.OnMapStart(map);
             });
+            // Reset RTV cooldown tracking on map start
+            _firstRtvOfMap = true;
+            // Record map start time
+            _mapStartTime = DateTime.Now;
         }
 
         public void CommandServerHandler(CCSPlayerController? player, CommandInfo command)
@@ -151,6 +160,33 @@ namespace cs2_rockthevote
                 return;
             }
 
+            // Check if enough time has passed since map start for the first RTV
+            if (_firstRtvOfMap && _config.InitialRtvDelay > 0)
+            {
+                TimeSpan timeSinceMapStart = DateTime.Now - _mapStartTime;
+                if (timeSinceMapStart.TotalSeconds < _config.InitialRtvDelay)
+                {
+                    int remainingSeconds = _config.InitialRtvDelay - (int)timeSinceMapStart.TotalSeconds;
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.wait-seconds", remainingSeconds));
+                    return;
+                }
+            }
+            
+            // Check for cooldown if this is not the first RTV of the map and cooldown is enabled
+            if (!_firstRtvOfMap && _config.VoteCooldownTime > 0)
+            {
+                TimeSpan timeSinceLastRtv = DateTime.Now - _lastRtvTime;
+                if (timeSinceLastRtv.TotalSeconds < _config.VoteCooldownTime)
+                {
+                    int remainingSeconds = _config.VoteCooldownTime - (int)timeSinceLastRtv.TotalSeconds;
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.wait-seconds", remainingSeconds));
+                    return;
+                }
+            }
+
+            // If we get here on the first RTV, mark it as no longer the first
+            _firstRtvOfMap = false;
+
             VoteResult result = _voteManager!.AddVote(player.UserId!.Value);
             switch (result.Result)
             {
@@ -166,6 +202,9 @@ namespace cs2_rockthevote
                 case VoteResultEnum.VotesReached:
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("rtv.rocked-the-vote", player.PlayerName)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.votes-reached"));
+                    
+                    // Update the last RTV time
+                    _lastRtvTime = DateTime.Now;
                     _endMapVoteManager.StartVote(_config);
 
                     // reset vote status

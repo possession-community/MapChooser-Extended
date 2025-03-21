@@ -79,6 +79,7 @@ namespace cs2_rockthevote
         public bool DontChangeRtv { get; set; } = true;
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
+        public int InitialRtvDelay { get; set; } = 60;
         public int ExtendTimeStep { get; set; } = 15; 
 //TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;

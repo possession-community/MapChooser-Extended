@@ -161,6 +161,17 @@ namespace cs2_rockthevote
                 });
             }
 
+            // Add ignore option if DontChangeRtv is enabled and this is an RTV vote
+            if (_config is RtvConfig rtvConfig && rtvConfig.DontChangeRtv)
+            {
+                Votes[_localizer.Localize("general.ignore-rtv")] = 0;
+                menu.AddMenuOption(_localizer.Localize("general.ignore-rtv"), (player, option) =>
+                {
+                    MapVoted(player, _localizer.Localize("general.ignore-rtv"));
+                    MenuManager.CloseActiveMenu(player);
+                });
+            }
+
             // Add map options
             foreach (var map in mapsEllected.Take((extendSettings.Enabled && (extendSettings.Times > _extendsUsed || extendSettings.Times == -1)) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
             {
@@ -293,6 +304,16 @@ namespace cs2_rockthevote
                     _nominationManager.ResetNominations();
                     _nominationManager.Nomlist.Clear();
                 }
+            }
+            else if (winner.Key == _localizer.Localize("general.ignore-rtv"))
+            {
+                // Do nothing if Ignore is selected
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.ignored"));
+                
+                _pluginState.MapChangeScheduled = false;
+                _pluginState.EofVoteHappening = false;
+                _pluginState.CommandsDisabled = false;
+                _pluginState.ExtendTimeVoteHappening = false;
             }
             else
             {
