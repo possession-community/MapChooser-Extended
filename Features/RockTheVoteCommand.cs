@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
+using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 
@@ -38,6 +39,33 @@ namespace cs2_rockthevote
                 // Handle player command
                 _rtvManager.UnRTVCommandHandler(player!);
             }
+        }
+
+        [ConsoleCommand("css_enable_rtv", "Enable RTV command (Admin only)")]
+        [ConsoleCommand("enable_rtv", "Enable RTV command (Admin only)")]
+        [RequiresPermissions("@css/generic")]
+        public void OnEnableRtv(CCSPlayerController? player, CommandInfo command)
+        {
+            _rtvManager.EnableRtvCommandHandler(player);
+        }
+
+        [ConsoleCommand("css_disable_rtv", "Disable RTV command (Admin only)")]
+        [ConsoleCommand("disable_rtv", "Disable RTV command (Admin only)")]
+        [RequiresPermissions("@css/generic")]
+        public void OnDisableRtv(CCSPlayerController? player, CommandInfo command)
+        {
+            _rtvManager.DisableRtvCommandHandler(player);
+        }
+
+        [ConsoleCommand("css_force_rtv", "Force RTV vote (Admin only)")]
+        [ConsoleCommand("force_rtv", "Force RTV vote (Admin only)")]
+        [RequiresPermissions("@css/generic")]
+        public void OnForceRtv(CCSPlayerController? player, CommandInfo command)
+        {
+            if (player != null && player.IsValid != false)
+                _rtvManager.ForceRtvCommandHandler(player, command);
+            else
+                return;
         }
 
         [GameEventHandler(HookMode.Pre)]
@@ -122,12 +150,93 @@ namespace cs2_rockthevote
             _endMapVoteManager.StartVote(config);
         }
 
+        public void EnableRtvCommandHandler(CCSPlayerController? player)
+        {
+            if (player != null && player.IsValid != false)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
+                return;
+            }
+
+            if (!_pluginState.RtvDisabled)
+            {
+                if (player != null)
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("rtv.already-enabled"));
+                else
+                    Console.WriteLine(_localizer.LocalizeWithPrefix("rtv.already-enabled"));
+                return;
+            }
+
+            _pluginState.RtvDisabled = false;
+            
+            if (player != null)
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.enabled-by-admin", player.PlayerName));
+            else
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.enabled-by-server"));
+        }
+
+        public void DisableRtvCommandHandler(CCSPlayerController? player)
+        {
+            if (player != null && player.IsValid != false)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
+                return;
+            }
+
+            if (_pluginState.RtvDisabled)
+            {
+                if (player != null)
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("rtv.already-disabled"));
+                else
+                    Console.WriteLine(_localizer.LocalizeWithPrefix("rtv.already-disabled"));
+                return;
+            }
+
+            _pluginState.RtvDisabled = true;
+            
+            if (player != null)
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.disabled-by-admin", player.PlayerName));
+            else
+                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.disabled-by-server"));
+        }
+
+        public void ForceRtvCommandHandler(CCSPlayerController? player, CommandInfo command)
+        {
+            if (player != null && player.IsValid != false)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
+                return;
+            }
+
+            // Check if we're in warmup
+            if (_gameRules.WarmupRunning)
+            {
+                if (player != null)
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.warmup"));
+                else
+                    Console.WriteLine(_localizer.LocalizeWithPrefix("general.validation.warmup"));
+                return;
+            }
+
+            // Force RTV vote
+            int voteDuration = _config.VoteDuration;
+            string args = command.ArgString.Trim();
+            if (!string.IsNullOrEmpty(args) && int.TryParse(args, out int duration))
+            {
+                voteDuration = duration;
+            }
+
+            Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.force-rtv", player?.PlayerName ?? "Server"));
+            _endMapVoteManager.StartVote(_config);
+            _voteManager!.ResetVotes();
+        }
+
         public void CommandHandler(CCSPlayerController? player)
         {
             if (player is null)
                 return;
 
-            if (_pluginState.DisableCommands || !_config.Enabled)
+            if (_pluginState.DisableCommands || !_config.Enabled || _pluginState.RtvDisabled)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
                 return;
@@ -218,7 +327,7 @@ namespace cs2_rockthevote
             if (player is null)
                 return;
 
-            if (_pluginState.DisableCommands || !_config.Enabled)
+            if (_pluginState.DisableCommands || !_config.Enabled || _pluginState.RtvDisabled)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
                 return;

@@ -8,6 +8,8 @@ namespace cs2_rockthevote
         public bool EofVoteHappening { get; set; }
         public bool ExtendTimeVoteHappening { get; set; }
         public bool CommandsDisabled { get; set; }
+        public bool RtvDisabled { get; set; } = false;
+        public bool NominateDisabled { get; set; } = false;
         public int ExtendsLeft { get; set; }
 
         public PluginState()
@@ -23,6 +25,8 @@ namespace cs2_rockthevote
             EofVoteHappening = false;
             ExtendTimeVoteHappening = false;
             CommandsDisabled = false;
+            RtvDisabled = false;
+            NominateDisabled = false;
             if (MapChangeScheduled || EofVoteHappening || ExtendTimeVoteHappening || CommandsDisabled)
             {
                 Server.ExecuteCommand("css_plugins reload RockTheVote");
