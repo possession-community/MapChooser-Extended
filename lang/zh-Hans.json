@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "地图最近已经被玩过",
   "general.vote-revoked-choose-again": "你的投票已被撤销。请重新选择。",
   "general.no-vote-to-revoke": "你没有投票可以撤销。",
+  "general.map-not-available": "此地图不可选择。",
   "rtv.rocked-the-vote": "玩家 {green}{0}{default} 想要开启下张地图投票",
   "rtv.already-rocked-the-vote": "你已经预热投票",
   "rtv.votes-reached": "达到票数，开始投票...",

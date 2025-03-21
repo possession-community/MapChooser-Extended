@@ -42,10 +42,11 @@ namespace cs2_rockthevote
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
         private readonly ExtendMapCommand _extendMapManager;
         private readonly RevoteCommand _revoteCommand;
+        private readonly WorkshopSynchronizer _workshopSynchronizer;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
-            //ChangeMapManager changeMapManager,
+            ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
             //ExtendCommand extManager,
@@ -57,11 +58,12 @@ namespace cs2_rockthevote
             DisplayMapListCommandHandler displayMapListCommandHandler,
             MapLister mapLister,
             ExtendMapCommand extendMapManager,
-            RevoteCommand revoteCommand)
+            RevoteCommand revoteCommand,
+            WorkshopSynchronizer workshopSynchronizer)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
-            //_changeMapManager = changeMapManager;
+            _changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
             //_extManager = extManager;
@@ -74,6 +76,7 @@ namespace cs2_rockthevote
             _mapLister = mapLister;
             _extendMapManager = extendMapManager;
             _revoteCommand = revoteCommand;
+            _workshopSynchronizer = workshopSynchronizer;
         }
 
         public Config Config { get; set; } = null!;
@@ -88,8 +91,6 @@ namespace cs2_rockthevote
             _dependencyManager.OnPluginLoad(this);
             _mapSettingsManager.OnLoad(this); // Initialize map settings
             _mapLister.OnLoad(this);       // Load maps from settings
-            // TODO: Remove
-            //_mapLister.OnLoad(this); // ensure map is loaded (legacy)
             RegisterListener<OnMapStart>(_dependencyManager.OnMapStart);
         }
 

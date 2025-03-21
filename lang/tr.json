@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Harita yakın zamanda oynandı",
   "general.vote-revoked-choose-again": "Oyunuz iptal edildi. Lütfen tekrar seçin.",
   "general.no-vote-to-revoke": "İptal edilecek oyunuz yok.",
+  "general.map-not-available": "Bu harita seçim için uygun değil.",
   "rtv.rocked-the-vote": "{green}{0}{default} oyuncusu !rtv verdi",
   "rtv.already-rocked-the-vote": "Zaten rtv verdiniz",
   "rtv.votes-reached": "Oy sayısına ulaşıldı, oylamaya başlıyor...",

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mappen.Utils
+namespace cs2_rockthevote
 {
     public class ForceFullUpdate
     {

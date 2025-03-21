@@ -140,6 +140,37 @@ namespace cs2_rockthevote.Core
         }
 
         /// <summary>
+        /// Map is loaded or not via map name
+        /// </summary>
+        /// <param name="mapName">Map name</param>
+        /// <returns>Map settings</returns>
+        public bool IsLoadedMapName(string mapName)
+        {
+            // Convert map name to lowercase
+            mapName = mapName.ToLower();
+
+            // Return true if loaded
+            if (_mapSettingsCache.ContainsKey(mapName))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Map is loaded or not via workshop id
+        /// </summary>
+        /// <param name="mapName">Map name</param>
+        /// <returns>Map settings</returns>
+        public bool IsLoadedMapId(string workshopId)
+        {
+            // Return true if loaded
+            if (_mapSettingsCache.Where(x => x.Value.Meta.WorkshopId == workshopId).Any())
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
         /// Get map settings
         /// </summary>
         /// <param name="mapName">Map name</param>

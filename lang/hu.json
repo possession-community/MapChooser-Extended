@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Ezt a pályát nemrégiben játszották",
   "general.vote-revoked-choose-again": "A szavazatod visszavonva. Kérlek, válassz újra.",
   "general.no-vote-to-revoke": "Nincs visszavonható szavazatod.",
+  "general.map-not-available": "Ez a pálya nem választható.",
   "rtv.rocked-the-vote": "{green}{0}{default} pályaszavazást szeretne",
   "rtv.already-rocked-the-vote": "Már kértél pályaszavazást",
   "rtv.votes-reached": "A szükséges szavazatszám elérve, kezdődik a szavazás...",

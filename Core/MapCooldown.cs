@@ -79,23 +79,6 @@ namespace cs2_rockthevote.Core
         {
             // Get map settings for the current map
             var settings = _mapSettingsManager.GetMapSettings(mapName);
-            
-            // If cooldown count is 0, clear all cooldowns
-            if (settings.Settings.Cooldown.Count == 0)
-            {
-                _mapsOnCoolDown.Clear();
-                // Reset CurrentCount for all maps to 0
-                foreach (var availableMap in _mapSettingsManager.GetAvailableMaps())
-                {
-                    var mapSettings = _mapSettingsManager.GetMapSettings(availableMap);
-                    mapSettings.Settings.Cooldown.CurrentCount = 0;
-                    
-                    // Save changes to file
-                    string filePath = Path.Combine(_mapSettingsManager.GetMapsDirectory(), $"{availableMap}.json");
-                    mapSettings.SaveToFile(filePath);
-                }
-                return;
-            }
 
             // Add the current map to cooldown in memory
             _mapsOnCoolDown[mapName] = settings.Settings.Cooldown.Count;

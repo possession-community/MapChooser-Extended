@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Карта була недавно зіграна",
   "general.vote-revoked-choose-again": "Ваш голос було відкликано. Будь ласка, оберіть знову.",
   "general.no-vote-to-revoke": "У вас немає голосів для відкликання.",
+  "general.map-not-available": "Ця карта недоступна для вибору.",
   "rtv.rocked-the-vote": "Гравець {green}{0}{default} хоче відмінити голосування",
   "rtv.already-rocked-the-vote": "Ви вже відмінили голосування",
   "rtv.votes-reached": "Досягнуто кількість голосів, починається голосування...",

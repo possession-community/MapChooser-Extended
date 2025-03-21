@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Карта была недавно сыграна",
   "general.vote-revoked-choose-again": "Ваш голос был отозван. Пожалуйста, выберите снова.",
   "general.no-vote-to-revoke": "У вас нет голосов для отзыва.",
+  "general.map-not-available": "Эта карта недоступна для выбора.",
   "rtv.rocked-the-vote": "Игрок {green}{0}{default} хочет сменить карту",
   "rtv.already-rocked-the-vote": "Вы уже проголосовали за смену карты",
   "rtv.votes-reached": "Количество голосов набрано. Начало голосования...",

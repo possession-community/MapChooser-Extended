@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Map has been played recently",
   "general.vote-revoked-choose-again": "Your vote has been revoked. Please choose again.",
   "general.no-vote-to-revoke": "You have no vote to revoke.",
+  "general.map-not-available": "This map is not available for selection.",
   "rtv.rocked-the-vote": "Player {green}{0}{default} wants to rock the vote",
   "rtv.already-rocked-the-vote": "You already rocked the vote",
   "rtv.votes-reached": "Number of votes reached, starting vote...",

@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "이 맵은 최근에 플레이되었습니다",
   "general.vote-revoked-choose-again": "투표가 취소되었습니다. 다시 선택해주세요.",
   "general.no-vote-to-revoke": "취소할 투표가 없습니다.",
+  "general.map-not-available": "이 맵은 선택할 수 없습니다.",
   "rtv.rocked-the-vote": "플레이어님 {green}{0}{default}이(가) 투표를 요청했습니다",
   "rtv.already-rocked-the-vote": "이미 투표를 요청하셨습니다",
   "rtv.votes-reached": "필요한 투표 수가 충족되어 투표를 시작합니다...",

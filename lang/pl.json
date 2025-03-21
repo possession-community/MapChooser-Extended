@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Mapa została niedawno rozegrana",
   "general.vote-revoked-choose-again": "Twój głos został cofnięty. Wybierz ponownie.",
   "general.no-vote-to-revoke": "Nie masz głosu do cofnięcia.",
+  "general.map-not-available": "Ta mapa nie jest dostępna do wyboru.",
   "rtv.rocked-the-vote": "Gracz {green}{0}{default} chce rozpocząć głosowanie",
   "rtv.already-rocked-the-vote": "Już rozpocząłeś głosowanie",
   "rtv.votes-reached": "Osiągnięto wymaganą liczbę głosów, rozpoczynam głosowanie...",

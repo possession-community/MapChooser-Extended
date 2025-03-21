@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "La carte a été récemment jouée",
   "general.vote-revoked-choose-again": "Votre vote a été révoqué. Veuillez choisir à nouveau.",
   "general.no-vote-to-revoke": "Vous n'avez aucun vote à révoquer.",
+  "general.map-not-available": "Cette carte n'est pas disponible pour la sélection.",
   "rtv.rocked-the-vote": "Le joueur {green}{0}{default} veut lancer le vote",
   "rtv.already-rocked-the-vote": "Vous avez déjà lancé le vote",
   "rtv.votes-reached": "Nombre de votes atteints, lancement du vote...",

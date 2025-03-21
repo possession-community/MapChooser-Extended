@@ -38,6 +38,7 @@
   "general.validation.map-played-recently": "Karte nesen tika spēlēta",
   "general.vote-revoked-choose-again": "Tava balss ir atsaukta. Lūdzu, izvēlies vēlreiz.",
   "general.no-vote-to-revoke": "Tev nav balsu, ko atsaukt.",
+  "general.map-not-available": "Šī karte nav pieejama izvēlei.",
   "rtv.rocked-the-vote": "Spēlētājs {green}{0}{default} vēlās sākt rock the vote",
   "rtv.already-rocked-the-vote": "Tu jau izmantoji komandu rtv",
   "rtv.votes-reached": "Vajadzīgās balsis sasniegtas, balsošana sāksies pēc...",
