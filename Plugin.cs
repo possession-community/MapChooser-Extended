@@ -15,6 +15,7 @@ namespace cs2_rockthevote
             var di = new DependencyManager<Plugin, Config>();
             di.LoadDependencies(typeof(Plugin).Assembly);
             di.AddIt(serviceCollection);
+            serviceCollection.AddScoped<StringLocalizer>();
         }
     }
 
