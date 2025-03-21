@@ -12,7 +12,8 @@ namespace cs2_rockthevote.Core
         private Plugin? _plugin;
         private readonly Dictionary<string, MapSettings> _mapSettingsCache = new();
         private MapSettings _defaultSettings = MapSettings.CreateDefault();
-        private string _mapsDirectory = string.Empty;
+        private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/RockTheVote");
+        private string _mapsDirectory = Path.Combine(_configDirectory, "maps");
         private bool _isInitialized = false;
         private readonly string[] _ignoredMaps = ["default", "<empty>", "\u003Cempty\u003E"];
 
@@ -30,7 +31,7 @@ namespace cs2_rockthevote.Core
         public void OnLoad(Plugin plugin)
         {
             _plugin = plugin;
-            _mapsDirectory = Path.Combine(plugin.ModulePath, "maps");
+            //_mapsDirectory = Path.Combine(plugin.ModulePath, "maps");
             
             // Create maps directory if it doesn't exist
             if (!Directory.Exists(_mapsDirectory))
@@ -239,7 +240,7 @@ namespace cs2_rockthevote.Core
         private bool IsMapAvailableByTime(MapSettings settings)
         {
             int currentHour = DateTime.Now.Hour;
-            return settings.Settings.Times.Contains(currentHour);
+            return (settings.Settings.Times.Count() == 0) || settings.Settings.Times.Contains(currentHour);
         }
 
         /// <summary>

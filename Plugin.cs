@@ -47,6 +47,8 @@ namespace cs2_rockthevote
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
+            MapSettingsManager mapSettingsManager,
+            MapCooldown mapCooldown,
             ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
@@ -64,6 +66,8 @@ namespace cs2_rockthevote
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
+            _mapSettingsManager = mapSettingsManager;
+            _mapCooldown = mapCooldown;
             _changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;

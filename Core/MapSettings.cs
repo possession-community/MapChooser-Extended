@@ -163,7 +163,7 @@ namespace cs2_rockthevote.Core
         /// マップサイクルに含める時間帯（時）
         /// </summary>
         [JsonPropertyName("times")]
-        public int[] Times { get; set; } = Enumerable.Range(0, 24).ToArray(); // デフォルトは全時間帯
+        public int[] Times { get; set; } = []; // デフォルトは全時間帯
 
         /// <summary>
         /// プレイヤー数の範囲
@@ -233,9 +233,9 @@ namespace cs2_rockthevote.Core
             return new MapCycleSettings
             {
                 Enabled = true,
-                Times = Enumerable.Range(0, 24).ToArray(),
+                Times = [],
                 Players = new PlayerRange { Min = 0, Max = 64 },
-                Cooldown = new CooldownSettings { Count = 2, Tags = new[] { "default" } },
+                Cooldown = new CooldownSettings { Count = 0, Tags = [] },
                 Nomination = new NominationSettings { Admin = false, Enabled = true },
                 Match = new MatchSettings { Type = 0, Limit = "30" },
                 Extend = new ExtendSettings { Enabled = true, Times = 2, Number = 15 }
@@ -284,19 +284,19 @@ namespace cs2_rockthevote.Core
         /// クールダウン回数
         /// </summary>
         [JsonPropertyName("count")]
-        public int Count { get; set; } = 2;
+        public int Count { get; set; } = 0;
 
         /// <summary>
         /// 現在のクールダウン回数
         /// </summary>
         [JsonPropertyName("current_count")]
-        public int CurrentCount { get; set; } = 2;
+        public int CurrentCount { get; set; } = 0;
 
         /// <summary>
         /// クールダウンタグ
         /// </summary>
         [JsonPropertyName("tags")]
-        public string[] Tags { get; set; } = new[] { "default" };
+        public string[] Tags { get; set; } = [];
 
         /// <summary>
         /// ベース設定とマージする
