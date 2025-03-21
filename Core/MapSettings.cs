@@ -4,33 +4,33 @@ using System.Text.Json.Serialization;
 namespace cs2_rockthevote.Core
 {
     /// <summary>
-    /// マップの設定を管理するクラス
+    /// Class for managing map settings
     /// </summary>
     public class MapSettings
     {
         /// <summary>
-        /// ベース設定ファイルのパス
+        /// Path to the base settings file
         /// </summary>
         [JsonPropertyName("base")]
         public string? BasePath { get; set; }
 
         /// <summary>
-        /// マップのメタ情報
+        /// Map metadata
         /// </summary>
         [JsonPropertyName("meta")]
         public MapMeta Meta { get; set; } = new MapMeta();
 
         /// <summary>
-        /// マップのサイクル設定
+        /// Map cycle settings
         /// </summary>
         [JsonPropertyName("settings")]
         public MapCycleSettings Settings { get; set; } = new MapCycleSettings();
 
         /// <summary>
-        /// ファイルからマップ設定を読み込む
+        /// Load map settings from a file
         /// </summary>
-        /// <param name="path">設定ファイルのパス</param>
-        /// <returns>読み込みに成功したかどうか</returns>
+        /// <param name="path">Path to the settings file</param>
+        /// <returns>Whether the loading was successful</returns>
         public bool LoadFromFile(string path)
         {
             try
@@ -63,10 +63,10 @@ namespace cs2_rockthevote.Core
         }
 
         /// <summary>
-        /// マップ設定をファイルに保存する
+        /// Save map settings to a file
         /// </summary>
-        /// <param name="path">保存先のパス</param>
-        /// <returns>保存に成功したかどうか</returns>
+        /// <param name="path">Path to save the file</param>
+        /// <returns>Whether the saving was successful</returns>
         public bool SaveToFile(string path)
         {
             try
@@ -78,7 +78,7 @@ namespace cs2_rockthevote.Core
 
                 string json = JsonSerializer.Serialize(this, options);
                 
-                // ディレクトリが存在しない場合は作成
+                // Create directory if it doesn't exist
                 string? directory = Path.GetDirectoryName(path);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
@@ -94,21 +94,21 @@ namespace cs2_rockthevote.Core
         }
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(MapSettings baseSettings)
         {
-            // メタ情報はマージしない（各マップ固有のもの）
+            // Don't merge metadata (specific to each map)
             
-            // 設定をマージ
+            // Merge settings
             Settings.MergeWithBase(baseSettings.Settings);
         }
 
         /// <summary>
-        /// デフォルト設定を作成する
+        /// Create default settings
         /// </summary>
-        /// <returns>デフォルト設定</returns>
+        /// <returns>Default settings</returns>
         public static MapSettings CreateDefault()
         {
             return new MapSettings
@@ -125,84 +125,84 @@ namespace cs2_rockthevote.Core
     }
 
     /// <summary>
-    /// マップのメタ情報
+    /// Map metadata
     /// </summary>
     public class MapMeta
     {
         /// <summary>
-        /// マップ名
+        /// Map name
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// 表示名
+        /// Display name
         /// </summary>
         [JsonPropertyName("display")]
         public string? DisplayName { get; set; }
 
         /// <summary>
-        /// ワークショップID
+        /// Workshop ID
         /// </summary>
         [JsonPropertyName("workshop_id")]
         public string? WorkshopId { get; set; }
     }
 
     /// <summary>
-    /// マップのサイクル設定
+    /// Map cycle settings
     /// </summary>
     public class MapCycleSettings
     {
         /// <summary>
-        /// マップサイクルが有効かどうか
+        /// Whether map cycle is enabled
         /// </summary>
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
         /// <summary>
-        /// マップサイクルに含める時間帯（時）
+        /// Time periods (hours) to include in the map cycle
         /// </summary>
         [JsonPropertyName("times")]
-        public int[] Times { get; set; } = []; // デフォルトは全時間帯
+        public int[] Times { get; set; } = []; // Default is all time periods
 
         /// <summary>
-        /// プレイヤー数の範囲
+        /// Player count range
         /// </summary>
         [JsonPropertyName("players")]
         public PlayerRange Players { get; set; } = new PlayerRange();
 
         /// <summary>
-        /// クールダウン設定
+        /// Cooldown settings
         /// </summary>
         [JsonPropertyName("cooldown")]
         public CooldownSettings Cooldown { get; set; } = new CooldownSettings();
 
         /// <summary>
-        /// ノミネーション設定
+        /// Nomination settings
         /// </summary>
         [JsonPropertyName("nomination")]
         public NominationSettings Nomination { get; set; } = new NominationSettings();
 
         /// <summary>
-        /// マッチ設定
+        /// Match settings
         /// </summary>
         [JsonPropertyName("match")]
         public MatchSettings Match { get; set; } = new MatchSettings();
 
         /// <summary>
-        /// 延長設定
+        /// Extension settings
         /// </summary>
         [JsonPropertyName("extend")]
         public ExtendSettings Extend { get; set; } = new ExtendSettings();
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(MapCycleSettings baseSettings)
         {
-            // 明示的に設定されていない場合はベース設定を使用
-            // 配列やオブジェクトはnullの場合のみベース設定を使用
+            // Use base settings if not explicitly set
+            // For arrays and objects, use base settings only if null
             
             // Times
             if (Times == null || Times.Length == 0)
@@ -225,9 +225,9 @@ namespace cs2_rockthevote.Core
         }
 
         /// <summary>
-        /// デフォルト設定を作成する
+        /// Create default settings
         /// </summary>
-        /// <returns>デフォルト設定</returns>
+        /// <returns>Default settings</returns>
         public static MapCycleSettings CreateDefault()
         {
             return new MapCycleSettings
@@ -244,29 +244,29 @@ namespace cs2_rockthevote.Core
     }
 
     /// <summary>
-    /// プレイヤー数の範囲
+    /// Player count range
     /// </summary>
     public class PlayerRange
     {
         /// <summary>
-        /// 最小プレイヤー数
+        /// Minimum player count
         /// </summary>
         [JsonPropertyName("min")]
         public int Min { get; set; } = 0;
 
         /// <summary>
-        /// 最大プレイヤー数
+        /// Maximum player count
         /// </summary>
         [JsonPropertyName("max")]
         public int Max { get; set; } = 64;
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(PlayerRange baseSettings)
         {
-            // デフォルト値の場合はベース設定を使用
+            // Use base settings for default values
             if (Min == 0)
                 Min = baseSettings.Min;
             
@@ -276,35 +276,35 @@ namespace cs2_rockthevote.Core
     }
 
     /// <summary>
-    /// クールダウン設定
+    /// Cooldown settings
     /// </summary>
     public class CooldownSettings
     {
         /// <summary>
-        /// クールダウン回数
+        /// Cooldown count
         /// </summary>
         [JsonPropertyName("count")]
         public int Count { get; set; } = 0;
 
         /// <summary>
-        /// 現在のクールダウン回数
+        /// Current cooldown count
         /// </summary>
         [JsonPropertyName("current_count")]
         public int CurrentCount { get; set; } = 0;
 
         /// <summary>
-        /// クールダウンタグ
+        /// Cooldown tags
         /// </summary>
         [JsonPropertyName("tags")]
         public string[] Tags { get; set; } = [];
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(CooldownSettings baseSettings)
         {
-            // デフォルト値の場合はベース設定を使用
+            // Use base settings for default values
             if (Count == 2)
                 Count = baseSettings.Count;
             
@@ -314,57 +314,57 @@ namespace cs2_rockthevote.Core
     }
 
     /// <summary>
-    /// ノミネーション設定
+    /// Nomination settings
     /// </summary>
     public class NominationSettings
     {
         /// <summary>
-        /// 管理者のみノミネーション可能かどうか
+        /// Whether only admins can nominate
         /// </summary>
         [JsonPropertyName("admin")]
         public bool Admin { get; set; } = false;
 
         /// <summary>
-        /// ノミネーションが有効かどうか
+        /// Whether nomination is enabled
         /// </summary>
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(NominationSettings baseSettings)
         {
-            // 明示的に設定されていない場合はベース設定を使用
-            // boolはデフォルト値の場合のみベース設定を使用
+            // Use base settings if not explicitly set
+            // For boolean values, use base settings only for default values
         }
     }
 
     /// <summary>
-    /// マッチ設定
+    /// Match settings
     /// </summary>
     public class MatchSettings
     {
         /// <summary>
-        /// マッチタイプ（0: 時間制限, 1: ラウンド制限）
+        /// Match type (0: time limit, 1: round limit)
         /// </summary>
         [JsonPropertyName("type")]
         public int Type { get; set; } = 0;
 
         /// <summary>
-        /// 制限値
+        /// Limit value
         /// </summary>
         [JsonPropertyName("limit")]
         public string Limit { get; set; } = "30";
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(MatchSettings baseSettings)
         {
-            // デフォルト値の場合はベース設定を使用
+            // Use base settings for default values
             if (Type == 0)
                 Type = baseSettings.Type;
             
@@ -374,35 +374,35 @@ namespace cs2_rockthevote.Core
     }
 
     /// <summary>
-    /// 延長設定
+    /// Extension settings
     /// </summary>
     public class ExtendSettings
     {
         /// <summary>
-        /// 延長が有効かどうか
+        /// Whether extension is enabled
         /// </summary>
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
         /// <summary>
-        /// 延長可能回数
+        /// Number of possible extensions
         /// </summary>
         [JsonPropertyName("times")]
         public int Times { get; set; } = 2;
 
         /// <summary>
-        /// 延長値
+        /// Extension value
         /// </summary>
         [JsonPropertyName("number")]
         public int Number { get; set; } = 15;
 
         /// <summary>
-        /// ベース設定とマージする
+        /// Merge with base settings
         /// </summary>
-        /// <param name="baseSettings">ベース設定</param>
+        /// <param name="baseSettings">Base settings</param>
         public void MergeWithBase(ExtendSettings baseSettings)
         {
-            // デフォルト値の場合はベース設定を使用
+            // Use base settings for default values
             if (Times == 2)
                 Times = baseSettings.Times;
             
