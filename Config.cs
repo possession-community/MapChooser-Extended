@@ -27,6 +27,7 @@ namespace cs2_rockthevote
         public int ExtendTimeStep { get; set; } 
         public int ExtendRoundStep { get; set; }
 
+        public int VoteCountdownTime { get; set; }
     }
 
     public interface IExtendMapConfig
@@ -52,6 +53,7 @@ namespace cs2_rockthevote
         public int TriggerRoundsBeforeEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
         public bool AllowExtend { get; set; } = true;
+        public int VoteCountdownTime { get; set; } = 10;
         public bool RoundBased { get; set; } = true;
         public int ExtendTimeStep { get; set; } = 15;
  //TODO: Remove - Using map settings instead
@@ -80,6 +82,7 @@ namespace cs2_rockthevote
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
         public int InitialRtvDelay { get; set; } = 60;
+        public int VoteCountdownTime { get; set; } = 10;
         public int ExtendTimeStep { get; set; } = 15; 
 //TODO: Remove - Using map settings instead
         public int ExtendRoundStep { get; set; } = 5;

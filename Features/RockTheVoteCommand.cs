@@ -314,7 +314,7 @@ namespace cs2_rockthevote
                     
                     // Update the last RTV time
                     _lastRtvTime = DateTime.Now;
-                    _endMapVoteManager.StartVote(_config);
+                    _endMapVoteManager.StartVoteWithCountdown(_config);
 
                     // reset vote status
                     _voteManager.ResetVotes();

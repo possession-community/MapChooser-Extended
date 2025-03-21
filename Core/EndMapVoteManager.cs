@@ -59,6 +59,7 @@ namespace cs2_rockthevote
         Dictionary<string, int> Votes = new();
         Dictionary<CCSPlayerController, string> PlayerVotes = new();
         int timeLeft = -1;
+        int countdownTimeLeft = -1;
 
         List<string> mapsEllected = new();
 
@@ -72,11 +73,12 @@ namespace cs2_rockthevote
         HashSet<int> _voted = new();
 
         public bool VoteInProgress => timeLeft >= 0;
+        public bool CountdownInProgress => countdownTimeLeft >= 0;
 
         public void OnLoad(Plugin plugin)
         {
             _plugin = plugin;
-            plugin.RegisterListener<OnTick>(VoteDisplayTick);
+            plugin.RegisterListener<OnTick>(DisplayTick);
         }
 
         public void OnConfigParsed(Config config)
@@ -90,6 +92,7 @@ namespace cs2_rockthevote
             Votes.Clear();
             PlayerVotes.Clear();
             timeLeft = 0;
+            countdownTimeLeft = -1;
             mapsEllected.Clear();
             KillTimer();
             // Reset extends used counter on map start
@@ -189,6 +192,7 @@ namespace cs2_rockthevote
         void KillTimer()
         {
             timeLeft = -1;
+            countdownTimeLeft = -1;
             if (Timer is not null)
             {
                 Timer!.Kill();
@@ -204,6 +208,29 @@ namespace cs2_rockthevote
                 {
                     player.PrintToCenter(text);
                 }
+            }
+        }
+
+        void PrintCenterHtmlAll(string html)
+        {
+            foreach (var player in Utilities.GetPlayers())
+            {
+                if (player.IsValid)
+                {
+                    player.PrintToCenterHtml(html);
+                }
+            }
+        }
+
+        public void DisplayTick()
+        {
+            if (countdownTimeLeft >= 0)
+            {
+                CountdownDisplayTick();
+            }
+            else if (timeLeft >= 0)
+            {
+                VoteDisplayTick();
             }
         }
 
@@ -230,6 +257,16 @@ namespace cs2_rockthevote
             {
                 player.PrintToCenterHtml(stringBuilder.ToString());
             }
+        }
+
+        public void CountdownDisplayTick()
+        {
+            if (countdownTimeLeft < 0)
+                return;
+
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendFormat($"<b>{_localizer.Localize("emv.hud.countdown", countdownTimeLeft)}</b>");
+            PrintCenterHtmlAll(stringBuilder.ToString());
         }
 
         void EndVote()
@@ -346,6 +383,39 @@ namespace cs2_rockthevote
             return array;
         }
 
+        public void StartVoteWithCountdown(IEndOfMapConfig config)
+        {
+            // Backup the current config as if this is called via the server command, the config will be changed
+            _configBackup = _config;
+            _config = config;
+
+            // Start countdown
+            countdownTimeLeft = config.VoteCountdownTime;
+            
+            // Announce countdown
+            Server.PrintToChatAll(_localizer.LocalizeWithPrefix("emv.countdown-started", countdownTimeLeft));
+            
+            // Start countdown timer
+            Timer = _plugin!.AddTimer(1.0F, () =>
+            {
+                if (countdownTimeLeft <= 0)
+                {
+                    // Countdown finished, start the vote
+                    if (Timer != null)
+                    {
+                        Timer.Kill();
+                        Timer = null;
+                    }
+                    countdownTimeLeft = -1;
+                    StartVote(config);
+                }
+                else
+                {
+                    countdownTimeLeft--;
+                }
+            }, TimerFlags.REPEAT);
+        }
+
         public void StartVote(IEndOfMapConfig config)
         {
             Votes.Clear();
@@ -353,7 +423,10 @@ namespace cs2_rockthevote
             _voted.Clear();
 
             // Backup the current config as if this is called via the server command, the config will be changed
-            _configBackup = _config;
+            if (_configBackup == null)
+            {
+                _configBackup = _config;
+            }
 
             _pluginState.EofVoteHappening = true;
             _config = config;
