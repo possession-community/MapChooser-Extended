@@ -1,5 +1,5 @@
 # CS2 Rock The Vote
-![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/Oz-Lin/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/Oz-Lin/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size")
+![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/Oz-Lin/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/Oz-Lin/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size") ![Version](https://img.shields.io/badge/version-1.9.4-blue)
 
 ![image](https://github.com/Oz-Lin/cs2-rockthevote/blob/main/example_image.png)
 
@@ -46,34 +46,40 @@ Please drop a ⭐ star in the repository
 - Vote to extend current map by maximum rounds as well (Thanks Cruze03 [#3](https://github.com/Oz-Lin/cs2-rockthevote/pull/3))
 - "Allow extends" checker and extend limits in RTV vote
 - Compatibility for non-round-based game mode during map time extension
+- Per-map settings system with detailed configuration options
+- Workshop collection auto-synchronization
+- Alternative command aliases: `yd` (nominate) and `ydb` (nomlist)
+- Maps in cooldown can now be nominated
 
 # Work in Progress
 - Cooldown to start another RTV after the last vote
-- Bug fix on "ignore specs" checker
+- Bug fix on "ignore specs" checker 
 
 # ⚠️ Help Wanted
 - WASD menu - a lot of code refactoring must be done before implementing this feature. Can't give guarantee about this feature. 
 
 # Translations
-| Language             | Contributor          |
-| -------------------- | -------------------- |
-| Brazilian Portuguese | abnerfs + ChatGPT             |
-| English              | abnerfs + Oz-Lin             |
-| Ukrainian            | panikajo + ChatGPT            |
-| Turkish              | brkvlr + ChatGPT              |
-| Russian              | Auttend + ChatGPT             |
-| Latvian              | rcon420 + ChatGPT             |
+| Language             | Contributor                    |
+| -------------------- | --------------------           |
+| Brazilian Portuguese | abnerfs + ChatGPT              |
+| English              | abnerfs + Oz-Lin               |
+| Ukrainian            | panikajo + ChatGPT             |
+| Turkish              | brkvlr + ChatGPT               |
+| Russian              | Auttend + ChatGPT              |
+| Latvian              | rcon420 + ChatGPT              |
 | Hungarian            | Chickender, lovasatt + ChatGPT |
-| Polish               | D3X + ChatGPT                 |
-| French               | o3LL + ChatGPT                |
-| Chinese (zh-Hans)    | himenekocn + Oz-Lin          |
-| Chinese (zh-Hant)    | himenekocn + Oz-Lin          |
-| Korean       | wjdrkfka3              |
+| Polish               | D3X + ChatGPT                  |
+| French               | o3LL + ChatGPT                 |
+| Chinese (zh-Hans)    | himenekocn + Oz-Lin            |
+| Chinese (zh-Hant)    | himenekocn + Oz-Lin            |
+| Korean               | wjdrkfka3                      |
+| Japanese             | uru                            |
 
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
 - Changes in the config file will require you to reload the plugin or restart the server (change the map won't work).
-- Maps that will be used in RTV/nominate/votemap/end of map vote are located in `addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt` (rename `maplist.example.txt` to `maplist.txt`)
+- ~~Maps that will be used in RTV/nominate/votemap/end of map vote are located in `addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt` (rename `maplist.example.txt` to `maplist.txt`)~~
+- Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/RockTheVote/maps/` directory as JSON files, see under section.
 
 ## General config
 | Config         | Description                                                                      | Default Value | Min | Max |
@@ -98,6 +104,7 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | VotePercentage      | Percentage of players that should type RTV in order to start a vote                                                    | 60            | 0     | 100                                  |
 | DontChangeRtv       | Enable/Disable option not to change the current map                                                                    | true          | false | true                                 |
 | IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
+| InitialRtvDelay     | Cooldown timer to start the "first" RTV                                                                                | 60             | 0 |  -                                 |
 | VoteCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | -                                 |
 | ExtendTimeStep        | How long (in minutes) should the mp_timelimit to be extended                                                             | 15         | 0       | -                                |
 | ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
@@ -185,17 +192,150 @@ Players can type `nextmap` to see which map is going to be played next
 | --------- | -------------------------------------------------------------------------------- | ------------- | ----- | ---- |
 | ShowToAll | Whether to show command response to everyone or just the player that executed it | false         | false | true |
 
+# Map Settings System
 
-  
-# Adding workshop maps
-- If you are not hosting a collection in order to add workshop maps you need to know it's id and add as following in the maplist.txt file: `<mapname>:<workshop-id>`.
-- If you are already hosting a collection and can change to workshop maps using the command `ds_workshop_changelevel <map-name>` you don't need the ID, just put the actual map name and it will work.
-    - However, it's still recommended to add the ID	if you plan to modify the display map name.
+Version 1.9.4 introduces a new map settings system that allows detailed configuration for each map individually.
 
+This system enables server administrators to apply different settings to each map.
+
+Editing maplist.txt is no longer necessary.
+
+This system is a bit more tedious than before, since you have to create a file with the name of each map, and each map has its own settings, but the `base system` of map settings allows you to inherit the same settings, so you don't have to write the same settings multiple times.
+
+## Map Settings Files
+
+Map settings are stored in `addons/counterstrikesharp/configs/plugins/RockTheVote/maps/` directory as JSON files.
+
+Each map has its own settings file (e.g., `de_dust2.json`) that inherits from the default settings (`maps/default.json`).
+
+If a specific map is loaded without a specific map configuration, the `maps/default.json` will be used to automatically generate the map configuration.
+
+`default.json` is here:
+
+<details> <summary>Click to view</summary>
+
+```jsonc
+{
+  // The json specified in base is loaded as the base `Settings`. You can overwrite the loaded settings by setting `Settings` as usual.
+  "base": "base/default.json",
+  "meta": {
+    "name": "default",
+    "display": "",
+    "workshop_id": ""
+  },
+  "settings": {
+    "enabled": true,
+    "times": [],
+    "players": {
+      "min": 0,
+      "max": 64
+    },
+    "cooldown": {
+      "count": 0,
+      "current_count": 0,
+      "tags": []
+    },
+    "nomination": {
+      "admin": false,
+      "enabled": true
+    },
+    "match": {
+      "type": 0,
+      "limit": "30"
+    },
+    "extend": {
+      "enabled": true,
+      "times": 2,
+      "number": 15
+    }
+  }
+}
 ```
-de_thera:3121217565
-de_dust2
+
+</details>
+
+### Example (maps/map.json)
+
+example map settings here:
+<details> <summary>Click to view</summary>
+
+```jsonc
+{
+  // The json specified in base is loaded as the base `Settings`. You can overwrite the loaded settings by setting `Settings` as usual.
+  "base": "base/default.json",
+  "meta": {
+    // actuall vpk map name
+    "name": "de_dust2",
+    // name that displayed while map vote
+    // if null or empty, plugin use meta.name
+    // currently, not used this for now
+    "display": "Dust II",
+    // workshop map id
+    // if null or empty, its official map or host collection
+    "workshop_id": ""
+  },
+  "settings": {
+    // enabled map cycle
+    "enabled": true,
+    // the time period included in the map cycle, only hours can be specified
+    "times": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+    // if a player on the server is within this player count range, then the map will cycle
+    "players": {
+      "min": 0,
+      "max": 64
+    },
+    // the number of cooldowns until the next map cycle is reduced by 1 for each map
+    // using tags will share the cooldown reset timing
+    // ex.)
+    // ze_ffx   = { count = 50, tags = ["ff"] }
+    // ze_ffxii = { count = 80, tags = ["ff"] }
+    // if ze_ffx map end and even if ze_ffxii cooldown count is 0,
+    // both count will be reset by tags
+    "cooldown": {
+      "count": 2,
+      "tags": ["official"]
+    },
+    "nomination": {
+      // if admin is true, only admin can nominate it
+      // so "enabled" will be ignore 'enabled' in that case
+      "admin": false,
+      // allow nominate this map
+      // default "enabled" is true
+      "enabled": true
+    },
+    "match": {
+      // should be "0" or "1", other is fallback to default
+      // 0 = time, 1 = round
+      // default is 0 = time
+      "type": 1,
+      // type = "0" -> mp_maxround  20
+      // type = "1" -> mp_timelimit 20
+      "limit": "30"
+    },
+    "extend": {
+      // if enabled true, this map can be extend by vote
+      "enabled": true,
+      // times is how many times extend
+      // 0 is disabled extend for this map
+      // -1 is extend times = infinity
+      "times": 2,
+      // match.type = "0" -> mp_maxround  +
+      // match.type = "1" -> mp_timelimit +
+      "number": 15
+    }
+  }
+}
 ```
+
+</details>
+
+# Workshop Auto-Sync
+
+Version 1.9.4 adds the ability to automatically synchronize maps from Steam Workshop collections. Add the collection IDs to your config file under the `Workshop` section: `"Workshop": { "collection_ids": ["123456789"] }`.
+
+The plugin will automatically fetch maps from these collections, create settings files for them, and make them available for voting.
+
+In addition, the map name (including the file name) automatically generated from the workshop may not be the official vpk name(cuz sers can freely write the title of the workshop), so it also includes a process to automatically correct it when the map starts.
 
 # Server commands
 
