@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using CounterStrikeSharp.API;
+﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using cs2_rockthevote.Core;
@@ -44,6 +44,7 @@ namespace cs2_rockthevote
         private readonly ExtendMapCommand _extendMapManager;
         private readonly RevoteCommand _revoteCommand;
         private readonly WorkshopSynchronizer _workshopSynchronizer;
+        private readonly ChangeMapCommand _changeMapCommand;
 
         public Plugin(DependencyManager<Plugin, Config> dependencyManager,
             NominationCommand nominationManager,
@@ -62,7 +63,8 @@ namespace cs2_rockthevote
             MapLister mapLister,
             ExtendMapCommand extendMapManager,
             RevoteCommand revoteCommand,
-            WorkshopSynchronizer workshopSynchronizer)
+            WorkshopSynchronizer workshopSynchronizer,
+            ChangeMapCommand changeMapCommand)
         {
             _dependencyManager = dependencyManager;
             _nominationManager = nominationManager;
@@ -82,6 +84,7 @@ namespace cs2_rockthevote
             _extendMapManager = extendMapManager;
             _revoteCommand = revoteCommand;
             _workshopSynchronizer = workshopSynchronizer;
+            _changeMapCommand = changeMapCommand;
         }
 
         public Config Config { get; set; } = null!;
@@ -156,6 +159,12 @@ namespace cs2_rockthevote
                 else if (text.StartsWith("extend"))
                 {
                     _extendMapManager.CommandHandler(player);
+                }
+                else if (text.StartsWith("changemap"))
+                {
+                    var split = text.Split("changemap");
+                    var map = split.Length > 1 ? split[1].Trim() : "";
+                    _changeMapCommand.CommandHandler(player, map);
                 }
                 // TODO: Implement this later
                 //else if (text == "revote")
