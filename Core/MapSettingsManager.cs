@@ -332,12 +332,14 @@ namespace cs2_rockthevote.Core
             {
                 // Time limit
                 Server.ExecuteCommand($"mp_timelimit {settings.Settings.Match.Limit}");
+                Server.ExecuteCommand($"mp_maxrounds 0");
                 Console.WriteLine($"[RockTheVote] Set mp_timelimit to {settings.Settings.Match.Limit}");
             }
             else if (settings.Settings.Match.Type == 1)
             {
                 // Round limit
                 Server.ExecuteCommand($"mp_maxrounds {settings.Settings.Match.Limit}");
+                Server.ExecuteCommand($"mp_timelimit 0");
                 Console.WriteLine($"[RockTheVote] Set mp_maxrounds to {settings.Settings.Match.Limit}");
             }
 
