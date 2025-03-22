@@ -91,7 +91,7 @@ namespace MapChooserExtended
         {
             Votes.Clear();
             PlayerVotes.Clear();
-            timeLeft = 0;
+            timeLeft = -1;
             countdownTimeLeft = -1;
             mapsEllected.Clear();
             KillTimer();

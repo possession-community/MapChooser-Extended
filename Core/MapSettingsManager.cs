@@ -12,7 +12,7 @@ namespace MapChooserExtended.Core
         private Plugin? _plugin;
         private readonly Dictionary<string, MapSettings> _mapSettingsCache = new();
         private MapSettings _defaultSettings = MapSettings.CreateDefault();
-        private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/MCE");
+        private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/MapChooserExtended");
         private string _mapsDirectory = Path.Combine(_configDirectory, "maps");
         private bool _isInitialized = false;
         private readonly string[] _ignoredMaps = ["default", "<empty>", "\u003Cempty\u003E"];

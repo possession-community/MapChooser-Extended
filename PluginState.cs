@@ -27,10 +27,10 @@ namespace MapChooserExtended
             CommandsDisabled = false;
             RtvDisabled = false;
             NominateDisabled = false;
-            if (MapChangeScheduled || EofVoteHappening || ExtendTimeVoteHappening || CommandsDisabled)
-            {
-                Server.ExecuteCommand("css_plugins reload RockTheVote");
-            }
+            //if (MapChangeScheduled || EofVoteHappening || ExtendTimeVoteHappening || CommandsDisabled)
+            //{
+            //    Server.ExecuteCommand("css_plugins reload RockTheVote");
+            //}
         }
     }
 }

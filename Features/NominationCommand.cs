@@ -312,12 +312,12 @@ namespace MapChooserExtended
                 return;
 
             // TODO: Change message to admin only message
-            if (!_mapSettingsManager.IsMapAvailableForNomination(player, map)) {
+            if (!_mapSettingsManager.IsMapAvailableForNomination(player, matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 return;
             }
 
-            if (!_mapSettingsManager.IsMapAvailableForCycle(map)) {
+            if (!_mapSettingsManager.IsMapAvailableForCycle(matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 return;
             }

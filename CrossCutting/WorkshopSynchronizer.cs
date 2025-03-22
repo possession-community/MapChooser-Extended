@@ -188,9 +188,9 @@ namespace MapChooserExtended
             string validName = Regex.Replace(workshopTitle, @"[^a-zA-Z0-9_]", "_").ToLower();
             
             // Ensure the name starts with a letter
-            if (!char.IsLetter(validName[0]))
+            if (validName.Length != 0 && !char.IsLetter(validName[0]))
                 validName = "map_" + validName;
-            
+
             return validName;
         }
 
