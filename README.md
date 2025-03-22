@@ -2,7 +2,7 @@
 
 General purpose map voting plugin, rtv, nominate, and more.
 
-Based on [Oz-Lin/cs2-rockthevote](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote)
+Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
@@ -81,10 +81,9 @@ Requires `@css/vip` permission
 | Japanese             | uru                            |
 
 # Configs
-- A config file will be created in `addons/counterstrikesharp/configs/plugins/RockTheVote` the first time you load the plugin.
+- A config file will be created in `addons/counterstrikesharp/configs/plugins/MapChooserExtended` the first time you load the plugin.
 - Changes in the config file will require you to reload the plugin or restart the server (change the map won't work).
-- ~~Maps that will be used in RTV/nominate/votemap/end of map vote are located in `addons/counterstrikesharp/configs/plugins/RockTheVote/maplist.txt` (rename `maplist.example.txt` to `maplist.txt`)~~
-- Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/RockTheVote/maps/` directory as JSON files, see under section.
+- Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/MapChooserExtended/maps/` directory as JSON files, see under section.
 
 ## General config
 | Config         | Description                                                                      | Default Value | Min | Max |
@@ -209,7 +208,7 @@ This system is a bit more tedious than before, since you have to create a file w
 
 ## Map Settings Files
 
-Map settings are stored in `addons/counterstrikesharp/configs/plugins/RockTheVote/maps/` directory as JSON files.
+Map settings are stored in `addons/counterstrikesharp/configs/plugins/MapChooserExtended/maps/` directory as JSON files.
 
 Each map has its own settings file (e.g., `de_dust2.json`) that inherits from the default settings (`maps/default.json`).
 
