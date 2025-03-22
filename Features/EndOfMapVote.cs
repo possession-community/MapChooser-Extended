@@ -2,12 +2,12 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Timers;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class EndOfMapVote : IPluginDependency<Plugin, Config>
     {

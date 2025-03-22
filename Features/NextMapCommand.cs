@@ -3,7 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 
-namespace cs2_rockthevote.Features
+namespace MapChooserExtended.Features
 {
     public class NextMapCommand : IPluginDependency<Plugin, Config>
     {
@@ -73,7 +73,7 @@ namespace cs2_rockthevote.Features
             else
                 Server.PrintToChatAll(_stringLocalizer.LocalizeWithPrefix("nextmap.admin-set", "Server", matchingMap));
 
-            Console.WriteLine($"[RockTheVote] Next map set to {matchingMap} by {player?.PlayerName ?? "Server"}");
+            Console.WriteLine($"[MCE] Next map set to {matchingMap} by {player?.PlayerName ?? "Server"}");
         }
 
         public void OnLoad(Plugin plugin)

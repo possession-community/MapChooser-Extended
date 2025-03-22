@@ -1,5 +1,5 @@
 {
-  "rtv.prefix": "{red}[RockTheVote]{default}",
+  "rtv.prefix": "{red}[MCE]{default}",
   "votemap.prefix": "{red}[Votemap]{default}",
   "extendmap.prefix": "{red}[Extend]{default}",
   "extendtime.prefix": "{red}[VoteExtend]{default}",
@@ -39,8 +39,8 @@
   "general.vote-revoked-choose-again": "Seu voto foi revogado. Por favor, escolha novamente.",
   "general.no-vote-to-revoke": "Você não tem voto para revogar.",
   "general.map-not-available": "Este mapa não está disponível para seleção.",
-  "rtv.rocked-the-vote": "O jogador {green}{0}{default} quer iniciar o RockTheVote",
-  "rtv.already-rocked-the-vote": "Você já iniciou o RockTheVote",
+  "rtv.rocked-the-vote": "O jogador {green}{0}{default} quer iniciar o MCE",
+  "rtv.already-rocked-the-vote": "Você já iniciou o MCE",
   "rtv.votes-reached": "Número de votos atingido, iniciando votação...",
   "rtv.vote-removed": "Você removeu seu voto.",
   "rtv.disabled": "RTV está {red}desativado{default} no momento",

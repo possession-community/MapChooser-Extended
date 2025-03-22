@@ -1,12 +1,12 @@
 ﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
-using cs2_rockthevote.Core;
-using cs2_rockthevote.Features;
+using MapChooserExtended.Core;
+using MapChooserExtended.Features;
 using Microsoft.Extensions.DependencyInjection;
 using static CounterStrikeSharp.API.Core.Listeners;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class PluginDependencyInjection : IPluginServiceCollection<Plugin>
     {

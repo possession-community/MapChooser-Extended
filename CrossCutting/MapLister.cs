@@ -1,8 +1,8 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class MapLister : IPluginDependency<Plugin, Config>
     {
@@ -47,7 +47,7 @@ namespace cs2_rockthevote
             if (EventMapsLoaded is not null)
                 EventMapsLoaded.Invoke(this, Maps!);
             
-            Console.WriteLine($"[RockTheVote] Loaded {Maps.Length} maps from settings");
+            Console.WriteLine($"[MCE] Loaded {Maps.Length} maps from settings");
         }
 
         public void OnMapStart(string mapName)

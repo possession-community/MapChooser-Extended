@@ -2,9 +2,9 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Menu;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public partial class Plugin
     {
@@ -65,7 +65,7 @@ namespace cs2_rockthevote
             // Check if the map meets cycle conditions
             if (!IsMapAvailableForCycle(map))
             {
-                Console.WriteLine($"[RockTheVote] Map {map} does not meet cycle conditions, finding alternative...");
+                Console.WriteLine($"[MCE] Map {map} does not meet cycle conditions, finding alternative...");
                 
                 // Find an alternative map that meets cycle conditions
                 var availableMaps = _mapSettingsManager.GetAvailableMaps()
@@ -77,11 +77,11 @@ namespace cs2_rockthevote
                     // Select a random map from available maps
                     var random = new Random();
                     map = availableMaps[random.Next(availableMaps.Count)];
-                    Console.WriteLine($"[RockTheVote] Selected alternative map: {map}");
+                    Console.WriteLine($"[MCE] Selected alternative map: {map}");
                 }
                 else
                 {
-                    Console.WriteLine($"[RockTheVote] No alternative maps available, using original map: {map}");
+                    Console.WriteLine($"[MCE] No alternative maps available, using original map: {map}");
                 }
             }
 

@@ -2,7 +2,7 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 
-namespace cs2_rockthevote.Core
+namespace MapChooserExtended.Core
 {
     /// <summary>
     /// Class for managing map settings
@@ -12,7 +12,7 @@ namespace cs2_rockthevote.Core
         private Plugin? _plugin;
         private readonly Dictionary<string, MapSettings> _mapSettingsCache = new();
         private MapSettings _defaultSettings = MapSettings.CreateDefault();
-        private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/RockTheVote");
+        private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/MCE");
         private string _mapsDirectory = Path.Combine(_configDirectory, "maps");
         private bool _isInitialized = false;
         private readonly string[] _ignoredMaps = ["default", "<empty>", "\u003Cempty\u003E"];
@@ -37,7 +37,7 @@ namespace cs2_rockthevote.Core
             if (!Directory.Exists(_mapsDirectory))
             {
                 Directory.CreateDirectory(_mapsDirectory);
-                Console.WriteLine($"[RockTheVote] Created maps directory: {_mapsDirectory}");
+                Console.WriteLine($"[MCE] Created maps directory: {_mapsDirectory}");
             }
 
             // Create default settings file if it doesn't exist
@@ -45,18 +45,18 @@ namespace cs2_rockthevote.Core
             if (!File.Exists(defaultSettingsPath))
             {
                 _defaultSettings.SaveToFile(defaultSettingsPath);
-                Console.WriteLine($"[RockTheVote] Created default settings file: {defaultSettingsPath}");
+                Console.WriteLine($"[MCE] Created default settings file: {defaultSettingsPath}");
             }
             else
             {
                 // Load default settings
                 if (_defaultSettings.LoadFromFile(defaultSettingsPath))
                 {
-                    Console.WriteLine($"[RockTheVote] Loaded default settings from: {defaultSettingsPath}");
+                    Console.WriteLine($"[MCE] Loaded default settings from: {defaultSettingsPath}");
                 }
                 else
                 {
-                    Console.WriteLine($"[RockTheVote] Failed to load default settings from: {defaultSettingsPath}");
+                    Console.WriteLine($"[MCE] Failed to load default settings from: {defaultSettingsPath}");
                 }
             }
 
@@ -129,15 +129,15 @@ namespace cs2_rockthevote.Core
                     }
 
                     _mapSettingsCache[mapName] = settings;
-                    Console.WriteLine($"[RockTheVote] Loaded map settings for: {mapName}");
+                    Console.WriteLine($"[MCE] Loaded map settings for: {mapName}");
                 }
                 else
                 {
-                    Console.WriteLine($"[RockTheVote] Failed to load map settings for: {mapName}");
+                    Console.WriteLine($"[MCE] Failed to load map settings for: {mapName}");
                 }
             }
 
-            Console.WriteLine($"[RockTheVote] Loaded {_mapSettingsCache.Count} map settings");
+            Console.WriteLine($"[MCE] Loaded {_mapSettingsCache.Count} map settings");
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace cs2_rockthevote.Core
                     }
 
                     _mapSettingsCache[mapName] = settings;
-                    Console.WriteLine($"[RockTheVote] Reloaded map settings for: {mapName}");
+                    Console.WriteLine($"[MCE] Reloaded map settings for: {mapName}");
                     return true;
                 }
             }
@@ -310,7 +310,7 @@ namespace cs2_rockthevote.Core
             if (_mapSettingsCache.ContainsKey(mapName))
             {
                 _mapSettingsCache.Remove(mapName);
-                Console.WriteLine($"[RockTheVote] Removed map settings for: {mapName}");
+                Console.WriteLine($"[MCE] Removed map settings for: {mapName}");
             }
 
             return false;
@@ -333,14 +333,14 @@ namespace cs2_rockthevote.Core
                 // Time limit
                 Server.ExecuteCommand($"mp_timelimit {settings.Settings.Match.Limit}");
                 Server.ExecuteCommand($"mp_maxrounds 0");
-                Console.WriteLine($"[RockTheVote] Set mp_timelimit to {settings.Settings.Match.Limit}");
+                Console.WriteLine($"[MCE] Set mp_timelimit to {settings.Settings.Match.Limit}");
             }
             else if (settings.Settings.Match.Type == 1)
             {
                 // Round limit
                 Server.ExecuteCommand($"mp_maxrounds {settings.Settings.Match.Limit}");
                 Server.ExecuteCommand($"mp_timelimit 0");
-                Console.WriteLine($"[RockTheVote] Set mp_maxrounds to {settings.Settings.Match.Limit}");
+                Console.WriteLine($"[MCE] Set mp_maxrounds to {settings.Settings.Match.Limit}");
             }
 
             // Apply other settings...
@@ -377,7 +377,7 @@ namespace cs2_rockthevote.Core
             // Save map settings file
             if (settings.SaveToFile(filePath))
             {
-                Console.WriteLine($"[RockTheVote] Created map settings file for: {mapName}");
+                Console.WriteLine($"[MCE] Created map settings file for: {mapName}");
                 _mapSettingsCache[mapName] = settings;
                 return true;
             }

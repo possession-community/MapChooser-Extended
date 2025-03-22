@@ -2,12 +2,12 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 using System.Text;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 using static CounterStrikeSharp.API.Core.Listeners;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class EndMapVoteManager : IPluginDependency<Plugin, Config>
     {
@@ -442,7 +442,7 @@ namespace cs2_rockthevote
             // If no maps meet cycle conditions, use all maps except current and cooldown
             if (availableMaps.Count == 0)
             {
-                Console.WriteLine("[RockTheVote] No maps meet cycle conditions, using all available maps");
+                Console.WriteLine("[MCE] No maps meet cycle conditions, using all available maps");
                 availableMaps = _mapLister.Maps!
                     .Select(x => x.Name)
                     .Where(x => x != Server.MapName && !_mapCooldown.IsMapInCooldown(x))

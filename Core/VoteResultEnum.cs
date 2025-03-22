@@ -1,4 +1,4 @@
-﻿namespace cs2_rockthevote
+﻿namespace MapChooserExtended
 {
     public enum VoteResultEnum
     {

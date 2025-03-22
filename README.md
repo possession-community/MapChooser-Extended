@@ -1,62 +1,67 @@
-# CS2 Rock The Vote
-![Downloads](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote/total) ![Last commit](https://img.shields.io/github/last-commit/Oz-Lin/cs2-rockthevote "Last commit") ![Open issues](https://img.shields.io/github/issues/Oz-Lin/cs2-rockthevote "Open Issues") ![Closed issues](https://img.shields.io/github/issues-closed/Oz-Lin/cs2-rockthevote "Closed Issues") ![Size](https://img.shields.io/github/repo-size/abnerfs/dontpad-api "Size") ![Version](https://img.shields.io/badge/version-1.9.4-blue)
+# MapChooser-Extended
 
-![image](https://github.com/Oz-Lin/cs2-rockthevote/blob/main/example_image.png)
+General purpose map voting plugin, rtv, nominate, and more.
 
-General purpose map voting plugin, started as a simple RTV and now has more features
+Based on [Oz-Lin/cs2-rockthevote](https://img.shields.io/github/downloads/Oz-Lin/cs2-rockthevote)
 
-# Enjoying the plugin?
-Please drop a ⭐ star in the repository 
-
-> [!WARNING]
-> Notes from Oz-Lin:
-> 
-> This fork of the plugin mainly considers ZE/ZM/ZR Zombie Escape/Survival/Riot, or any round-based game modes.
->
-> Now testing for non-round-based modes such as bhop/surf/kz/mg-course! Make sure both `mp_timelimit` and `mp_roundtime` has the same value. 
->
-> ~~For non-round-based modes such as bhop/surf/kz/mg-course, I cannot guarantee your use case.~~ Please double-check your server cvar configs (such as `mp_timelimit`, `mp_maxrounds` etc, along with `TriggerSecondsBeforeEnd` and `TriggerRoundsBeforeEnd` in config.json) in case of compatibility issues.
-  
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
 
 # Installation
-- Download the latest release from https://github.com/Oz-Lin/cs2-rockthevote/releases
-- Extract the .zip file into `addons/counterstrikesharp/plugins`
-- Enjoy
-
-# Features
-- Reads from a custom maplist
-- RTV/unrtv Command
-- Timeleft command
-- Nominate command (with partial map name matching [#31](https://github.com/abnerfs/cs2-rockthevote/pull/31))
-- Votemap command
-- Supports workshop maps
-- Nextmap command
-- !ext map time limit extension command
-- Ignore players in Spectators from vote count
-- Added "Extend current map" in end of map vote
-- !revote during RTV or VIPextend vote to change the option
-- [VIP flag] Vote to extend current map by time limit
-- [Admin flag] Extend current map time limit
-- Force RTV from the server side [#70](https://github.com/abnerfs/cs2-rockthevote/pull/70)
-- Fully configurable
-- Translated by the community
-- Nomlist command to see who nominated which map
-- Vote to extend current map by maximum rounds as well (Thanks Cruze03 [#3](https://github.com/Oz-Lin/cs2-rockthevote/pull/3))
-- "Allow extends" checker and extend limits in RTV vote
-- Compatibility for non-round-based game mode during map time extension
-- Per-map settings system with detailed configuration options
-- Workshop collection auto-synchronization
-- Alternative command aliases: `yd` (nominate) and `ydb` (nomlist)
-- Maps in cooldown can now be nominated
+- WIP
 
 # Work in Progress
-- Cooldown to start another RTV after the last vote
-- Bug fix on "ignore specs" checker 
+- make Extend command for admin only
+- Vote sounds settings
+- Introducing CS2ScreenMenu, instead of Chat menu
+  - for nomination menu and changemap menu
+- remove codes related vip
+- remove votemap
 
-# ⚠️ Help Wanted
-- WASD menu - a lot of code refactoring must be done before implementing this feature. Can't give guarantee about this feature. 
+# Available Commands
+
+## General Commands (Everyone)
+| Command | Aliases | Description |
+| ------- | ------- | ----------- |
+| `rtv` | `css_rtv` | Start a Rock The Vote map vote |
+| `unrtv` | `css_unrtv` | Remove your vote to rock the vote |
+| `nominate <map>` | `css_nominate <map>`, `nom <map>`, `css_nom <map>`, `yd <map>`, `css_yd <map>` | Nominate a map for voting |
+| `nomlist` | `css_nomlist`, `ydb`, `css_ydb` | Display a list of nominated maps and who nominated them |
+| `votemap <map>` | `vm <map>` | Vote for a specific map |
+| `timeleft` | | Display the remaining time on the current map |
+| `nextmap` | | Display the next map in rotation |
+| `ext` | `css_ext`, `extend`, `css_extend`, `extendmap`, `css_extendmap` | Vote to extend the current map |
+| `revote` | `css_revote` | Change your vote during an active vote |
+
+## VIP Commands
+Requires `@css/vip` permission
+| Command | Aliases | Description |
+| ------- | ------- | ----------- |
+| `css_voteextend` | `css_ve` | Start a vote to extend the current map |
+
+## Admin Commands
+
+### Map Control Commands
+| Command | Aliases | Permission | Description |
+| ------- | ------- | ---------- | ----------- |
+| `css_extend <minutes>` | | `@css/changemap` | Extend the current map time limit |
+| `css_changemap <map>` | `changemap <map>` | `@css/generic` | Change the map immediately |
+| `css_setnextmap <map>` | | `@css/generic` | Set the next map in rotation |
+
+### RTV Control Commands
+| Command | Aliases | Permission | Description |
+| ------- | ------- | ---------- | ----------- |
+| `css_enable_rtv` | `enable_rtv` | `@css/generic` | Enable RTV command |
+| `css_disable_rtv` | `disable_rtv` | `@css/generic` | Disable RTV command |
+| `css_force_rtv` | `force_rtv` | `@css/generic` | Force RTV vote |
+
+### Nomination Control Commands
+| Command | Aliases | Permission | Description |
+| ------- | ------- | ---------- | ----------- |
+| `css_enable_nominate` | `enable_nominate` | `@css/generic` | Enable nomination command |
+| `css_disable_nominate` | `disable_nominate` | `@css/generic` | Disable nomination command |
+| `css_nominate_addmap <map>` | `nominate_addmap <map>` | `@css/generic` | Add a map to nomination list |
+| `css_nominate_removemap <map>` | `nominate_removemap <map>` | `@css/generic` | Remove a map from nomination list |
 
 # Translations
 | Language             | Contributor                    |
@@ -336,18 +341,3 @@ Version 1.9.4 adds the ability to automatically synchronize maps from Steam Work
 The plugin will automatically fetch maps from these collections, create settings files for them, and make them available for voting.
 
 In addition, the map name (including the file name) automatically generated from the workshop may not be the official vpk name(cuz sers can freely write the title of the workshop), so it also includes a process to automatically correct it when the map starts.
-
-# Server commands
-
-- rtv [seconds] - Trigger a map vote externally that will change the map immediately with an optional seconds parameter for voting duration (useful for gamemodes like GunGame)
-
-# Admin commands
-- css_extend [minutes] - Extend the current map time limit mp_timelimit by minutes 
-
-# Vip commands
-Requires "@css/vip" permission
-- css_ve or css_voteextend - Vote to initialise extending the current map
-
-# Limitations
- - Plugins is still under development and a lot of functionality is still going to be added in the future.
- - I usually test the new versions in an empty server with bots so it is hard to tell if everything is actually working, feel free to post any issues here or in the discord thread so I can fix them https://discord.com/channels/1160907911501991946/1176224458751627514

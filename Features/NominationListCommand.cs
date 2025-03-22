@@ -1,12 +1,12 @@
 ﻿using CounterStrikeSharp.API;
 
-namespace cs2_rockthevote;
+namespace MapChooserExtended;
 
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core.Plugin;
 using CounterStrikeSharp.API.Modules.Commands;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
 public partial class Plugin
 {

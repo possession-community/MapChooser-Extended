@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class DependencyManager<TPlugin, TConfig>
     {

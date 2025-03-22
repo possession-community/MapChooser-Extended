@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace cs2_rockthevote.Core
+namespace MapChooserExtended.Core
 {
     /// <summary>
     /// Class for managing map settings
@@ -57,7 +57,7 @@ namespace cs2_rockthevote.Core
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[RockTheVote] Error loading map settings from {path}: {ex.Message}");
+                Console.WriteLine($"[MCE] Error loading map settings from {path}: {ex.Message}");
                 return false;
             }
         }
@@ -88,7 +88,7 @@ namespace cs2_rockthevote.Core
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[RockTheVote] Error saving map settings to {path}: {ex.Message}");
+                Console.WriteLine($"[MCE] Error saving map settings to {path}: {ex.Message}");
                 return false;
             }
         }

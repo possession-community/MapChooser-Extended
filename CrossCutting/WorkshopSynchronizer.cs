@@ -2,9 +2,9 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     /// <summary>
     /// Class for synchronizing maps from Steam Workshop collections

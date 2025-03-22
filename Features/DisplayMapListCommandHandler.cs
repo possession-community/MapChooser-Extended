@@ -1,6 +1,6 @@
-﻿namespace cs2_rockthevote;
+﻿namespace MapChooserExtended;
 
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
 public class DisplayMapListCommandHandler : IPluginDependency<Plugin, Config>
 {

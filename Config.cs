@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using System.Text.Json.Serialization;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public interface ICommandConfig
     {

@@ -4,7 +4,7 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Timers;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 using Microsoft.Extensions.Localization;
 using System.Data;
 using System.Text;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class ExtendRoundTimeManager : IPluginDependency<Plugin, Config>
     {
@@ -75,7 +75,7 @@ namespace cs2_rockthevote
                 // Screw it, Oz-Lin is fixing the null reference exception issue for razpberry.
                 //Server.PrintToConsole(_localizer.LocalizeWithPrefix("") + "Null Reference Exception happened, default to 3 extends.");
 
-                Server.ExecuteCommand("css_plugins reload RockTheVote"); // screw it!
+                Server.ExecuteCommand("css_plugins reload MCE"); // screw it!
             }
 
             Votes.Clear();

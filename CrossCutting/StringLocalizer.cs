@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class StringLocalizer
     {

@@ -1,4 +1,4 @@
-﻿namespace cs2_rockthevote
+﻿namespace MapChooserExtended
 {
     public class AsyncVoteValidator
     {

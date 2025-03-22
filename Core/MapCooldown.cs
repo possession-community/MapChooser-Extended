@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
-namespace cs2_rockthevote.Core
+namespace MapChooserExtended.Core
 {
     public class MapCooldown : IPluginDependency<Plugin, Config>
     {
@@ -68,7 +68,7 @@ namespace cs2_rockthevote.Core
                 }
             }
 
-            Console.WriteLine($"[RockTheVote] Initialized {_taggedMaps.Count} tag groups for cooldown");
+            Console.WriteLine($"[MCE] Initialized {_taggedMaps.Count} tag groups for cooldown");
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace cs2_rockthevote.Core
                 }
             }
 
-            Console.WriteLine($"[RockTheVote] Updated cooldowns: {_mapsOnCoolDown.Count} maps in cooldown");
+            Console.WriteLine($"[MCE] Updated cooldowns: {_mapsOnCoolDown.Count} maps in cooldown");
         }
 
         /// <summary>

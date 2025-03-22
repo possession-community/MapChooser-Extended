@@ -5,9 +5,9 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Menu;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public partial class Plugin
     {
@@ -386,7 +386,7 @@ namespace cs2_rockthevote
             if (Nominations[userId].Maps.IndexOf(map) == -1)
                 Nominations[userId].Maps.Add(map);
 
-            Console.WriteLine($"[RockTheVote] Map {map} force nominated by {player?.PlayerName ?? "Server"}");
+            Console.WriteLine($"[MCE] Map {map} force nominated by {player?.PlayerName ?? "Server"}");
         }
 
         public void ResetNominations()

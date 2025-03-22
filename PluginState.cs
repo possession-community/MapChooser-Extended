@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class PluginState : IPluginDependency<Plugin, Config>
     {

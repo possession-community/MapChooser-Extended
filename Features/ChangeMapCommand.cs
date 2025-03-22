@@ -5,7 +5,7 @@ using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Menu;
 
-namespace cs2_rockthevote.Features
+namespace MapChooserExtended.Features
 {
     public class ChangeMapCommand : IPluginDependency<Plugin, Config>
     {
@@ -137,7 +137,7 @@ namespace cs2_rockthevote.Features
             // Close the menu
             MenuManager.CloseActiveMenu(player);
             
-            Console.WriteLine($"[RockTheVote] Admin {player.PlayerName} changed map to {map}");
+            Console.WriteLine($"[MCE] Admin {player.PlayerName} changed map to {map}");
         }
 
         public void OnLoad(Plugin plugin)

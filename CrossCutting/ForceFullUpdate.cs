@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class ForceFullUpdate
     {

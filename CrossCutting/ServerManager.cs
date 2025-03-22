@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public static class ServerManager
     {

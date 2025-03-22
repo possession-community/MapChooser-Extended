@@ -4,7 +4,7 @@ using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Utils;
 using System.Security.Cryptography.X509Certificates;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public class MaxRoundsManager : IPluginDependency<Plugin, Config>
     {

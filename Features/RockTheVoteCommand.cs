@@ -5,7 +5,7 @@ using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public partial class Plugin
     {

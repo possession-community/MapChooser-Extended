@@ -1,5 +1,5 @@
 {
-  "rtv.prefix": "{red}[RockTheVote]{default}",
+  "rtv.prefix": "{red}[MCE]{default}",
   "votemap.prefix": "{red}[マップ投票]{default}",
   "extendmap.prefix": "{red}[マップ延長]{default}",
   "extendtime.prefix": "{red}[時間延長投票]{default}",

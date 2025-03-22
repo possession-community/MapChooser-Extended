@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public static class Extensions
     {

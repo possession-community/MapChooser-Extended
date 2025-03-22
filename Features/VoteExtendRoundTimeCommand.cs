@@ -5,10 +5,10 @@ using CounterStrikeSharp.API.Core.Plugin;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Entities;
-using cs2_rockthevote.Core;
+using MapChooserExtended.Core;
 using Microsoft.Extensions.Localization;
 
-namespace cs2_rockthevote
+namespace MapChooserExtended
 {
     public partial class Plugin
     {

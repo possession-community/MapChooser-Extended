@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Cvars;
 
-namespace cs2_rockthevote.Core
+namespace MapChooserExtended.Core
 {
     public class TimeLimitManager : IPluginDependency<Plugin, Config>
     {

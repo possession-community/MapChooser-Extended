@@ -1,4 +1,4 @@
-﻿namespace cs2_rockthevote
+﻿namespace MapChooserExtended
 {
 
     public record VoteResult(VoteResultEnum Result, int VoteCount, int RequiredVotes);
