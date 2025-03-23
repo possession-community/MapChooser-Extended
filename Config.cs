@@ -89,27 +89,6 @@ namespace MapChooserExtended
         //public int ExtendLimit { get; set; } = 3; // share with EndOfMapConfig ExtendLimit
     }
 
-    public class VotemapConfig : ICommandConfig, IVoteConfig
-    {
-        public bool Enabled { get; set; } = true;
-        public int VotePercentage { get; set; } = 60;
-        public bool ChangeMapImmediately { get; set; } = true;
-        public bool EnabledInWarmup { get; set; } = true;
-        public int MinPlayers { get; set; } = 0;
-        public int MinRounds { get; set; } = 0;
-        public bool HudMenu { get; set; } = false;
-        public bool IgnoreSpec { get; set; } = true;
-    }
-
-    public class VipExtendMapConfig : IExtendMapConfig
-    {
-        public bool Enabled { get; set; } = true;
-        public int VoteDuration { get; set; } = 30;
-        public int VotePercentage { get; set; } = 60;
-        public bool RoundBased { get; set; } = true;
-        public bool HudMenu { get; set; } = true;
-    }
-
     public class TimeleftConfig
     {
         public bool ShowToAll { get; set; } = false;
@@ -128,10 +107,8 @@ namespace MapChooserExtended
     {
         public int Version { get; set; } = 15;
         public RtvConfig Rtv { get; set; } = new();
-        public VotemapConfig Votemap { get; set; } = new();
         public EndOfMapConfig EndOfMapVote { get; set; } = new();
         public ExtendMapConfig ExtendMapVote { get; set; } = new();
-        public VipExtendMapConfig VipExtendMapVote { get; set; } = new();
         public TimeleftConfig Timeleft { get; set; } = new();
         public NextmapConfig Nextmap { get; set; } = new();
         public WorkshopConfig Workshop { get; set; } = new();

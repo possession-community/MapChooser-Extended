@@ -62,30 +62,9 @@ namespace MapChooserExtended
 
         public void ScheduleMapChange(string map, bool mapEnd = false, string prefix = DEFAULT_PREFIX)
         {
-            // Check if the map meets cycle conditions
-            if (!IsMapAvailableForCycle(map))
-            {
-                Console.WriteLine($"[MCE] Map {map} does not meet cycle conditions, finding alternative...");
-                
-                // Find an alternative map that meets cycle conditions
-                var availableMaps = _mapSettingsManager.GetAvailableMaps()
-                    .Where(m => !_mapCooldown.IsMapInCooldown(m))
-                    .ToList();
-                
-                if (availableMaps.Count > 0)
-                {
-                    // Select a random map from available maps
-                    var random = new Random();
-                    map = availableMaps[random.Next(availableMaps.Count)];
-                    Console.WriteLine($"[MCE] Selected alternative map: {map}");
-                }
-                else
-                {
-                    Console.WriteLine($"[MCE] No alternative maps available, using original map: {map}");
-                }
-            }
-
+            // Admin commands should ignore cycle conditions
             NextMap = map;
+
             _prefix = prefix;
             _pluginState.MapChangeScheduled = true;
             _mapEnd = mapEnd;

@@ -33,7 +33,6 @@ namespace MapChooserExtended
         private readonly MapCooldown _mapCooldown;
         private readonly ChangeMapManager _changeMapManager;
         private readonly EndMapVoteManager _endMapVoteManager;
-        private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
         private readonly TimeLeftCommand _timeLeft;
         private readonly NextMapCommand _nextMap;
@@ -48,7 +47,6 @@ namespace MapChooserExtended
             MapSettingsManager mapSettingsManager,
             MapCooldown mapCooldown,
             ChangeMapManager changeMapManager,
-            VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
             TimeLeftCommand timeLeft,
             NextMapCommand nextMap,
@@ -65,7 +63,6 @@ namespace MapChooserExtended
             _mapSettingsManager = mapSettingsManager;
             _mapCooldown = mapCooldown;
             _changeMapManager = changeMapManager;
-            _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
             _timeLeft = timeLeft;
             _nextMap = nextMap;
@@ -121,18 +118,6 @@ namespace MapChooserExtended
                     var split = text.Split("yd");
                     var map = split.Length > 1 ? split[1].Trim() : "";
                     _nominationManager.CommandHandler(player, map);
-                }
-                else if (text.StartsWith("votemap"))
-                {
-                    var split = text.Split("votemap");
-                    var map = split.Length > 1 ? split[1].Trim() : "";
-                    _votemapManager.CommandHandler(player, map);
-                }
-                else if (text.StartsWith("vm"))
-                {
-                    var split = text.Split("vm");
-                    var map = split.Length > 1 ? split[1].Trim() : "";
-                    _votemapManager.CommandHandler(player, map);
                 }
                 else if (text.StartsWith("timeleft"))
                 {

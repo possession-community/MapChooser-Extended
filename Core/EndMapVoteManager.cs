@@ -51,7 +51,6 @@ namespace MapChooserExtended
         private readonly TimeLimitManager _timeLimitManager;
         private readonly RoundLimitManager _roundLimitManager;
         private readonly GameRules _gameRules;
-        private VotemapConfig _votemapConfig = new(); // dealing with votemap overrides endmapvote nextmap
 
         // Track the number of extends used for the current map
         private int _extendsUsed = 0;
@@ -67,8 +66,6 @@ namespace MapChooserExtended
         private IEndOfMapConfig? _configBackup = null;
         private int _canVote = 0;
         private Plugin? _plugin;
-        private EndOfMapConfig? _eomConfig = new();
-        // Use map settings instead of config
 
         HashSet<int> _voted = new();
 
@@ -83,7 +80,7 @@ namespace MapChooserExtended
 
         public void OnConfigParsed(Config config)
         {
-            _eomConfig = config.EndOfMapVote;
+            //_eomConfig = config.EndOfMapVote;
             // Use map settings instead of config
         }
 
@@ -358,7 +355,6 @@ namespace MapChooserExtended
             else
             {
                 _changeMapManager.ScheduleMapChange(winner.Key, mapEnd: mapEnd);
-                _votemapConfig.Enabled = false;
                 if (_config != null && _config.ChangeMapImmediately)
                     _changeMapManager.ChangeNextMap(mapEnd);
                 else

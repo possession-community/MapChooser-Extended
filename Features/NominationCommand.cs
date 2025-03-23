@@ -171,7 +171,7 @@ namespace MapChooserExtended
             }
 
             // Check if the map exists in the map list
-            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _localizer);
+            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _localizer, true);
             if (matchingMap == "")
                 return;
 

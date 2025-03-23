@@ -41,7 +41,6 @@ namespace MapChooserExtended
 
         private int _canVote = 0;
         private Plugin? _plugin;
-        private VipExtendMapConfig _veConfig = new();
         
         // Track the number of extends used for the current map
         private int _extendsUsed = 0;

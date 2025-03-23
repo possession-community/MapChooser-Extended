@@ -368,7 +368,7 @@ namespace MapChooserExtended.Core
                 Meta = new MapMeta
                 {
                     Name = mapName,
-                    DisplayName = mapName,
+                    DisplayName = "",
                     WorkshopId = ""
                 },
                 Settings = new MapCycleSettings()
@@ -403,6 +403,25 @@ namespace MapChooserExtended.Core
             }
 
             return availableMaps;
+        }
+
+        /// <summary>
+        /// Get a list of all maps, ignoring cycle conditions
+        /// </summary>
+        /// <returns>List of all maps</returns>
+        public List<string> GetAllMaps()
+        {
+            List<string> allMaps = new();
+
+            foreach (var kvp in _mapSettingsCache)
+            {
+                if (_ignoredMaps.Contains(kvp.Key))
+                    continue;
+
+                allMaps.Add(kvp.Key);
+            }
+
+            return allMaps;
         }
 
         /// <summary>

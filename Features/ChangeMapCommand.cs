@@ -34,7 +34,8 @@ namespace MapChooserExtended.Features
         {
             // Create a menu with all maps, including the current map
             _changeMapMenu = new("Change Map");
-            foreach (var map in _mapLister.Maps!)
+            foreach (var map in _mapLister.AllMaps!)
+ // Use AllMaps to ignore cycle conditions for admin commands
             {
                 _changeMapMenu.AddMenuOption(map.Name, (CCSPlayerController player, ChatMenuOption option) =>
                 {
@@ -67,7 +68,7 @@ namespace MapChooserExtended.Features
             else
             {
                 // Search for maps containing the specified string
-                var matchingMaps = _mapLister.Maps!
+                var matchingMaps = _mapLister.AllMaps!
                     .Select(x => x.Name)
                     .Where(x => x.ToLower().Contains(map.ToLower()))
                     .ToList();

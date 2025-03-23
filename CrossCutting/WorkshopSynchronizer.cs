@@ -143,7 +143,7 @@ namespace MapChooserExtended
                             Meta = new MapMeta
                             {
                                 Name = validMapName,
-                                DisplayName = mapName,
+                                DisplayName = "",
                                 WorkshopId = workshopId
                             },
                             Settings = new MapCycleSettings()
@@ -184,8 +184,8 @@ namespace MapChooserExtended
         /// <returns>Valid map name</returns>
         private string CreateValidMapName(string workshopTitle)
         {
-            // Remove invalid characters and convert to lowercase
-            string validName = Regex.Replace(workshopTitle, @"[^a-zA-Z0-9_]", "_").ToLower();
+            // Remove invalid characters
+            string validName = Regex.Replace(workshopTitle, @"[^a-zA-Z0-9_]", "_");
             
             // Ensure the name starts with a letter
             if (validName.Length != 0 && !char.IsLetter(validName[0]))
@@ -250,8 +250,8 @@ namespace MapChooserExtended
                             // Reload map settings
                             _mapSettingsManager.LoadAllMapSettings();
                             _mapLister.LoadMaps();
-                            break;
                         }
+                        return;
                     }
                 }
             }
