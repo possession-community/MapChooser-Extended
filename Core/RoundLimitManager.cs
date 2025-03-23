@@ -8,8 +8,6 @@ namespace MapChooserExtended.Core
         private GameRules _gameRules;
 
         private ConVar? _maxRounds; // move to RoundLimitManager.cs?
-
-        //private decimal TimeLimitValue => (decimal)(_timeLimit?.GetPrimitiveValue<float>() ?? 0F) * 60M;
         public int RoundLimitValue => _maxRounds?.GetPrimitiveValue<int>() ?? 0;
 
         public bool UnlimitedRound => RoundLimitValue <= 0;
@@ -21,8 +19,7 @@ namespace MapChooserExtended.Core
                 if (_gameRules.WarmupRunning)
                     return 0;
 
-                //return (decimal)(Server.CurrentTime - _gameRules.GameStartTime);
-                return -1; // todo
+                return _gameRules.TotalRoundsPlayed;
             }
         }
 
@@ -64,7 +61,10 @@ namespace MapChooserExtended.Core
 
         public void ExtendRound(int rounds)
         {
-            // TODO: implement extending rounds
+            if (!UnlimitedRound)
+            {
+                RoundsRemaining += rounds;
+            }
         }
     }
 }

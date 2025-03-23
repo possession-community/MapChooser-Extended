@@ -302,8 +302,10 @@ namespace MapChooserExtended
                     var mapSettings = _mapSettingsManager.GetMapSettings(currentMap);
                     
                     // Use map settings to determine extend behavior
+                    // TODO: make round time extend?
                     if (mapSettings.Settings.Match.Type == 0 && !_timeLimitManager.UnlimitedTime)
                     {
+                        /*
                         if (_eomConfig!.RoundBased == true)
                         {
                             _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number, _timeLimitManager, _gameRules);
@@ -312,6 +314,8 @@ namespace MapChooserExtended
                         {
                             _extendRoundTimeManager.ExtendRoundTime(extendSettings.Number, _timeLimitManager, _gameRules);
                         }
+                        */
+                        _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number, _timeLimitManager, _gameRules);
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed",
                             extendSettings.Number, percent, totalVotes));
                     }

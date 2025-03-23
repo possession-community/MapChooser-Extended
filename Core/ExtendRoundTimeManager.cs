@@ -236,7 +236,6 @@ namespace MapChooserExtended
                     ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
                 }
                 else
- // Round limit
                 {
                     ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
                 }
@@ -307,7 +306,7 @@ namespace MapChooserExtended
                 // RoundTime is in seconds, so multiply by 60 to convert to minutes
                 gameRules.RoundTime += (minutesToExtendBy * 60);
 
-                var gameRulesProxy = Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First();
+                var gameRulesProxy = Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").FirstOrDefault();
                 Utilities.SetStateChanged(gameRulesProxy, "CCSGameRulesProxy", "m_pGameRules");
 
                 // Update TimeRemaining in timeLimitManager
@@ -329,15 +328,12 @@ namespace MapChooserExtended
 
         }
 
-
         public bool ExtendMapTimeLimit(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
         {
             try
             {
-                _timeLimitManager.TimeLimitValue += (minutesToExtendBy * 60); //convert to seconds
-
-                // Update TimeRemaining
-                //_timeLimitManager.TimeRemaining = (_timeLimitManager.TimeLimitValue/60) - (_timeLimitManager.TimePlayed/60);
+                // Use the ExtendTime method to properly update the time limit
+                _timeLimitManager.ExtendTime(minutesToExtendBy);
 
                 _pluginState.MapChangeScheduled = false;
                 _pluginState.EofVoteHappening = false;

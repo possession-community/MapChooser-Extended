@@ -55,8 +55,8 @@ namespace MapChooserExtended
             RockTheVoteCommand rtvManager,
             //ExtendCommand extManager,
             TimeLeftCommand timeLeft,
-            ExtendRoundTimeCommand extendRoundTime,
-            VoteExtendRoundTimeCommand voteExtendRoundTime,
+            //ExtendRoundTimeCommand extendRoundTime,
+            //VoteExtendRoundTimeCommand voteExtendRoundTime,
             NextMapCommand nextMap,
             EndMapVoteManager endMapVoteManager,
             DisplayMapListCommandHandler displayMapListCommandHandler,
@@ -75,8 +75,8 @@ namespace MapChooserExtended
             _rtvManager = rtvManager;
             //_extManager = extManager;
             _timeLeft = timeLeft;
-            _extendRoundTime = extendRoundTime;
-            _voteExtendRoundTime = voteExtendRoundTime;
+            //_extendRoundTime = extendRoundTime;
+            //_voteExtendRoundTime = voteExtendRoundTime;
             _nextMap = nextMap;
             _endMapVoteManager = endMapVoteManager;
             _displayMapListCommandHandler = displayMapListCommandHandler;
@@ -112,11 +112,6 @@ namespace MapChooserExtended
                 if (text == "rtv")
                 {
                     _rtvManager.CommandHandler(player);
-                }
-                else if (text == "ext")
-                {
-                    //_extManager.CommandHandler(player);
-                    _extendMapManager.CommandHandler(player);
                 }
                 else if (text.StartsWith("nominate"))
                 {
@@ -155,10 +150,6 @@ namespace MapChooserExtended
                 else if (text.StartsWith("nextmap"))
                 {
                     _nextMap.CommandHandler(player);
-                }
-                else if (text.StartsWith("extend"))
-                {
-                    _extendMapManager.CommandHandler(player);
                 }
                 else if (text.StartsWith("changemap"))
                 {

@@ -10,8 +10,8 @@ namespace MapChooserExtended.Core
         private ConVar? _timeLimit;
 
         public decimal TimeLimitValue {
-            get => (decimal)(_timeLimit?.GetPrimitiveValue<float>() ?? 0F) * 60M;
-            set => _timeLimit?.SetValue((float)(value / 60M));
+            get => (decimal)(_timeLimit?.GetPrimitiveValue<float>() ?? 0F);
+            set => _timeLimit?.SetValue((float)value);
         }
 
         public bool UnlimitedTime => TimeLimitValue <= 0;
@@ -23,7 +23,7 @@ namespace MapChooserExtended.Core
                 if (_gameRules.WarmupRunning)
                     return 0;
 
-                return (decimal)(Server.CurrentTime - _gameRules.GameStartTime);
+                return (decimal)(Server.CurrentTime - _gameRules.GameStartTime) / 60M;
             }
         }
 
@@ -65,7 +65,10 @@ namespace MapChooserExtended.Core
 
         public void ExtendTime(int minutes)
         {
-            // TODO: implement extending time
+            if (!UnlimitedTime)
+            {
+                TimeLimitValue += minutes;
+            }
         }
     }
 }

@@ -11,12 +11,13 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 - WIP
 
 # Work in Progress
-- make Extend command for admin only
-- Vote sounds settings
-- Introducing CS2ScreenMenu, instead of Chat menu
+- ~~make Extend command for admin only~~
+- vote sounds settings
+- introducing CS2ScreenMenu, instead of Chat menu
   - for nomination menu and changemap menu
 - remove codes related vip
 - remove votemap
+- investigate about timelimit and maxrounds, + roundtime
 
 # Available Commands
 
