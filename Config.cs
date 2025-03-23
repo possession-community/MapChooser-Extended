@@ -24,8 +24,6 @@ namespace MapChooserExtended
         public int VoteDuration { get; set; }
         public bool HudMenu { get; set; }
         public bool HideHudAfterVote { get; set; }
-        public int ExtendTimeStep { get; set; } 
-        public int ExtendRoundStep { get; set; }
 
         public int VoteCountdownTime { get; set; }
     }
@@ -35,10 +33,7 @@ namespace MapChooserExtended
         public bool Enabled { get; set; }
         public int VoteDuration { get; set; }
         public int VotePercentage { get; set; }
-        public int ExtendTimeStep { get; set; }
-        public int ExtendRoundStep { get; set; } 
         public bool HudMenu { get; set; }
-        public int ExtendLimit { get; set; }
     }
 
     public class EndOfMapConfig : IEndOfMapConfig, IExtendMapConfig
@@ -55,14 +50,8 @@ namespace MapChooserExtended
         public bool AllowExtend { get; set; } = true;
         public int VoteCountdownTime { get; set; } = 10;
         public bool RoundBased { get; set; } = true;
-        public int ExtendTimeStep { get; set; } = 15;
- //TODO: Remove - Using map settings instead
-        public int ExtendRoundStep { get; set; } = 5;
- //TODO: Remove - Using map settings instead
         public int VotePercentage { get; set; } = 60;
- //TODO: Remove - Using map settings instead
-        public int ExtendLimit { get; set; } = 3;
- //TODO: Remove - Using map settings instead
+        public int ExtendTimeStep { get; set; } = 15;
     }
 
     public class RtvConfig : ICommandConfig, IVoteConfig, IEndOfMapConfig, IExtendMapConfig
@@ -83,12 +72,6 @@ namespace MapChooserExtended
         public int VoteCooldownTime { get; set; } = 300;
         public int InitialRtvDelay { get; set; } = 60;
         public int VoteCountdownTime { get; set; } = 10;
-        public int ExtendTimeStep { get; set; } = 15; 
-//TODO: Remove - Using map settings instead
-        public int ExtendRoundStep { get; set; } = 5;
- //TODO: Remove - Using map settings instead
-        public int ExtendLimit { get; set; } = 3;
- //TODO: Remove - Using map settings instead
 
     }
 
@@ -103,10 +86,6 @@ namespace MapChooserExtended
         public bool IgnoreSpec { get; set; } = true;
         public bool RoundBased { get; set; } = true;
 
-        public int ExtendTimeStep { get; set; } = 15;
- //TODO: Remove - Using map settings instead
-        public int ExtendRoundStep { get; set; } = 5;
- //TODO: Remove - Using map settings instead
         //public int ExtendLimit { get; set; } = 3; // share with EndOfMapConfig ExtendLimit
     }
 
@@ -127,12 +106,6 @@ namespace MapChooserExtended
         public bool Enabled { get; set; } = true;
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;
-        public int ExtendTimeStep { get; set; } = 15;
- //TODO: Remove - Using map settings instead
-        public int ExtendRoundStep { get; set; } = 5;
- //TODO: Remove - Using map settings instead
-        public int ExtendLimit { get; set; } = 3;
- //TODO: Remove - Using map settings instead
         public bool RoundBased { get; set; } = true;
         public bool HudMenu { get; set; } = true;
     }

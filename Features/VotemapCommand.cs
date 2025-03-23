@@ -135,10 +135,22 @@ namespace MapChooserExtended
 
         public void OpenVotemapMenu(CCSPlayerController player)
         {
-            if (_config.HudMenu)
-                MenuManager.OpenCenterHtmlMenu(_plugin!, player, votemapMenuHud!);
+            if (_config.HudMenu && _plugin != null && votemapMenuHud != null)
+            {
+                MenuManager.OpenCenterHtmlMenu(_plugin, player, votemapMenuHud);
+            }
+            else if (_config.HudMenu)
+            {
+                Console.WriteLine("[MCE] Error: Cannot open HUD menu, plugin or menu is null");
+                if (votemapMenu != null)
+                    MenuManager.OpenChatMenu(player, votemapMenu);
+            }
+
             else
-                MenuManager.OpenChatMenu(player, votemapMenu!);
+            {
+                if (votemapMenu != null)
+                    MenuManager.OpenChatMenu(player, votemapMenu);
+            }
         }
 
         void AddVote(CCSPlayerController player, string map)

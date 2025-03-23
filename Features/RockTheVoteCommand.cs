@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
+using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
 namespace MapChooserExtended
 {
@@ -89,6 +90,8 @@ namespace MapChooserExtended
         private DateTime _lastRtvTime = DateTime.MinValue;
         private bool _firstRtvOfMap = true;
         // Track when the map started
+        // Timer for map start operations
+        private Timer? _mapStartTimer = null;
         private DateTime _mapStartTime = DateTime.Now;
         public bool VotesAlreadyReached => _voteManager!.VotesAlreadyReached;
 
@@ -103,9 +106,18 @@ namespace MapChooserExtended
 
         public void OnMapStart(string map)
         {
-            var newMapWaitingPeriod = new CounterStrikeSharp.API.Modules.Timers.Timer(20.0f, () =>
+            // Kill previous timer if it exists
+            if (_mapStartTimer != null)
+            {
+                _mapStartTimer.Kill();
+                _mapStartTimer = null;
+            }
+            
+            // Create new timer and store reference
+            _mapStartTimer = new Timer(20.0f, () =>
             {
                 _voteManager!.OnMapStart(map);
+                _mapStartTimer = null; // Clear reference after execution
             });
             // Reset RTV cooldown tracking on map start
             _firstRtvOfMap = true;

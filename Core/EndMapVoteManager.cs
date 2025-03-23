@@ -68,7 +68,7 @@ namespace MapChooserExtended
         private int _canVote = 0;
         private Plugin? _plugin;
         private EndOfMapConfig? _eomConfig = new();
-        private int _totalExtendLimit;
+        // Use map settings instead of config
 
         HashSet<int> _voted = new();
 
@@ -84,7 +84,7 @@ namespace MapChooserExtended
         public void OnConfigParsed(Config config)
         {
             _eomConfig = config.EndOfMapVote;
-            _totalExtendLimit = config.EndOfMapVote.ExtendLimit;
+            // Use map settings instead of config
         }
 
         public void OnMapStart(string map)
@@ -97,7 +97,6 @@ namespace MapChooserExtended
             KillTimer();
             // Reset extends used counter on map start
             _extendsUsed = 0;
-            _eomConfig!.ExtendLimit = _totalExtendLimit;
 
             // Restore the config if it was changed by the server command
             if (_configBackup is not null)

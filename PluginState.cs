@@ -10,6 +10,7 @@ namespace MapChooserExtended
         public bool CommandsDisabled { get; set; }
         public bool RtvDisabled { get; set; } = false;
         public bool NominateDisabled { get; set; } = false;
+        // Stores the number of extends left for the current map, initialized from map settings
         public int ExtendsLeft { get; set; }
 
         public PluginState()

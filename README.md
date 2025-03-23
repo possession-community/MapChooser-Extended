@@ -112,9 +112,9 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
 | InitialRtvDelay     | Cooldown timer to start the "first" RTV                                                                                | 60             | 0 |  -                                 |
 | VoteCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | -                                 |
-| ExtendTimeStep        | How long (in minutes) should the mp_timelimit to be extended                                                             | 15         | 0       | -                                |
-| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
-| ExtendLimit             | How many times the current map can be extended (-1 for unlimited extensions)                                          | 3             | -1     |                                      |
+| ExtendTimeStep        | **(Deprecated - Now using map settings)** How long (in minutes) should the mp_timelimit to be extended                                                             | 15         | 0       | -                                |
+| ExtendRoundStep         | **(Deprecated - Now using map settings)** How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | **(Deprecated - Now using map settings)** How many times the current map can be extended (-1 for unlimited extensions)                                          | 3             | -1     |                                      |
 
 ## End of map vote
 Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like vote will start to define the next map, it can be configured to change immediatly or only when the map actually ends
@@ -132,9 +132,9 @@ Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like v
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
 | AllowExtend             | Option to extend the current map (Also needs to configure ExtendLimit)                                                 | true          | false | true                                 |
 | RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
-| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
-| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
-| ExtendLimit             | How many times the current map can be extended (-1 for unlimited extensions)                                           | 3             | -1     |                                      |
+| ExtendTimeStep          | **(Deprecated - Now using map settings)** How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
+| ExtendRoundStep         | **(Deprecated - Now using map settings)** How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | **(Deprecated - Now using map settings)** How many times the current map can be extended (-1 for unlimited extensions)                                           | 3             | -1     |                                      |
 
 ## Extend map vote
 Players can extend the current map by using the `!ext` command. Extends the `mp_timelimit` and `mp_maxrounds` cvar
@@ -147,9 +147,9 @@ Players can extend the current map by using the `!ext` command. Extends the `mp_
 | MinPlayers              | Minimum amount of players to enable ext                              |               |       |      |
 | VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
 | ChangeMapImmediately     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
-| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
-| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
-| ExtendLimit             | How many times the current map can be extended (-1 for unlimited extensions)                                          | 3             | -1     |                                      |
+| ExtendTimeStep          | **(Deprecated - Now using map settings)** How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
+| ExtendRoundStep         | **(Deprecated - Now using map settings)** How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | **(Deprecated - Now using map settings)** How many times the current map can be extended (-1 for unlimited extensions)                                          | 3             | -1     |                                      |
 | RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
 | IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
 
@@ -162,9 +162,9 @@ Players can extend the current map by using the `!ve` or `!voteextend` command. 
 | Enabled                 | Enable/Disable extend map vote functionality                                                                           | true          | false | true                                 |
 | VoteDuration            | Seconds the VIP extend vote should last                                                                                | 30            | 1     |                                      |
 | VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
-| ExtendTimeStep          | How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
-| ExtendRoundStep         | How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
-| ExtendLimit             | How many times the current map can be extended (-1 for unlimited extensions)                                           | 3             | -1     |                                      |
+| ExtendTimeStep          | **(Deprecated - Now using map settings)** How long (in minutes) should the mp_timelimit to be extended                                                           | 15            | 0     |                                      |
+| ExtendRoundStep         | **(Deprecated - Now using map settings)** How many rounds should the mp_maxrounds to be extended                                                                 | 5             | 0     |                                      |
+| ExtendLimit             | **(Deprecated - Now using map settings)** How many times the current map can be extended (-1 for unlimited extensions)                                           | 3             | -1     |                                      |
 | RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
 | HudMenu                 | Whether to use HudMenu or just the chat one                                                                            | true          | false | true                                 |
 
@@ -202,7 +202,7 @@ Players can type `nextmap` to see which map is going to be played next
 
 Version 1.9.4 introduces a new map settings system that allows detailed configuration for each map individually.
 
-This system enables server administrators to apply different settings to each map.
+This system enables server administrators to apply different settings to each map, including extend settings (times, number) that were previously configured globally.
 
 Editing maplist.txt is no longer necessary.
 

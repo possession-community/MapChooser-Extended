@@ -39,7 +39,6 @@ namespace MapChooserExtended
 
         private IExtendMapConfig? _config = null;
 
-        private int _totalExtendLimit;
         private int _canVote = 0;
         private Plugin? _plugin;
         private VipExtendMapConfig _veConfig = new();
@@ -68,7 +67,6 @@ namespace MapChooserExtended
                 
                 // For backward compatibility, still set the plugin state
                 _pluginState.ExtendsLeft = GetCurrentMapExtendSettings().Times;
-                _totalExtendLimit = GetCurrentMapExtendSettings().Times;
             }
             catch (Exception)
             {

@@ -102,14 +102,20 @@ namespace MapChooserExtended
             if (mapEnd != _mapEnd)
                 return false;
 
-            if (!_pluginState.MapChangeScheduled)
+            if (!_pluginState.MapChangeScheduled || NextMap == null)
                 return false;
 
             _pluginState.MapChangeScheduled = false;
-            Server.PrintToChatAll(_localizer.LocalizeWithPrefixInternal(_prefix, "general.changing-map", NextMap!));
+            Server.PrintToChatAll(_localizer.LocalizeWithPrefixInternal(_prefix, "general.changing-map", NextMap));
             _plugin!.AddTimer(3.0F, () =>
             {
-                Map map = _maps.FirstOrDefault(x => x.Name == NextMap!)!;
+                Map? map = _maps.FirstOrDefault(x => x.Name == NextMap);
+                if (map == null)
+                {
+                    Console.WriteLine($"[MCE] Error: Map {NextMap} not found in map list");
+                    return;
+                }
+                
                 if (Server.IsMapValid(map.Name))
                 {
                     Server.ExecuteCommand($"changelevel {map.Name}");
