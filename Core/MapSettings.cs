@@ -196,6 +196,12 @@ namespace MapChooserExtended.Core
         public ExtendSettings Extend { get; set; } = new ExtendSettings();
 
         /// <summary>
+        /// Additional cfg files to execute on map start
+        /// </summary>
+        [JsonPropertyName("cfgs")]
+        public string[] Cfgs { get; set; } = [];
+
+        /// <summary>
         /// Merge with base settings
         /// </summary>
         /// <param name="baseSettings">Base settings</param>
@@ -222,6 +228,10 @@ namespace MapChooserExtended.Core
 
             // Extend
             Extend.MergeWithBase(baseSettings.Extend);
+
+            // Cfgs
+            if (Cfgs == null || Cfgs.Length == 0)
+                Cfgs = baseSettings.Cfgs;
         }
 
         /// <summary>
@@ -238,7 +248,8 @@ namespace MapChooserExtended.Core
                 Cooldown = new CooldownSettings { Count = 0, Tags = [] },
                 Nomination = new NominationSettings { Admin = false, Enabled = true },
                 Match = new MatchSettings { Type = 0, Limit = "30" },
-                Extend = new ExtendSettings { Enabled = true, Times = 2, Number = 15 }
+                Extend = new ExtendSettings { Enabled = true, Times = 2, Number = 15 },
+                Cfgs = []
             };
         }
     }

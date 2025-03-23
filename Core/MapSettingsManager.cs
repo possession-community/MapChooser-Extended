@@ -14,6 +14,7 @@ namespace MapChooserExtended.Core
         private MapSettings _defaultSettings = MapSettings.CreateDefault();
         private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/MapChooserExtended");
         private string _mapsDirectory = Path.Combine(_configDirectory, "maps");
+        private string _configsDirectory = Path.Combine(_configDirectory, "maps/configs");
         private bool _isInitialized = false;
         private readonly string[] _ignoredMaps = ["default", "<empty>", "\u003Cempty\u003E"];
 
@@ -38,6 +39,13 @@ namespace MapChooserExtended.Core
             {
                 Directory.CreateDirectory(_mapsDirectory);
                 Console.WriteLine($"[MCE] Created maps directory: {_mapsDirectory}");
+            }
+
+            // Create configs directory if it doesn't exist
+            if (!Directory.Exists(_configsDirectory))
+            {
+                Directory.CreateDirectory(_configsDirectory);
+                Console.WriteLine($"[MCE] Created configs directory: {_configsDirectory}");
             }
 
             // Create default settings file if it doesn't exist
@@ -343,7 +351,23 @@ namespace MapChooserExtended.Core
                 Console.WriteLine($"[MCE] Set mp_maxrounds to {settings.Settings.Match.Limit}");
             }
 
-            // Apply other settings...
+            // Execute additional cfg files if specified
+            if (settings.Settings.Cfgs != null && settings.Settings.Cfgs.Length > 0)
+            {
+                foreach (var cfg in settings.Settings.Cfgs)
+                {
+                    string cfgPath = Path.Combine(_configsDirectory, $"{cfg}.cfg");
+                    if (File.Exists(cfgPath))
+                    {
+                        Server.ExecuteCommand($"exec {cfgPath}");
+                        Console.WriteLine($"[MCE] Executed cfg file: {cfgPath}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[MCE] Warning: cfg file not found: {cfgPath}");
+                    }
+                }
+            }
         }
 
         /// <summary>
