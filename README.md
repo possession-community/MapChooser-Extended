@@ -16,6 +16,7 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 - introducing CS2ScreenMenu, instead of Chat menu
   - for nomination menu and changemap menu
 - remove codes related vip
+  - move voteextend to admin only
 - remove votemap
 - investigate about timelimit and maxrounds, + roundtime
 

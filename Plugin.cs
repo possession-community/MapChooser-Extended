@@ -35,10 +35,7 @@ namespace MapChooserExtended
         private readonly EndMapVoteManager _endMapVoteManager;
         private readonly VotemapCommand _votemapManager;
         private readonly RockTheVoteCommand _rtvManager;
-        //private readonly ExtendCommand _extManager;
         private readonly TimeLeftCommand _timeLeft;
-        private readonly ExtendRoundTimeCommand _extendRoundTime;
-        private readonly VoteExtendRoundTimeCommand _voteExtendRoundTime;
         private readonly NextMapCommand _nextMap;
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
         private readonly ExtendMapCommand _extendMapManager;
@@ -53,10 +50,7 @@ namespace MapChooserExtended
             ChangeMapManager changeMapManager,
             VotemapCommand voteMapManager,
             RockTheVoteCommand rtvManager,
-            //ExtendCommand extManager,
             TimeLeftCommand timeLeft,
-            //ExtendRoundTimeCommand extendRoundTime,
-            //VoteExtendRoundTimeCommand voteExtendRoundTime,
             NextMapCommand nextMap,
             EndMapVoteManager endMapVoteManager,
             DisplayMapListCommandHandler displayMapListCommandHandler,
@@ -73,10 +67,7 @@ namespace MapChooserExtended
             _changeMapManager = changeMapManager;
             _votemapManager = voteMapManager;
             _rtvManager = rtvManager;
-            //_extManager = extManager;
             _timeLeft = timeLeft;
-            //_extendRoundTime = extendRoundTime;
-            //_voteExtendRoundTime = voteExtendRoundTime;
             _nextMap = nextMap;
             _endMapVoteManager = endMapVoteManager;
             _displayMapListCommandHandler = displayMapListCommandHandler;
