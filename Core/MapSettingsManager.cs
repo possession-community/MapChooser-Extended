@@ -134,6 +134,12 @@ namespace MapChooserExtended.Core
                                 settings.MergeWithBase(baseSettings);
                             }
                         }
+                    else if (settings.Settings == null)
+                    {
+                        // If base is not specified and Settings is null, use default.json
+                        settings.MergeWithBase(_defaultSettings);
+                        Console.WriteLine($"[MCE] Using default settings for {mapName} because base is not specified and Settings is null");
+                    }
                     }
 
                     _mapSettingsCache[mapName] = settings;
@@ -212,6 +218,12 @@ namespace MapChooserExtended.Core
                                 newSettings.MergeWithBase(baseSettings);
                             }
                         }
+                    else if (newSettings.Settings == null)
+                    {
+                        // If base is not specified and Settings is null, use default.json
+                        newSettings.MergeWithBase(_defaultSettings);
+                        Console.WriteLine($"[MCE] Using default settings for {mapName} because base is not specified and Settings is null");
+                    }
                     }
 
                     _mapSettingsCache[mapName] = newSettings;
@@ -306,6 +318,12 @@ namespace MapChooserExtended.Core
                                 settings.MergeWithBase(baseSettings);
                             }
                         }
+                    else if (settings.Settings == null)
+                    {
+                        // If base is not specified and Settings is null, use default.json
+                        settings.MergeWithBase(_defaultSettings);
+                        Console.WriteLine($"[MCE] Using default settings for {mapName} because base is not specified and Settings is null");
+                    }
                     }
 
                     _mapSettingsCache[mapName] = settings;

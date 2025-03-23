@@ -101,6 +101,13 @@ namespace MapChooserExtended.Core
         {
             // Don't merge metadata (specific to each map)
             
+            // If Settings is null, use base settings
+            if (Settings == null)
+            {
+                Settings = baseSettings.Settings;
+                return;
+            }
+            
             // Merge settings
             Settings.MergeWithBase(baseSettings.Settings);
         }
@@ -208,11 +215,18 @@ namespace MapChooserExtended.Core
         public void MergeWithBase(MapCycleSettings baseSettings)
         {
             // Use base settings if not explicitly set
-            // For arrays and objects, use base settings only if null
+            // For arrays and objects, use base settings only if null or empty
+            
+            // Get default values for comparison
+            var defaultSettings = CreateDefault();
             
             // Times
             if (Times == null || Times.Length == 0)
                 Times = baseSettings.Times;
+                
+            // Enabled - use base setting if it's the default value
+            if (Enabled == defaultSettings.Enabled)
+                Enabled = baseSettings.Enabled;
 
             // Players
             Players.MergeWithBase(baseSettings.Players);
@@ -278,10 +292,13 @@ namespace MapChooserExtended.Core
         public void MergeWithBase(PlayerRange baseSettings)
         {
             // Use base settings for default values
-            if (Min == 0)
+            // Compare with default values from MapCycleSettings.CreateDefault()
+            var defaultPlayerRange = new PlayerRange { Min = 0, Max = 64 };
+            
+            if (Min == defaultPlayerRange.Min)
                 Min = baseSettings.Min;
             
-            if (Max == 64)
+            if (Max == defaultPlayerRange.Max)
                 Max = baseSettings.Max;
         }
     }
@@ -316,7 +333,10 @@ namespace MapChooserExtended.Core
         public void MergeWithBase(CooldownSettings baseSettings)
         {
             // Use base settings for default values
-            if (Count == 2)
+            // Compare with default values from MapCycleSettings.CreateDefault()
+            var defaultCooldownSettings = new CooldownSettings { Count = 0, Tags = [] };
+            
+            if (Count == defaultCooldownSettings.Count)
                 Count = baseSettings.Count;
             
             if (Tags == null || Tags.Length == 0 || (Tags.Length == 1 && Tags[0] == "default"))
@@ -349,6 +369,11 @@ namespace MapChooserExtended.Core
         {
             // Use base settings if not explicitly set
             // For boolean values, use base settings only for default values
+            if (Admin == false)
+                Admin = baseSettings.Admin;
+            
+            if (Enabled == true)
+                Enabled = baseSettings.Enabled;
         }
     }
 
@@ -376,10 +401,13 @@ namespace MapChooserExtended.Core
         public void MergeWithBase(MatchSettings baseSettings)
         {
             // Use base settings for default values
-            if (Type == 0)
+            // Compare with default values from MapCycleSettings.CreateDefault()
+            var defaultMatchSettings = new MatchSettings { Type = 0, Limit = "30" };
+            
+            if (Type == defaultMatchSettings.Type)
                 Type = baseSettings.Type;
             
-            if (Limit == "30")
+            if (Limit == defaultMatchSettings.Limit)
                 Limit = baseSettings.Limit;
         }
     }
@@ -414,11 +442,17 @@ namespace MapChooserExtended.Core
         public void MergeWithBase(ExtendSettings baseSettings)
         {
             // Use base settings for default values
-            if (Times == 2)
+            // Compare with default values from MapCycleSettings.CreateDefault()
+            var defaultExtendSettings = new ExtendSettings { Enabled = true, Times = 2, Number = 15 };
+            
+            if (Times == defaultExtendSettings.Times)
                 Times = baseSettings.Times;
             
-            if (Number == 15)
+            if (Number == defaultExtendSettings.Number)
                 Number = baseSettings.Number;
+                
+            if (Enabled == defaultExtendSettings.Enabled)
+                Enabled = baseSettings.Enabled;
         }
     }
 }
