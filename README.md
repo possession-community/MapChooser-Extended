@@ -169,6 +169,8 @@ Each map has its own settings file (e.g., `de_dust2.json`) that inherits from th
 
 If a specific map is loaded without a specific map configuration, the `maps/default.json` will be used to automatically generate the map configuration.
 
+And, each map settings can be set multiple cfgs for exec some cfgs when OnMapStart. See `Settings.cfgs` comment on `example.json`
+
 `default.json` is here:
 
 <details> <summary>Click to view</summary>
@@ -206,7 +208,8 @@ If a specific map is loaded without a specific map configuration, the `maps/defa
       "enabled": true,
       "times": 2,
       "number": 15
-    }
+    },
+    "cfgs": []
   }
 }
 ```
@@ -281,7 +284,11 @@ example map settings here:
       // match.type = "0" -> mp_maxround  +
       // match.type = "1" -> mp_timelimit +
       "number": 15
-    }
+    },
+    // Each value can be named as a cfg file, allowing additional configuration to be performed at map start.
+    // cfg file should be put on <plugin-config>/maps/configs
+    // default is empty
+    "cfgs": ["official", "deMap"]
   }
 }
 ```
