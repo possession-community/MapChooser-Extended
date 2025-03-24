@@ -14,7 +14,7 @@ namespace MapChooserExtended.Core
         private MapSettings _defaultSettings = MapSettings.CreateDefault();
         private readonly static string _configDirectory = Path.Combine(Application.RootDirectory, "configs/plugins/MapChooserExtended");
         private string _mapsDirectory = Path.Combine(_configDirectory, "maps");
-        private string _configsDirectory = Path.Combine(_configDirectory, "maps/configs");
+        private string _cfgsDirectory = Path.Combine(Server.GameDirectory, "csgo/cfg/MapChooserExtended/maps");
         private bool _isInitialized = false;
         private readonly string[] _ignoredMaps = ["default", "<empty>", "\u003Cempty\u003E"];
 
@@ -42,10 +42,10 @@ namespace MapChooserExtended.Core
             }
 
             // Create configs directory if it doesn't exist
-            if (!Directory.Exists(_configsDirectory))
+            if (!Directory.Exists(_cfgsDirectory))
             {
-                Directory.CreateDirectory(_configsDirectory);
-                Console.WriteLine($"[MCE] Created configs directory: {_configsDirectory}");
+                Directory.CreateDirectory(_cfgsDirectory);
+                Console.WriteLine($"[MCE] Created configs directory: {_cfgsDirectory}");
             }
 
             // Create default settings file if it doesn't exist
@@ -353,7 +353,19 @@ namespace MapChooserExtended.Core
 
             MapSettings settings = GetMapSettings(mapName);
 
-            // Apply match settings
+            // Execute additional cfg files if specified
+            if (settings.Settings.Cfgs != null && settings.Settings.Cfgs.Length > 0)
+            {
+                foreach (var cfg in settings.Settings.Cfgs)
+                {
+                    string cfgPath = Path.Combine(_cfgsDirectory, $"{cfg}.cfg");
+
+                    // TODO: File check? or logging?
+                    Server.ExecuteCommand($"exec {cfgPath}");
+                }
+            }
+
+            // Apply match settings after cfgs
             if (settings.Settings.Match.Type == 0)
             {
                 // Time limit
@@ -367,18 +379,6 @@ namespace MapChooserExtended.Core
                 Server.ExecuteCommand($"mp_maxrounds {settings.Settings.Match.Limit}");
                 Server.ExecuteCommand($"mp_timelimit 0");
                 Console.WriteLine($"[MCE] Set mp_maxrounds to {settings.Settings.Match.Limit}");
-            }
-
-            // Execute additional cfg files if specified
-            if (settings.Settings.Cfgs != null && settings.Settings.Cfgs.Length > 0)
-            {
-                foreach (var cfg in settings.Settings.Cfgs)
-                {
-                    string cfgPath = Path.Combine(_configsDirectory, $"{cfg}.cfg");
-
-                    // TODO: File check? or logging?
-                    Server.ExecuteCommand($"exec {cfgPath}");
-                }
             }
         }
 
