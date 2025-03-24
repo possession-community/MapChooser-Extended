@@ -83,7 +83,7 @@ namespace MapChooserExtended.Core
                 return;
 
             // Delay applying map settings to ensure they are loaded
-            _plugin!.AddTimer(1.0f, () =>
+            _plugin!.AddTimer(0.1f, () =>
             {
                 Server.NextFrame(() =>
                 {
