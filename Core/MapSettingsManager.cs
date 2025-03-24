@@ -82,11 +82,18 @@ namespace MapChooserExtended.Core
             if (!_isInitialized)
                 return;
 
-            // Reload current map settings
-            ReloadMapSettings(mapName);
+            // Delay applying map settings to ensure they are loaded
+            _plugin!.AddTimer(1.0f, () =>
+            {
+                Server.NextFrame(() =>
+                {
+                    // Reload current map settings
+                    ReloadMapSettings(mapName);
 
-            // Apply map settings
-            ApplyMapSettings(mapName);
+                    // Apply map settings
+                    ApplyMapSettings(mapName);
+                });
+            });
         }
 
         /// <summary>
@@ -143,7 +150,8 @@ namespace MapChooserExtended.Core
                     }
 
                     _mapSettingsCache[mapName] = settings;
-                    Console.WriteLine($"[MCE] Loaded map settings for: {mapName}");
+                    // TODO: hide this to avoid spamming the console
+                    // Console.WriteLine($"[MCE] Loaded map settings for: {mapName}");
                 }
                 else
                 {
@@ -358,7 +366,7 @@ namespace MapChooserExtended.Core
             {
                 foreach (var cfg in settings.Settings.Cfgs)
                 {
-                    string cfgPath = Path.Combine(_cfgsDirectory, $"{cfg}.cfg");
+                    string cfgPath = Path.Combine("MapChooserExtended/maps", $"{cfg}.cfg");
 
                     // TODO: File check? or logging?
                     Server.ExecuteCommand($"exec {cfgPath}");

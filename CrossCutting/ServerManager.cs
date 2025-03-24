@@ -32,8 +32,8 @@ namespace MapChooserExtended
             }
             catch (CounterStrikeSharp.API.Core.NativeException ex) when (ex.Message.Contains("Global Variables not initialized"))
             {
-                // サーバー初期化前はデフォルト値を返す
-                Console.WriteLine("[MCE] Server not fully initialized yet, returning default player count");
+                // hide this to avoid spamming the console
+                //Console.WriteLine("[MCE] Server not fully initialized yet, returning default player count");
                 return 0;
             }
         }
