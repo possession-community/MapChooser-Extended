@@ -11,7 +11,6 @@ namespace MapChooserExtended
     public partial class Plugin
     {
         [ConsoleCommand("css_rtv", "Votes to rock the vote")]
-        [ConsoleCommand("rtv", "Votes to rock the vote")]
         public void OnRTV(CCSPlayerController? player, CommandInfo? command)
         {
             if (player is null)
@@ -27,7 +26,6 @@ namespace MapChooserExtended
         }
 
         [ConsoleCommand("css_unrtv", "Removes a vote to rock the vote")]
-        [ConsoleCommand("unrtv", "Removes a vote to rock the vote")]
         public void OnUnRTV(CCSPlayerController? player, CommandInfo? command)
         {
             if (player is null)
@@ -43,30 +41,24 @@ namespace MapChooserExtended
         }
 
         [ConsoleCommand("css_enable_rtv", "Enable RTV command (Admin only)")]
-        [ConsoleCommand("enable_rtv", "Enable RTV command (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnEnableRtv(CCSPlayerController? player, CommandInfo command)
         {
             _rtvManager.EnableRtvCommandHandler(player);
         }
 
         [ConsoleCommand("css_disable_rtv", "Disable RTV command (Admin only)")]
-        [ConsoleCommand("disable_rtv", "Disable RTV command (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnDisableRtv(CCSPlayerController? player, CommandInfo command)
         {
             _rtvManager.DisableRtvCommandHandler(player);
         }
 
         [ConsoleCommand("css_force_rtv", "Force RTV vote (Admin only)")]
-        [ConsoleCommand("force_rtv", "Force RTV vote (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnForceRtv(CCSPlayerController? player, CommandInfo command)
         {
-            if (player != null && player.IsValid != false)
-                _rtvManager.ForceRtvCommandHandler(player, command);
-            else
-                return;
+            _rtvManager.ForceRtvCommandHandler(player, command);
         }
 
         [GameEventHandler(HookMode.Pre)]
@@ -164,7 +156,7 @@ namespace MapChooserExtended
 
         public void EnableRtvCommandHandler(CCSPlayerController? player)
         {
-            if (player != null && player.IsValid != false)
+            if (player == null || !player.IsValid)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
                 return;
@@ -189,7 +181,7 @@ namespace MapChooserExtended
 
         public void DisableRtvCommandHandler(CCSPlayerController? player)
         {
-            if (player != null && player.IsValid != false)
+            if (player == null || !player.IsValid)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
                 return;
@@ -214,7 +206,7 @@ namespace MapChooserExtended
 
         public void ForceRtvCommandHandler(CCSPlayerController? player, CommandInfo command)
         {
-            if (player != null && player.IsValid != false)
+            if (player == null || !player.IsValid)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.admin-only"));
                 return;

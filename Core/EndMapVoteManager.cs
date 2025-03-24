@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Menu;
+using CS2MenuManager.API.Menu;
+using CS2MenuManager.API.Enum;
 using CounterStrikeSharp.API.Modules.Timers;
 using MapChooserExtended.Core;
 using System.Text;
@@ -140,12 +141,12 @@ namespace MapChooserExtended
         private void ShowMapVoteMenu(CCSPlayerController player)
         {
             var menu = CreateMapVoteMenu();
-            MenuManager.OpenChatMenu(player, menu);
+            menu.Display(player);
         }
 
-        private ChatMenu CreateMapVoteMenu()
+        private CenterHtmlMenu CreateMapVoteMenu()
         {
-            ChatMenu menu = new(_localizer.Localize("emv.hud.menu-title"));
+            CenterHtmlMenu menu = new CenterHtmlMenu(_localizer.Localize("emv.hud.menu-title"), _plugin);
 
             // Add extend option if allowed
             // Get current map extend settings
@@ -153,10 +154,9 @@ namespace MapChooserExtended
             if (extendSettings.Enabled && (extendSettings.Times > _extendsUsed || extendSettings.Times == -1))
             {
                 Votes[_localizer.Localize("general.extend-current-map")] = 0;
-                menu.AddMenuOption(_localizer.Localize("general.extend-current-map"), (player, option) =>
+                menu.AddItem(_localizer.Localize("general.extend-current-map"), (player, option) =>
                 {
-                    MapVoted(player, _localizer.Localize("general.extend-current-map"));
-                    MenuManager.CloseActiveMenu(player);
+                    MapVoted(player, option.Text);
                 });
             }
 
@@ -164,21 +164,19 @@ namespace MapChooserExtended
             if (_config is RtvConfig rtvConfig && rtvConfig.DontChangeRtv)
             {
                 Votes[_localizer.Localize("general.ignore-rtv")] = 0;
-                menu.AddMenuOption(_localizer.Localize("general.ignore-rtv"), (player, option) =>
+                menu.AddItem(_localizer.Localize("general.ignore-rtv"), (player, option) =>
                 {
-                    MapVoted(player, _localizer.Localize("general.ignore-rtv"));
-                    MenuManager.CloseActiveMenu(player);
+                    MapVoted(player, option.Text);
                 });
             }
 
             // Add map options
-            foreach (var map in mapsEllected.Take((extendSettings.Enabled && (extendSettings.Times > _extendsUsed || extendSettings.Times == -1)) ? (MAX_OPTIONS_HUD_MENU - 1) : MAX_OPTIONS_HUD_MENU))
+            foreach (var map in mapsEllected.Take(MAX_OPTIONS_HUD_MENU))
             {
                 Votes[map] = 0;
-                menu.AddMenuOption(map, (player, option) =>
+                menu.AddItem(map, (player, option) =>
                 {
-                    MapVoted(player, map);
-                    MenuManager.CloseActiveMenu(player);
+                    MapVoted(player, option.Text);
                 });
             }
 
@@ -238,16 +236,10 @@ namespace MapChooserExtended
             int index = 1;
             StringBuilder stringBuilder = new();
             stringBuilder.AppendFormat($"<b>{_localizer.Localize("emv.hud.hud-timer", timeLeft)}</b>");
-            if (!_config!.HudMenu)
-                foreach (var kv in Votes.OrderByDescending(x => x.Value).Take(MAX_OPTIONS_HUD_MENU).Where(x => x.Value > 0))
-                {
-                    stringBuilder.AppendFormat($"<br>{kv.Key} <font color='green'>({kv.Value})</font>");
-                }
-            else
-                foreach (var kv in Votes.Take(MAX_OPTIONS_HUD_MENU))
-                {
-                    stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
-                }
+            foreach (var kv in Votes)
+            {
+                stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
+            }
 
             foreach (CCSPlayerController player in ServerManager.ValidPlayers().Where(x => !_voted.Contains(x.UserId!.Value)))
             {
@@ -435,7 +427,7 @@ namespace MapChooserExtended
 
             // Get maps that meet cycle conditions
             var availableMaps = _mapSettingsManager.GetAvailableMaps()
-                .Where(m => m != Server.MapName && !_mapCooldown.IsMapInCooldown(m) && _mapSettingsManager.IsMapAvailableForCycle(m))
+                .Where(m => m != Server.MapName && !_mapCooldown.IsMapInCooldown(m))
                 .ToList();
 
             // If no maps meet cycle conditions, use all maps except current and cooldown
@@ -489,7 +481,7 @@ namespace MapChooserExtended
             var menu = CreateMapVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
-                MenuManager.OpenChatMenu(player, menu);
+                menu.Display(player);
 
             timeLeft = _config.VoteDuration;
             Timer = _plugin!.AddTimer(1.0F, () =>

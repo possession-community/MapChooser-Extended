@@ -9,7 +9,6 @@ namespace MapChooserExtended
 {
     public partial class Plugin
     {
-        [ConsoleCommand("revote", "Revote the current vote")]
         [ConsoleCommand("css_revote", "Revote the current vote")]
         public void OnRevote(CCSPlayerController? player, CommandInfo? command)
         {

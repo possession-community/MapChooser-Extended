@@ -70,7 +70,7 @@ namespace MapChooserExtended
         public bool DontChangeRtv { get; set; } = true;
         public bool IgnoreSpec { get; set; } = true;
         public int VoteCooldownTime { get; set; } = 300;
-        public int InitialRtvDelay { get; set; } = 60;
+        public int InitialRtvDelay { get; set; } = 300;
         public int VoteCountdownTime { get; set; } = 10;
 
     }

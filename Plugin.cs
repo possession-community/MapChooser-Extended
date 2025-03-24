@@ -127,12 +127,6 @@ namespace MapChooserExtended
                 {
                     _nextMap.CommandHandler(player);
                 }
-                else if (text.StartsWith("changemap"))
-                {
-                    var split = text.Split("changemap");
-                    var map = split.Length > 1 ? split[1].Trim() : "";
-                    _changeMapCommand.CommandHandler(player, map);
-                }
                 // TODO: Implement this later
                 //else if (text == "revote")
                 //{

@@ -2,7 +2,8 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Menu;
+using CS2MenuManager.API.Menu;
+using CS2MenuManager.API.Enum;
 using CounterStrikeSharp.API.Modules.Timers;
 using MapChooserExtended.Core;
 using Microsoft.Extensions.Localization;
@@ -116,22 +117,21 @@ namespace MapChooserExtended
         private void ShowVoteMenu(CCSPlayerController player)
         {
             var menu = CreateVoteMenu();
-            MenuManager.OpenChatMenu(player, menu);
+            menu.Display(player);
         }
 
-        private ChatMenu CreateVoteMenu()
+        private CenterHtmlMenu CreateVoteMenu()
         {
-            ChatMenu menu = new(_localizer.Localize("extendtime.hud.menu-title"));
+            CenterHtmlMenu menu = new CenterHtmlMenu(_localizer.Localize("extendtime.hud.menu-title"), _plugin);
 
             var answers = new List<string>() { "Yes", "No" };
 
             foreach (var answer in answers)
             {
                 Votes[answer] = 0;
-                menu.AddMenuOption(answer, (player, option) =>
+                menu.AddItem(answer, (player, option) =>
                 {
                     ExtendTimeVoted(player, answer);
-                    MenuManager.CloseActiveMenu(player);
                 });
             }
 
@@ -167,16 +167,10 @@ namespace MapChooserExtended
             int index = 1;
             StringBuilder stringBuilder = new();
             stringBuilder.AppendFormat($"<b>{_localizer.Localize("extendtime.hud.hud-timer", timeLeft)}</b>");
-            if (!_config!.HudMenu)
-                foreach (var kv in Votes.OrderByDescending(x => x.Value).Take(MAX_OPTIONS_HUD_MENU).Where(x => x.Value > 0))
-                {
-                    stringBuilder.AppendFormat($"<br>{kv.Key} <font color='green'>({kv.Value})</font>");
-                }
-            else
-                foreach (var kv in Votes.Take(MAX_OPTIONS_HUD_MENU))
-                {
-                    stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
-                }
+            foreach (var kv in Votes)
+            {
+                stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
+            }
 
             foreach (CCSPlayerController player in ServerManager.ValidPlayers())
             {
@@ -273,7 +267,7 @@ namespace MapChooserExtended
             var menu = CreateVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
-                MenuManager.OpenChatMenu(player, menu);
+                menu.Display(player);
 
             timeLeft = _config.VoteDuration;
             Timer = _plugin!.AddTimer(1.0F, () =>

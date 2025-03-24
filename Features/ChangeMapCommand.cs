@@ -3,7 +3,8 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Menu;
+using CS2MenuManager.API.Menu;
+using CS2MenuManager.API.Enum;
 
 namespace MapChooserExtended.Features
 {
@@ -12,11 +13,11 @@ namespace MapChooserExtended.Features
         private readonly ChangeMapManager _changeMapManager;
         private readonly StringLocalizer _localizer;
         private readonly MapLister _mapLister;
-        private ChatMenu? _changeMapMenu = null;
+        private CenterHtmlMenu? _changeMapMenu = null;
+        private Plugin? _plugin;
 
-        [ConsoleCommand("css_changemap", "Change the map immediately (Admin only)")]
-        [ConsoleCommand("changemap", "Change the map immediately (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [ConsoleCommand("css_mcemaps", "Change the map immediately (Admin only)")]
+        [RequiresPermissions("@css/changemap")]
         public void ChangeMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
             CommandHandler(player, command.GetArg(1));
@@ -30,22 +31,26 @@ namespace MapChooserExtended.Features
             _mapLister.EventMapsLoaded += OnMapsLoaded;
         }
 
+        public void OnLoad(Plugin plugin)
+        {
+            _plugin = plugin;
+        }
+
         public void OnMapsLoaded(object? sender, Map[] maps)
         {
             // Create a menu with all maps, including the current map
-            _changeMapMenu = new("Change Map");
-            foreach (var map in _mapLister.AllMaps!)
- // Use AllMaps to ignore cycle conditions for admin commands
+            _changeMapMenu = new CenterHtmlMenu("Change Map", _plugin);
+            foreach (var map in _mapLister.AllMaps!) // Use AllMaps to ignore cycle conditions for admin commands
             {
-                _changeMapMenu.AddMenuOption(map.Name, (CCSPlayerController player, ChatMenuOption option) =>
+                _changeMapMenu.AddItem(map.Name, (player, option) =>
                 {
                     ChangeMap(player, option.Text);
                 });
             }
 
-            _changeMapMenu.AddMenuOption("Exit", (CCSPlayerController player, ChatMenuOption option) =>
+            _changeMapMenu.AddItem("Exit", (player, option) =>
             {
-                MenuManager.CloseActiveMenu(player);
+                // Menu will be closed automatically
             });
         }
 
@@ -79,46 +84,47 @@ namespace MapChooserExtended.Features
                 else if (matchingMaps.Count == 1)
                 {
                     // Even if there's only one match, still show the menu to prevent accidental map changes
-                    ChatMenu singleMapMenu = new("Confirm Map Change");
-                    singleMapMenu.AddMenuOption(matchingMaps[0], (CCSPlayerController p, ChatMenuOption option) =>
+                    CenterHtmlMenu singleMapMenu = new CenterHtmlMenu("Confirm Map Change", _plugin);
+                    singleMapMenu.AddItem(matchingMaps[0], (p, option) =>
                     {
                         ChangeMap(p, option.Text);
                     });
-                    singleMapMenu.AddMenuOption("Exit", (CCSPlayerController p, ChatMenuOption option) =>
+                    singleMapMenu.AddItem("Exit", (p, option) =>
                     {
-                        MenuManager.CloseActiveMenu(p);
+                        // Menu will be closed automatically
                     });
                     
-                    MenuManager.OpenChatMenu(player!, singleMapMenu);
+                    singleMapMenu.Display(player!);
                 }
                 else
                 {
                     // Create a menu with matching maps
-                    ChatMenu matchingMapMenu = new("Matching Maps");
+                    CenterHtmlMenu matchingMapMenu = new CenterHtmlMenu("Matching Maps", _plugin);
                     foreach (var matchingMap in matchingMaps)
                     {
-                        matchingMapMenu.AddMenuOption(matchingMap, (CCSPlayerController p, ChatMenuOption option) =>
+                        matchingMapMenu.AddItem(matchingMap, (p, option) =>
                         {
                             ChangeMap(p, option.Text);
                         });
                     }
-                    matchingMapMenu.AddMenuOption("Exit", (CCSPlayerController p, ChatMenuOption option) =>
+                    matchingMapMenu.AddItem("Exit", (p, option) =>
                     {
-                        MenuManager.CloseActiveMenu(p);
+                        // Menu will be closed automatically
                     });
                     
-                    MenuManager.OpenChatMenu(player!, matchingMapMenu);
+                    matchingMapMenu.Display(player!);
                 }
             }
         }
 
         private void OpenChangeMapMenu(CCSPlayerController player)
         {
-            MenuManager.OpenChatMenu(player!, _changeMapMenu!);
+            _changeMapMenu!.Display(player!);
         }
 
-        private void ChangeMap(CCSPlayerController player, string map)
+        private void ChangeMap(CCSPlayerController player, string option)
         {
+            string map = option;
             // Check if player is admin
             if (!player.IsValid || !AdminManager.PlayerHasPermissions(player, ["@css/changemap"]))
             {
@@ -133,15 +139,8 @@ namespace MapChooserExtended.Features
             _changeMapManager.ScheduleMapChange(map, false, "changemap.prefix");
             _changeMapManager.ChangeNextMap();
             
-            // Close the menu
-            MenuManager.CloseActiveMenu(player);
             
             Console.WriteLine($"[MCE] Admin {player.PlayerName} changed map to {map}");
-        }
-
-        public void OnLoad(Plugin plugin)
-        {
-            // TODO: Something
         }
 
         public void OnConfigParsed(Config config)

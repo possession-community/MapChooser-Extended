@@ -4,19 +4,16 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Admin;
-using CounterStrikeSharp.API.Modules.Menu;
 using MapChooserExtended.Core;
+using CS2MenuManager.API.Menu;
+using CS2MenuManager.API.Enum;
 
 namespace MapChooserExtended
 {
     public partial class Plugin
     {
         [ConsoleCommand("css_nominate", "nominate a map to rtv")]
-        [ConsoleCommand("nominate", "nominate a map to rtv")]
         [ConsoleCommand("css_nom", "nominate a map to rtv")]
-        [ConsoleCommand("nom", "nominate a map to rtv")]
-        [ConsoleCommand("css_yd", "nominate a map to rtv")]
-        [ConsoleCommand("yd", "nominate a map to rtv")]
         public void OnNominate(CCSPlayerController player, CommandInfo command)
         {
             string map = command.GetArg(1).Trim();
@@ -36,32 +33,28 @@ namespace MapChooserExtended
         }
 
         [ConsoleCommand("css_enable_nominate", "Enable nominate command (Admin only)")]
-        [ConsoleCommand("enable_nominate", "Enable nominate command (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnEnableNominate(CCSPlayerController player, CommandInfo command)
         {
             _nominationManager.EnableNominateCommandHandler(player);
         }
 
         [ConsoleCommand("css_disable_nominate", "Disable nominate command (Admin only)")]
-        [ConsoleCommand("disable_nominate", "Disable nominate command (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnDisableNominate(CCSPlayerController player, CommandInfo command)
         {
             _nominationManager.DisableNominateCommandHandler(player);
         }
 
         [ConsoleCommand("css_nominate_addmap", "Add a map to nomination list (Admin only)")]
-        [ConsoleCommand("nominate_addmap", "Add a map to nomination list (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnNominateAddMap(CCSPlayerController player, CommandInfo command)
         {
             _nominationManager.NominateAddMapCommandHandler(player, command);
         }
 
         [ConsoleCommand("css_nominate_removemap", "Remove a map from nomination list (Admin only)")]
-        [ConsoleCommand("nominate_removemap", "Remove a map from nomination list (Admin only)")]
-        [RequiresPermissions("@css/generic")]
+        [RequiresPermissions("@css/changemap")]
         public void OnNominateRemoveMap(CCSPlayerController player, CommandInfo command)
         {
             _nominationManager.NominateRemoveMapCommandHandler(player, command);
@@ -71,7 +64,8 @@ namespace MapChooserExtended
     public class NominationCommand : IPluginDependency<Plugin, Config>
     {
         Dictionary<int, (string PlayerName, List<string> Maps)> Nominations = new();
-        ChatMenu? nominationMenu = null;
+        CenterHtmlMenu? nominationMenu = null;
+        private Plugin? _plugin;
         private RtvConfig _config = new();
         private EndOfMapConfig _eomConfig = new();
         private GameRules _gamerules;
@@ -95,6 +89,11 @@ namespace MapChooserExtended
             _mapCooldown.EventCooldownRefreshed += OnMapsLoaded;
         }
 
+        public void OnLoad(Plugin plugin)
+        {
+            _plugin = plugin;
+        }
+
         public void OnMapStart(string map)
         {
             Nominations.Clear();
@@ -110,18 +109,24 @@ namespace MapChooserExtended
 
         public void OnMapsLoaded(object? sender, Map[] maps)
         {
-            nominationMenu = new("Nomination");
+            nominationMenu = new CenterHtmlMenu("Nomination", _plugin);
             foreach (var map in _mapLister.Maps!.Where(x => x.Name != Server.MapName))
             {
-                nominationMenu.AddMenuOption(map.Name, (CCSPlayerController player, ChatMenuOption option) =>
-                {
-                    Nominate(player, option.Text);
-                }, _mapCooldown.IsMapInCooldown(map.Name));
+                // TODO: Use allMaps + check if the map is available for nomination
+                //       And, add the text to each options, the reason why the map is not available
+                if (_mapCooldown.IsMapInCooldown(map.Name)) {
+                    nominationMenu.AddItem(map.Name, DisableOption.DisableHideNumber);
+                } else {
+                    nominationMenu.AddItem(map.Name, (player, option) =>
+                    {
+                        Nominate(player, option.Text);
+                    });
+                }
             }
 
-            nominationMenu.AddMenuOption("Exit", (CCSPlayerController player, ChatMenuOption option) =>
+            nominationMenu.AddItem("Exit", (player, option) =>
             {
-                MenuManager.CloseActiveMenu(player);
+                // in default, Menu will be closed automatically
             });
         }
 
@@ -290,11 +295,12 @@ namespace MapChooserExtended
 
         public void OpenNominationMenu(CCSPlayerController player)
         {
-            MenuManager.OpenChatMenu(player!, nominationMenu!);
+            nominationMenu!.Display(player!);
         }
 
-        void Nominate(CCSPlayerController player, string map)
+        void Nominate(CCSPlayerController player, string option)
         {
+            string map = option;
             if (map == Server.MapName)
             {
                 player!.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.current-map"));
@@ -363,8 +369,6 @@ namespace MapChooserExtended
                 player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated", matchingMap,
                     totalVotes));
             }
-            if (player != null)
-                MenuManager.CloseActiveMenu(player);
         }
 
         public List<string> NominationWinners()

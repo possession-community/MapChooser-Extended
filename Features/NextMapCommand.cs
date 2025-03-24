@@ -88,7 +88,7 @@ namespace MapChooserExtended.Features
 
             plugin.AddCommand("css_setnextmap", "Set the next map (Admin only)", (player, info) =>
             {
-                if (player != null && player.IsValid && AdminManager.PlayerHasPermissions(player, "@css/generic"))
+                if (player != null && player.IsValid && AdminManager.PlayerHasPermissions(player, "@css/changemap"))
                     SetNextMapCommandHandler(player, info);
                 else
                     return;

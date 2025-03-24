@@ -27,12 +27,11 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 | ------- | ------- | ----------- |
 | `rtv` | `css_rtv` | Start a Rock The Vote map vote |
 | `unrtv` | `css_unrtv` | Remove your vote to rock the vote |
-| `nominate <map>` | `css_nominate <map>`, `nom <map>`, `css_nom <map>`, `yd <map>`, `css_yd <map>` | Nominate a map for voting |
-| `nomlist` | `css_nomlist`, `ydb`, `css_ydb` | Display a list of nominated maps and who nominated them |
-| `votemap <map>` | `vm <map>` | Vote for a specific map |
+| `css_nominate <map>` | `css_nom <map>` | Nominate a map for voting |
+| `css_nomlist` |  | Display a list of nominated maps and who nominated them |
 | `timeleft` | | Display the remaining time on the current map |
 | `nextmap` | | Display the next map in rotation |
-| `revote` | `css_revote` | Change your vote during an active vote |
+| `css_revote` | | Change your vote during an active vote |
 
 ## Admin Commands
 
@@ -40,23 +39,23 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 | Command | Aliases | Permission | Description |
 | ------- | ------- | ---------- | ----------- |
 | `css_extend <minutes>` | `css_ext`, `css_extendmap` | `@css/changemap` | Extend the current map time limit |
-| `css_changemap <map>` | `changemap <map>` | `@css/generic` | Change the map immediately |
-| `css_setnextmap <map>` | | `@css/generic` | Set the next map in rotation |
+| `css_changemap <map>` | | `@css/changemap` | Change the map immediately |
+| `css_setnextmap <map>` | | `@css/changemap` | Set the next map in rotation |
 
 ### RTV Control Commands
 | Command | Aliases | Permission | Description |
 | ------- | ------- | ---------- | ----------- |
-| `css_enable_rtv` | `enable_rtv` | `@css/generic` | Enable RTV command |
-| `css_disable_rtv` | `disable_rtv` | `@css/generic` | Disable RTV command |
-| `css_force_rtv` | `force_rtv` | `@css/generic` | Force RTV vote |
+| `css_enable_rtv` | | `@css/changemap` | Enable RTV command |
+| `css_disable_rtv` | | `@css/changemap` | Disable RTV command |
+| `css_force_rtv` | | `@css/changemap` | Force RTV vote |
 
 ### Nomination Control Commands
 | Command | Aliases | Permission | Description |
 | ------- | ------- | ---------- | ----------- |
-| `css_enable_nominate` | `enable_nominate` | `@css/generic` | Enable nomination command |
-| `css_disable_nominate` | `disable_nominate` | `@css/generic` | Disable nomination command |
-| `css_nominate_addmap <map>` | `nominate_addmap <map>` | `@css/generic` | Add a map to nomination list |
-| `css_nominate_removemap <map>` | `nominate_removemap <map>` | `@css/generic` | Remove a map from nomination list |
+| `css_enable_nominate` | | `@css/changemap` | Enable nomination command |
+| `css_disable_nominate` | | `@css/changemap` | Disable nomination command |
+| `css_nominate_addmap <map>` | | `@css/changemap` | Add a map to nomination list |
+| `css_nominate_removemap <map>` | | `@css/changemap` | Remove a map from nomination list |
 
 # Translations
 | Language             | Contributor                    |
@@ -81,9 +80,8 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 - Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/MapChooserExtended/maps/` directory as JSON files, see under section.
 
 ## General config
-| Config         | Description                                                                      | Default Value | Min | Max |
-| -------------- | -------------------------------------------------------------------------------- | ------------- | --- | --- |
-| MapsInCoolDown | Number of maps that can't be used in vote because they have been played recently | 3             | 0   |     |
+
+WIP
 
 ## RockTheVote
 Players can type rtv to request the map to be changed, once a number of votes is reached (by default 60% of players in the server) a vote will start for the next map, this vote lasts up to 30 seconds (hardcoded for now), in the end server changes to the winner map.
@@ -286,7 +284,7 @@ example map settings here:
       "number": 15
     },
     // Each value can be named as a cfg file, allowing additional configuration to be performed at map start.
-    // cfg file should be put on <plugin-config>/maps/configs
+    // cfg file should be put on csgo/cfg/MapChooserExtended/maps
     // default is empty
     "cfgs": ["official", "deMap"]
   }

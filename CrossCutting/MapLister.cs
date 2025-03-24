@@ -45,7 +45,7 @@ namespace MapChooserExtended
                         !string.IsNullOrEmpty(meta.WorkshopId) ? meta.WorkshopId : null
                     );
                 }).ToArray();
-            
+
             // Convert to Map objects
             Maps = availableMaps
                 .Select(mapName => {
