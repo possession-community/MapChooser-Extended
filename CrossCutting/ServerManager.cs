@@ -26,7 +26,16 @@ namespace MapChooserExtended
 
         public static int ValidPlayerCount(bool considerBots = false)
         {
-            return ValidPlayers(considerBots).Length;
+            try
+            {
+                return ValidPlayers(considerBots).Length;
+            }
+            catch (CounterStrikeSharp.API.Core.NativeException ex) when (ex.Message.Contains("Global Variables not initialized"))
+            {
+                // サーバー初期化前はデフォルト値を返す
+                Console.WriteLine("[MCE] Server not fully initialized yet, returning default player count");
+                return 0;
+            }
         }
 
         //public static CCSPlayerController[] ValidPlayers(bool considerBots = false, bool ignoreSpecs = false)
