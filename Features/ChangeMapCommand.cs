@@ -58,8 +58,6 @@ namespace MapChooserExtended.Features
                 return;
             }
 
-            map = map.ToLower().Trim();
-
             if (string.IsNullOrEmpty(map))
             {
                 // Open menu with all maps
@@ -70,7 +68,7 @@ namespace MapChooserExtended.Features
                 // Search for maps containing the specified string
                 var matchingMaps = _mapLister.AllMaps!
                     .Select(x => x.Name)
-                    .Where(x => x.ToLower().Contains(map.ToLower()))
+                    .Where(x => x.Contains(map))
                     .ToList();
 
                 if (matchingMaps.Count == 0)

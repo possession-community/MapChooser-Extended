@@ -105,12 +105,12 @@ namespace MapChooserExtended
             }
 
             // Original implementation
-            if (mapsToSearch.Select(x => x.Name).FirstOrDefault(x => x.ToLower() == map) is not null)
+            if (mapsToSearch.Select(x => x.Name).FirstOrDefault(x => x == map) is not null)
                 return map;
 
             var matchingMaps = mapsToSearch
                 .Select(x => x.Name)
-                .Where(x => x.ToLower().Contains(map.ToLower()))
+                .Where(x => x.Contains(map))
                 .ToList();
 
             if (matchingMaps.Count == 0)

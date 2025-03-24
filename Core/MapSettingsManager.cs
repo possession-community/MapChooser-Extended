@@ -161,9 +161,6 @@ namespace MapChooserExtended.Core
         /// <returns>Map settings</returns>
         public bool IsLoadedMapName(string mapName)
         {
-            // Convert map name to lowercase
-            mapName = mapName.ToLower();
-
             // Return true if loaded
             if (_mapSettingsCache.ContainsKey(mapName))
                 return true;
@@ -192,9 +189,6 @@ namespace MapChooserExtended.Core
         /// <returns>Map settings</returns>
         public MapSettings GetMapSettings(string mapName)
         {
-            // Convert map name to lowercase
-            mapName = mapName.ToLower();
-
             // Return cached settings if available
             if (_mapSettingsCache.TryGetValue(mapName, out MapSettings? settings))
                 return settings;
@@ -231,7 +225,16 @@ namespace MapChooserExtended.Core
                 }
             }
 
-            // Return default settings if map settings don't exist
+            // If map settings don't exist, create them
+            if (!_ignoredMaps.Contains(mapName))
+            {
+                if (CreateMapSettingsFile(mapName))
+                {
+                    Console.WriteLine($"[MCE] Auto-created map settings for: {mapName}");
+                    return GetMapSettings(mapName); // Recursive call to load the newly created settings
+                }
+            }
+            
             return _defaultSettings;
         }
 
@@ -296,9 +299,6 @@ namespace MapChooserExtended.Core
         /// <returns>Whether the reload was successful</returns>
         public bool ReloadMapSettings(string mapName)
         {
-            // Convert map name to lowercase
-            mapName = mapName.ToLower();
-
             // Load settings file if it exists
             string filePath = Path.Combine(_mapsDirectory, $"{mapName}.json");
             if (File.Exists(filePath))
@@ -389,9 +389,6 @@ namespace MapChooserExtended.Core
         /// <returns>Whether the creation was successful</returns>
         public bool CreateMapSettingsFile(string mapName)
         {
-            // Convert map name to lowercase
-            mapName = mapName.ToLower();
-
             // Don't create if settings file already exists
             string filePath = Path.Combine(_mapsDirectory, $"{mapName}.json");
             if (File.Exists(filePath))

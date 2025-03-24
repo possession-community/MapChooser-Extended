@@ -39,7 +39,7 @@ namespace MapChooserExtended.Features
 
         public void SetNextMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
-            string mapName = command.GetArg(1).Trim().ToLower();
+            string mapName = command.GetArg(1).Trim();
             if (string.IsNullOrEmpty(mapName))
             {
                 if (player != null)

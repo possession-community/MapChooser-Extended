@@ -24,7 +24,7 @@ namespace MapChooserExtended.Core
                 var map = Server.MapName;
                 if (map is not null)
                 {
-                    UpdateCooldowns(map.Trim().ToLower());
+                    UpdateCooldowns(map.Trim());
                     EventCooldownRefreshed?.Invoke(this, maps);
                 }
             };
@@ -44,7 +44,7 @@ namespace MapChooserExtended.Core
         public void OnMapStart(string mapName)
         {
             // Update cooldowns when map changes
-            UpdateCooldowns(mapName.Trim().ToLower());
+            UpdateCooldowns(mapName.Trim());
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace MapChooserExtended.Core
         /// <returns>Whether the map is in cooldown</returns>
         public bool IsMapInCooldown(string mapName)
         {
-            return _mapsOnCoolDown.ContainsKey(mapName.ToLower()) && _mapsOnCoolDown[mapName.ToLower()] > 0;
+            return _mapsOnCoolDown.ContainsKey(mapName) && _mapsOnCoolDown[mapName] > 0;
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace MapChooserExtended.Core
         /// <returns>Remaining cooldown (0 if not in cooldown)</returns>
         public int GetRemainingCooldown(string mapName)
         {
-            if (_mapsOnCoolDown.TryGetValue(mapName.ToLower(), out var cooldown))
+            if (_mapsOnCoolDown.TryGetValue(mapName, out var cooldown))
             {
                 return cooldown;
             }

@@ -19,7 +19,7 @@ namespace MapChooserExtended
         [ConsoleCommand("yd", "nominate a map to rtv")]
         public void OnNominate(CCSPlayerController player, CommandInfo command)
         {
-            string map = command.GetArg(1).Trim().ToLower();
+            string map = command.GetArg(1).Trim();
             _nominationManager.CommandHandler(player!, map);
         }
 
@@ -160,7 +160,7 @@ namespace MapChooserExtended
 
         public void NominateAddMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
-            string mapName = command.GetArg(1).Trim().ToLower();
+            string mapName = command.GetArg(1).Trim();
             if (string.IsNullOrEmpty(mapName))
             {
                 if (player != null)
@@ -196,7 +196,7 @@ namespace MapChooserExtended
 
         public void NominateRemoveMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
-            string mapName = command.GetArg(1).Trim().ToLower();
+            string mapName = command.GetArg(1).Trim();
             if (string.IsNullOrEmpty(mapName))
             {
                 if (player != null)
@@ -244,7 +244,6 @@ namespace MapChooserExtended
             if (player is null)
                 return;
 
-            map = map.ToLower().Trim();
             if (_pluginState.DisableCommands || !_config.NominationEnabled || _pluginState.NominateDisabled)
             {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));

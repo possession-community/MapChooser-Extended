@@ -8,7 +8,7 @@
         public Map(string name, string? id)
         {
             Id = id?.Trim();
-            Name = name.Trim().ToLower();
+            Name = name.Trim();
         }
     }
 }
