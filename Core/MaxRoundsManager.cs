@@ -66,7 +66,6 @@ namespace MapChooserExtended
             _canClinch = ConVar.Find("mp_match_can_clinch");
         }
 
-
         public void ClearRounds()
         {
             CTWins = 0;
