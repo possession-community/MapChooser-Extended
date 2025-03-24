@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     env:
-        dllName: RockTheVote
+        dllName: MapChooserExtended
         debugPath: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/bin/Debug
 
     runs-on: ubuntu-latest

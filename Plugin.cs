@@ -21,10 +21,10 @@ namespace MapChooserExtended
 
     public partial class Plugin : BasePlugin, IPluginConfig<Config>
     {
-        public override string ModuleName => "RockTheVote";
-        public override string ModuleVersion => "1.9.4";
+        public override string ModuleName => "MapChooserExtended";
+        public override string ModuleVersion => "2.0.0";
         public override string ModuleAuthor => "abnerfs, Oz-Lin";
-        public override string ModuleDescription => "https://github.com/oz-lin/cs2-rockthevote";
+        public override string ModuleDescription => "WIP";
 
         private readonly DependencyManager<Plugin, Config> _dependencyManager;
         private readonly NominationCommand _nominationManager;
@@ -147,10 +147,10 @@ namespace MapChooserExtended
             Config = config;
 
             if (Config.Version < 15)
-                Console.WriteLine("[RockTheVote] please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
+                Console.WriteLine("[MCE] please delete it from addons/counterstrikesharp/configs/plugins/MapChooserExtended and let the plugin recreate it on load");
 
             if (Config.Version < 13)
-                throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/RockTheVote and let the plugin recreate it on load");
+                throw new Exception("Your config file is too old, please delete it from addons/counterstrikesharp/configs/plugins/MapChooserExtended and let the plugin recreate it on load");
 
             _dependencyManager.OnConfigParsed(config);
         }

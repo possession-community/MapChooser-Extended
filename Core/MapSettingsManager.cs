@@ -375,15 +375,9 @@ namespace MapChooserExtended.Core
                 foreach (var cfg in settings.Settings.Cfgs)
                 {
                     string cfgPath = Path.Combine(_configsDirectory, $"{cfg}.cfg");
-                    if (File.Exists(cfgPath))
-                    {
-                        Server.ExecuteCommand($"exec {cfgPath}");
-                        Console.WriteLine($"[MCE] Executed cfg file: {cfgPath}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[MCE] Warning: cfg file not found: {cfgPath}");
-                    }
+
+                    // TODO: File check? or logging?
+                    Server.ExecuteCommand($"exec {cfgPath}");
                 }
             }
         }

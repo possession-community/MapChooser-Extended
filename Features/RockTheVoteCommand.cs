@@ -147,7 +147,7 @@ namespace MapChooserExtended
                 }
             }
 
-            Console.WriteLine($"[RockTheVote] Starting vote with {VoteDuration} seconds duration");
+            Console.WriteLine($"[MCE] Starting vote with {VoteDuration} seconds duration");
 
             RtvConfig config = new RtvConfig
             {
