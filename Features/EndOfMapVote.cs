@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Cvars;
 using CounterStrikeSharp.API.Modules.Timers;
@@ -58,7 +58,9 @@ namespace MapChooserExtended
 
         bool CheckTimeLeft()
         {
-            return !_timeLimit.UnlimitedTime && _timeLimit.TimeRemaining <= _config.TriggerSecondsBeforeEnd;
+            // TriggerSecondsBeforeEnd is in seconds, convert to minutes
+            decimal triggerMinutesBeforeEnd = _config.TriggerSecondsBeforeEnd / 60M;
+            return !_timeLimit.UnlimitedTime && _timeLimit.TimeRemaining <= triggerMinutesBeforeEnd;
         }
 
         public void StartVote()
