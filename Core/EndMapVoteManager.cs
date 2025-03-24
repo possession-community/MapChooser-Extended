@@ -451,12 +451,39 @@ namespace MapChooserExtended
             // Shuffle available maps
             var mapsScrambled = Shuffle(new Random(), availableMaps);
             
-            // Combine nominations with available maps
-            mapsEllected = _nominationManager.NominationWinners()
-                .Where(m => _mapSettingsManager.IsMapAvailableForCycle(m)) // Only include nominations that meet cycle conditions
-                .Concat(mapsScrambled)
-                .Distinct()
+            // Get nominated maps that meet cycle conditions
+            var nominatedMaps = _nominationManager.NominationWinners()
+                .Where(m => _mapSettingsManager.IsMapAvailableForCycle(m))
                 .ToList();
+
+            // Determine how many maps to show in the vote
+            int mapsToInclude = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
+            if (config.HudMenu && mapsToInclude > MAX_OPTIONS_HUD_MENU)
+                mapsToInclude = MAX_OPTIONS_HUD_MENU;
+
+            // If we have enough nominated maps, use only those
+            if (nominatedMaps.Count >= mapsToInclude)
+            {
+                mapsEllected = nominatedMaps.Take(mapsToInclude).ToList();
+            }
+            // Otherwise, use all nominated maps and fill the rest with random maps
+            else
+            {
+                // Add all nominated maps first
+                mapsEllected = new List<string>(nominatedMaps);
+                
+                // Fill the remaining slots with random maps that aren't already nominated
+                int remainingSlots = mapsToInclude - nominatedMaps.Count;
+                if (remainingSlots > 0)
+                {
+                    var additionalMaps = mapsScrambled
+                        .Where(m => !nominatedMaps.Contains(m))
+                        .Take(remainingSlots)
+                        .ToList();
+                    
+                    mapsEllected.AddRange(additionalMaps);
+                }
+            }
 
             _canVote = ServerManager.ValidPlayerCount();
             var menu = CreateMapVoteMenu();

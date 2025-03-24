@@ -73,12 +73,14 @@ namespace MapChooserExtended
         Dictionary<int, (string PlayerName, List<string> Maps)> Nominations = new();
         ChatMenu? nominationMenu = null;
         private RtvConfig _config = new();
+        private EndOfMapConfig _eomConfig = new();
         private GameRules _gamerules;
         private StringLocalizer _localizer;
         private PluginState _pluginState;
         private MapCooldown _mapCooldown;
         private MapLister _mapLister;
         private MapSettingsManager _mapSettingsManager;
+        private int _maxNominations = 0;
 
         public Dictionary<int, (string PlayerName, List<string> Maps)> Nomlist => Nominations;
 
@@ -101,6 +103,9 @@ namespace MapChooserExtended
         public void OnConfigParsed(Config config)
         {
             _config = config.Rtv;
+            _eomConfig = config.EndOfMapVote;
+            // Set max nominations based on maps to show in vote
+            _maxNominations = _eomConfig.MapsToShow == 0 ? 6 : _eomConfig.MapsToShow;
         }
 
         public void OnMapsLoaded(object? sender, Map[] maps)
@@ -310,7 +315,6 @@ namespace MapChooserExtended
             if (matchingMap == "")
                 return;
 
-            // TODO: Change message to admin only message
             if (!_mapSettingsManager.IsMapAvailableForNomination(player, matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 return;
@@ -318,6 +322,23 @@ namespace MapChooserExtended
 
             if (!_mapSettingsManager.IsMapAvailableForCycle(matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
+                return;
+            }
+
+            // Check if the map is already nominated by someone else
+            foreach (var nomination in Nominations)
+            {
+                if (nomination.Key != player.UserId!.Value && nomination.Value.Maps.Contains(matchingMap))
+                {
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated-by-someone-else", matchingMap));
+                    return;
+                }
+            }
+
+            // Check if nomination list is full
+            if (NominationWinners().Count >= _maxNominations)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.nomination-list-full", _maxNominations));
                 return;
             }
 
@@ -373,6 +394,29 @@ namespace MapChooserExtended
                     player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 else
                     Console.WriteLine(_localizer.LocalizeWithPrefix("general.map-not-available"));
+                return;
+            }
+
+            // Check if the map is already nominated by someone else
+            foreach (var nomination in Nominations)
+            {
+                if (nomination.Key != player.UserId!.Value && nomination.Value.Maps.Contains(map))
+                {
+                    if (player != null)
+                        player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated-by-someone-else", map));
+                    else
+                        Console.WriteLine(_localizer.LocalizeWithPrefix("nominate.already-nominated-by-someone-else", map));
+                    return;
+                }
+            }
+
+            // Check if nomination list is full
+            if (NominationWinners().Count >= _maxNominations)
+            {
+                if (player != null)
+                    player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.nomination-list-full", _maxNominations));
+                else
+                    Console.WriteLine(_localizer.LocalizeWithPrefix("nominate.nomination-list-full", _maxNominations));
                 return;
             }
 
