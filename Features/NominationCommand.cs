@@ -161,7 +161,7 @@ namespace MapChooserExtended
             }
 
             // Check if the map exists in the map list
-            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _localizer, true);
+            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _localizer);
             if (matchingMap == "")
                 return;
 
@@ -262,6 +262,7 @@ namespace MapChooserExtended
         public void OpenNominationMenu(CCSPlayerController player)
         {
             var menu = new CenterHtmlMenu("Nomination", _plugin);
+            // this is a special case
             foreach (var map in _mapLister.AllMaps!
                 .Where(x => x.Name != Server.MapName &&
                             _mapSettingsManager.IsMapAvailableForNomination(player, x.Name) &&
@@ -297,16 +298,15 @@ namespace MapChooserExtended
                 return;
             }
 
-
             string matchingMap = _mapLister.GetSingleMatchingMapName(map, player, _localizer);
 
             if (matchingMap == "")
                 return;
 
-            // Check if map is available for nomination and cycle
+            // Check if map is available for nomination
+            // Use Maps from MapLister which is already filtered by availability and cooldown
             if (!_mapSettingsManager.IsMapAvailableForNomination(player, matchingMap) ||
-                !_mapSettingsManager.IsMapAvailableForCycle(matchingMap) || 
-                !_mapCooldown.IsMapInCooldown(matchingMap)) {
+                !_mapLister.Maps!.Any(m => m.Name == matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 return;
             }
@@ -371,8 +371,9 @@ namespace MapChooserExtended
         // Force nominate a map (admin only)
         void ForceNominate(CCSPlayerController player, string map)
         {
-            // Check if map is available for nomination and cycle
-            if (!_mapSettingsManager.IsMapAvailableForNomination(player, map))
+            // Check if map is available for nomination
+            // Use Maps from MapLister which is already filtered by availability and cooldown
+            if (!_mapLister.AllMaps!.Any(m => m.Name == map))
             {
                 if (player != null)
                     player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));

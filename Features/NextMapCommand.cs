@@ -50,7 +50,7 @@ namespace MapChooserExtended.Features
             }
 
             // Check if the map exists in the map list
-            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _stringLocalizer, true); // Use isAdmin=true to ignore cycle conditions
+            string matchingMap = _mapLister.GetSingleMatchingMapName(mapName, player, _stringLocalizer);
             if (matchingMap == "") {
                 player.PrintToChat(_stringLocalizer.LocalizeWithPrefix("nextmap.cannot-set-current-map"));
                 return;

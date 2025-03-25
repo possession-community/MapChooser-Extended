@@ -52,9 +52,10 @@ namespace MapChooserExtended.Core
         {
             _taggedMaps.Clear();
 
-            // Group maps by tags
-            foreach (var mapName in _mapSettingsManager.GetAvailableMaps())
+            // Group maps by tags - use AllMaps from MapLister to include all maps
+            foreach (var map in _mapLister.AllMaps ?? Array.Empty<Map>())
             {
+                var mapName = map.Name;
                 var settings = _mapSettingsManager.GetMapSettings(mapName);
                 foreach (var tag in settings.Settings.Cooldown.Tags)
                 {
@@ -123,8 +124,10 @@ namespace MapChooserExtended.Core
             }
             
             // Decrement CurrentCount for all maps except the current map and tagged maps
-            foreach (var availableMap in _mapSettingsManager.GetAvailableMaps())
+            // Use AllMaps from MapLister to include all maps
+            foreach (var map in _mapLister.AllMaps ?? Array.Empty<Map>())
             {
+                var availableMap = map.Name;
                 if (availableMap != mapName && !settings.Settings.Cooldown.Tags.Any(tag => _taggedMaps.ContainsKey(tag) && _taggedMaps[tag].Contains(availableMap)))
                 {
                     var mapSettings = _mapSettingsManager.GetMapSettings(availableMap);

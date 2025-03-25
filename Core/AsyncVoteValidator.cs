@@ -6,7 +6,6 @@
         public int RequiredVotes { get => (int)Math.Round(ServerManager.ValidPlayerCount() * VotePercentage); }
         private IVoteConfig _config { get; set; }
 
-
         public AsyncVoteValidator(IVoteConfig config)
         {
             _config = config;

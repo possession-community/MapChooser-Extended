@@ -394,7 +394,7 @@ namespace MapChooserExtended
                 {
                     countdownTimeLeft--;
                 }
-            }, TimerFlags.REPEAT);
+            }, TimerFlags.STOP_ON_MAPCHANGE);
         }
 
         public void StartVote(IEndOfMapConfig config)
@@ -415,9 +415,10 @@ namespace MapChooserExtended
             if (mapsToShow > MAX_OPTIONS_HUD_MENU)
                 mapsToShow = MAX_OPTIONS_HUD_MENU;
 
-            // Get maps that meet cycle conditions
-            var availableMaps = _mapSettingsManager.GetAvailableMaps()
-                .Where(m => m != Server.MapName && !_mapCooldown.IsMapInCooldown(m))
+            // Get maps from MapLister which are already filtered by availability
+            var availableMaps = _mapLister.Maps!
+                .Select(m => m.Name)
+                .Where(m => m != Server.MapName)
                 .ToList();
 
             // If no maps meet cycle conditions, use all maps except current and cooldown
@@ -433,10 +434,9 @@ namespace MapChooserExtended
             // Shuffle available maps
             var mapsScrambled = Shuffle(new Random(), availableMaps);
             
-            // Get nominated maps that meet cycle conditions
-            var nominatedMaps = _nominationManager.NominationWinners()
-                .Where(m => _mapSettingsManager.IsMapAvailableForCycle(m))
-                .ToList();
+            // Get nominated maps from the nomination winners
+            // No need to check if maps are available for cycle as MapLister already does this
+            var nominatedMaps = _nominationManager.NominationWinners().ToList();
 
             // Determine how many maps to show in the vote
             int mapsToInclude = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
@@ -482,7 +482,7 @@ namespace MapChooserExtended
                 }
                 else
                     timeLeft--;
-            }, TimerFlags.REPEAT);
+            }, TimerFlags.STOP_ON_MAPCHANGE);
         }
 
         /// <summary>

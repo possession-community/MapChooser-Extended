@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using MapChooserExtended.Core;
@@ -131,29 +131,6 @@ namespace MapChooserExtended
                 }
                 return HookResult.Continue;
             });
-        }
-
-        /// <summary>
-        /// Check if a map is available for the cycle
-        /// </summary>
-        /// <param name="mapName">Map name</param>
-        /// <returns>Whether the map is available</returns>
-        private bool IsMapAvailableForCycle(string mapName)
-        {
-            // Check if the map meets cycle conditions
-            return _mapSettingsManager.IsMapAvailableForCycle(mapName) && 
-                   !_mapCooldown.IsMapInCooldown(mapName);
-        }
-
-        /// <summary>
-        /// Get a list of maps available for the cycle
-        /// </summary>
-        /// <returns>List of available maps</returns>
-        public List<string> GetAvailableMapsForCycle()
-        {
-            return _mapSettingsManager.GetAvailableMaps()
-                .Where(m => !_mapCooldown.IsMapInCooldown(m))
-                .ToList();
         }
     }
 }

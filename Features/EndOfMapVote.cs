@@ -102,7 +102,7 @@ namespace MapChooserExtended
                             if (CheckTimeLeft())
                                 StartVote();
                         }
-                    }, TimerFlags.REPEAT);
+                    }, TimerFlags.STOP_ON_MAPCHANGE);
                 }
             }
 
