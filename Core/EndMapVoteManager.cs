@@ -12,7 +12,7 @@ namespace MapChooserExtended
 {
     public class EndMapVoteManager : IPluginDependency<Plugin, Config>
     {
-        const int MAX_OPTIONS_HUD_MENU = 6;
+        const int MAX_OPTIONS_HUD_MENU = 5;
 
         public EndMapVoteManager(
             MapLister mapLister, 
@@ -106,8 +106,7 @@ namespace MapChooserExtended
 
         public void MapVoted(CCSPlayerController player, string mapName)
         {
-            if (_config!.HideHudAfterVote)
-                _voted.Add(player.UserId!.Value);
+            _voted.Add(player.UserId!.Value);
 
             if (PlayerVotes.ContainsKey(player))
             {

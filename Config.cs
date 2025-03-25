@@ -22,7 +22,6 @@ namespace MapChooserExtended
         public int MapsToShow { get; set; }
         public bool ChangeMapImmediately { get; set; }
         public int VoteDuration { get; set; }
-        public bool HideHudAfterVote { get; set; }
         public int VoteCountdownTime { get; set; }
     }
 
@@ -39,7 +38,6 @@ namespace MapChooserExtended
         public int MapsToShow { get; set; } = 6;
         public bool ChangeMapImmediately { get; set; } = false;
         public int VoteDuration { get; set; } = 30;
-        public bool HideHudAfterVote { get; set; } = false;
         public int TriggerSecondsBeforeEnd { get; set; } = 120;
         public int TriggerRoundsBeforeEnd { get; set; } = 2;
         public float DelayToChangeInTheEnd { get; set; } = 6F;
@@ -55,7 +53,6 @@ namespace MapChooserExtended
         public int MinPlayers { get; set; } = 0;
         public int MinRounds { get; set; } = 0;
         public bool ChangeMapImmediately { get; set; } = false;
-        public bool HideHudAfterVote { get; set; } = false;
         public int MapsToShow { get; set; } = 6;
         public int VoteDuration { get; set; } = 30;
         public int VotePercentage { get; set; } = 60;

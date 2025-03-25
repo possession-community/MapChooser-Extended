@@ -103,7 +103,7 @@ namespace MapChooserExtended
             _config = config.Rtv;
             _eomConfig = config.EndOfMapVote;
             // Set max nominations based on maps to show in vote
-            _maxNominations = _eomConfig.MapsToShow == 0 ? 6 : _eomConfig.MapsToShow;
+            _maxNominations = _eomConfig.MapsToShow == 0 ? 5 : _eomConfig.MapsToShow;
         }
 
         public void OnMapsLoaded(object? sender, Map[] maps)

@@ -17,7 +17,6 @@ namespace MapChooserExtended
 {
     public class ExtendRoundTimeManager : IPluginDependency<Plugin, Config>
     {
-        const int MAX_OPTIONS_HUD_MENU = 6;
         public ExtendRoundTimeManager(IStringLocalizer stringLocalizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules, MapSettingsManager mapSettingsManager)
         {
             _localizer = new StringLocalizer(stringLocalizer, "extendtime.prefix");

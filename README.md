@@ -28,12 +28,12 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 ## General Commands (Everyone)
 | Command | Aliases | Description |
 | ------- | ------- | ----------- |
-| `rtv` | `css_rtv` | Start a Rock The Vote map vote |
-| `unrtv` | `css_unrtv` | Remove your vote to rock the vote |
+| `css_rtv` | `rtv` | Start a Rock The Vote map vote |
+| `css_unrtv` | `unrtv` | Remove your vote to rock the vote |
 | `css_nominate <map>` | `css_nom <map>` | Nominate a map for voting |
 | `css_nomlist` |  | Display a list of nominated maps and who nominated them |
-| `timeleft` | | Display the remaining time on the current map |
-| `nextmap` | | Display the next map in rotation |
+| `css_timeleft` | `timeleft` | Display the remaining time on the current map |
+| `css_nextmap` | `nextmap` | Display the next map in rotation |
 | `css_revote` | | Change your vote during an active vote |
 
 ## Admin Commands
@@ -89,36 +89,34 @@ WIP
 ## RockTheVote
 Players can type rtv to request the map to be changed, once a number of votes is reached (by default 60% of players in the server) a vote will start for the next map, this vote lasts up to 30 seconds (hardcoded for now), in the end server changes to the winner map.
 
-| Config              | Description                                                                                                            | Default Value | Min   | Max                                  |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
-| Enabled             | Enable/Disable RTV functionality                                                                                       | true          | false | true                                 |
-| EnabledInWarmup     | Enable/Disable RTV during warmup                                                                                       | false         | false | true                                 |
-| NominationEnabled   | Enable/Disable nomination                                                                                              | true          | false | true                                 |
-| MinPlayers          | Minimum amount of players to enable RTV/Nominate                                                                       | 0             | 0     |                                      |
-| MinRounds           | Minimum rounds to enable RTV/Nominate                                                                                  | 0             | 0     |                                      |
-| ChangeMapImmediately | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
-| HideHudAfterVote    | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
-| MapsToShow          | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
-| VoteDuration        | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
-| VotePercentage      | Percentage of players that should type RTV in order to start a vote                                                    | 60            | 0     | 100                                  |
-| DontChangeRtv       | Enable/Disable option not to change the current map                                                                    | true          | false | true                                 |
-| IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
-| InitialRtvDelay     | Cooldown timer to start the "first" RTV                                                                                | 60             | 0 |  -                                 |
-| RtvCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | 
+| Config               | Description                                                         | Default Value | Min   | Max   |
+| -------------------  | --------------------------------------------------------------------| ------------- | ----- | ----- |
+| Enabled              | Enable/Disable RTV functionality                                    | true          | false | true  |
+| EnabledInWarmup      | Enable/Disable RTV during warmup                                    | false         | false | true  |
+| NominationEnabled    | Enable/Disable nomination                                           | true          | false | true  |
+| MinPlayers           | Minimum amount of players to enable RTV/Nominate                    | 0             | 0     |       |
+| MinRounds            | Minimum rounds to enable RTV/Nominate                               | 0             | 0     |       |
+| ChangeMapImmediately | Whether to change the map immediatly when vote ends or not          | false         | false | true  |
+| MapsToShow           | Amount of maps to show in vote,                                     | 6             | 1     | 5     |
+| VoteDuration         | Seconds the RTV should last                                         | 30            | 1     |       |
+| VotePercentage       | Percentage of players that should type RTV in order to start a vote | 60            | 0     | 100   |
+| DontChangeRtv        | Enable/Disable option not to change the current map                 | true          | false | true  |
+| IgnoreSpec           | Ignore spectators from vote count                                   | true          | false | true  |
+| InitialRtvDelay      | Cooldown timer to start the "first" RTV                             | 300           | 0     | -     |
+| RtvCooldownTime      | Cooldown timer to start the next RTV                                | 300           | 0     | -     |
 
 ## End of map vote
 Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like vote will start to define the next map, it can be configured to change immediatly or only when the map actually ends
 
-| Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
-| Enabled                 | Enable/Disable end of map vote functionality                                                                           | true          | false | true                                 |
-| ChangeMapImmediately     | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
-| HideHudAfterVote        | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
-| MapsToShow              | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
-| VoteDuration            | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
-| TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, only used when mp_timelimit is greater than 0    | 120           | 1     |                                      |
-| TriggerRoundsBeforeEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
-| DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
+| Config                  | Description                                                                              | Default Value | Min   | Max  |
+| ----------------------- | -----------------------------------------------------------------------------------------| ------------- | ----- | -----|
+| Enabled                 | Enable/Disable end of map vote functionality                                             | true          | false | true |
+| ChangeMapImmediately    | Whether to change the map immediatly when vote ends or not                               | false         | false | true |
+| MapsToShow              | Amount of maps to show in vote,                                                          | 6             | 1     | 5    |
+| VoteDuration            | Seconds the RTV should last                                                              | 30            | 1     | -    |
+| TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, for `mp_timelimit` | 120           | 1     | -    |
+| TriggerRoundsBeforeEnd  | Amount of rounds before end of map that should trigger the vote,      for `mp_maxrounds` | 2             | 1     | -    |
+| DelayToChangeInTheEnd   | Delay in seconds to change the map after the win panel is shown to the players           | 6             | 3     | -    |
 
 ## Timeleft
 Players can type `timeleft` to see how much time is left in the current map 
@@ -238,6 +236,8 @@ example map settings here:
     // both count will be reset by tags
     "cooldown": {
       "count": 2,
+      // current count will be updated by plugins automatically
+      "current_count": 0,
       "tags": ["official"]
     },
     "nomination": {
