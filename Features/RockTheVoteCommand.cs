@@ -286,12 +286,12 @@ namespace MapChooserExtended
             }
             
             // Check for cooldown if this is not the first RTV of the map and cooldown is enabled
-            if (!_firstRtvOfMap && _config.VoteCooldownTime > 0)
+            if (!_firstRtvOfMap && _config.RtvCooldownTime > 0)
             {
                 TimeSpan timeSinceLastRtv = DateTime.Now - _lastRtvTime;
-                if (timeSinceLastRtv.TotalSeconds < _config.VoteCooldownTime)
+                if (timeSinceLastRtv.TotalSeconds < _config.RtvCooldownTime)
                 {
-                    int remainingSeconds = _config.VoteCooldownTime - (int)timeSinceLastRtv.TotalSeconds;
+                    int remainingSeconds = _config.RtvCooldownTime - (int)timeSinceLastRtv.TotalSeconds;
                     player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.wait-seconds", remainingSeconds));
                     return;
                 }

@@ -268,20 +268,6 @@ namespace MapChooserExtended
                     return;
                 }
             }
-            // TODO: Remove
-            /*
-            else if (_config.MinRounds > 0 && _config.MinRounds > _gamerules.TotalRoundsPlayed)
-            {
-                player!.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.minimum-rounds", _config.MinRounds));
-                return;
-            }
-
-            if (ServerManager.ValidPlayerCount() < _config!.MinPlayers)
-            {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.minimum-players", _config!.MinPlayers));
-                return;
-            }
-            */
 
             if (string.IsNullOrEmpty(map))
             {
@@ -307,26 +293,16 @@ namespace MapChooserExtended
                 return;
             }
 
-            // TODO: Remove
-            /*
-            if (_mapCooldown.IsMapInCooldown(map))
-            {
-                player!.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.map-played-recently"));
-                return;
-            }
-            */
 
             string matchingMap = _mapLister.GetSingleMatchingMapName(map, player, _localizer);
 
             if (matchingMap == "")
                 return;
 
-            if (!_mapSettingsManager.IsMapAvailableForNomination(player, matchingMap)) {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
-                return;
-            }
-
-            if (!_mapSettingsManager.IsMapAvailableForCycle(matchingMap)) {
+            // Check if map is available for nomination and cycle
+            if (!_mapSettingsManager.IsMapAvailableForNomination(player, matchingMap) ||
+                !_mapSettingsManager.IsMapAvailableForCycle(matchingMap) || 
+                !_mapCooldown.IsMapInCooldown(matchingMap)) {
                 player.PrintToChat(_localizer.LocalizeWithPrefix("general.map-not-available"));
                 return;
             }
@@ -356,8 +332,8 @@ namespace MapChooserExtended
             if (!alreadyVoted)
                 Nominations[userId].Maps.Add(matchingMap);
 
-            var totalVotes = Nominations.Select(x => x.Value.Maps.Where(y => y == matchingMap).Count())
-                .Sum();
+            // Count total votes for this map more efficiently
+            var totalVotes = Nominations.Sum(x => x.Value.Maps.Count(y => y == matchingMap));
 
             if (!alreadyVoted)
             {
@@ -376,22 +352,22 @@ namespace MapChooserExtended
             if (Nominations.Count == 0)
                 return new List<string>();
 
-            var rawNominations = Nominations
-                .Select(x => x.Value.Maps)
-                .Aggregate((acc, x) => acc.Concat(x).ToList());
-
-            return rawNominations
-                .Distinct()
-                .Select(map => new KeyValuePair<string, int>(map, rawNominations.Count(x => x == map)))
-                .OrderByDescending(x => x.Value)
-                .Select(x => x.Key)
+            // Flatten all nominations into a single list
+            var allMaps = Nominations.SelectMany(x => x.Value.Maps);
+            
+            // Group by map name, count occurrences, order by count descending, and return map names
+            return allMaps
+                .GroupBy(x => x)
+                .Select(g => new { Map = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Select(x => x.Map)
                 .ToList();
         }
 
         // Force nominate a map (admin only)
         void ForceNominate(CCSPlayerController player, string map)
         {
-            // Check if the map is available for nomination
+            // Check if map is available for nomination and cycle
             if (!_mapSettingsManager.IsMapAvailableForNomination(player, map))
             {
                 if (player != null)

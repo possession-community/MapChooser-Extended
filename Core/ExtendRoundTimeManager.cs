@@ -38,8 +38,6 @@ namespace MapChooserExtended
         Dictionary<CCSPlayerController, string> PlayerVotes = new();
         int timeLeft = -1;
 
-        private IExtendMapConfig? _config = null;
-
         private int _canVote = 0;
         private Plugin? _plugin;
         
@@ -254,33 +252,6 @@ namespace MapChooserExtended
 
             _pluginState.ExtendTimeVoteHappening = false;
         }
-
-        public void StartVote(IExtendMapConfig config)
-        {
-            Votes.Clear();
-            PlayerVotes.Clear();
-            _pluginState.ExtendTimeVoteHappening = true;
-            _config = config ?? throw new ArgumentNullException(nameof(config));
-
-            _canVote = ServerManager.ValidPlayerCount();
-
-            var menu = CreateVoteMenu();
-
-            foreach (var player in ServerManager.ValidPlayers())
-                menu.Display(player);
-
-            timeLeft = _config.VoteDuration;
-            Timer = _plugin!.AddTimer(1.0F, () =>
-            {
-                if (timeLeft <= 0)
-                {
-                    ExtendTimeVote();
-                }
-                else
-                    timeLeft--;
-            }, TimerFlags.REPEAT);
-        }
-        // VIP Extend End
 
         // ExtendRoundTime: Extend the current round time for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
         public bool ExtendRoundTime(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)

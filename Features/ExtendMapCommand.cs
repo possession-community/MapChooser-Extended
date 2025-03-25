@@ -37,17 +37,14 @@ namespace MapChooserExtended
         private readonly StringLocalizer _localizer;
         private readonly GameRules _gameRules;
         private TimeLimitManager _timeLimitManager;
-        private RoundLimitManager _roundLimitManager;
         private ExtendRoundTimeManager _extendRoundTimeManager;
         private MapSettingsManager _mapSettingsManager;
-        private ExtendMapConfig _config = new();
 
-        public ExtendMapCommand(GameRules gameRules, IStringLocalizer localizer, PluginState pluginState, TimeLimitManager timeLimitManager, RoundLimitManager roundLimitManager, ExtendRoundTimeManager extendRoundTimeManager, MapSettingsManager mapSettingsManager)
+        public ExtendMapCommand(GameRules gameRules, IStringLocalizer localizer, TimeLimitManager timeLimitManager, ExtendRoundTimeManager extendRoundTimeManager, MapSettingsManager mapSettingsManager)
         {
             _localizer = new StringLocalizer(localizer, "extendmap.prefix");
             _gameRules = gameRules;
             _timeLimitManager = timeLimitManager;
-            _roundLimitManager = roundLimitManager;
             _extendRoundTimeManager = extendRoundTimeManager;
             _mapSettingsManager = mapSettingsManager;
         }
@@ -60,21 +57,6 @@ namespace MapChooserExtended
         {
             if (player is null || !player.IsValid || player.IsBot)
                 return;
-
-            if (!_config.Enabled)
-            {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.disabled"));
-                return;
-            }
-
-            if (_gameRules.WarmupRunning)
-            {
-                if (!_config.EnabledInWarmup)
-                {
-                    player.PrintToChat(_localizer.LocalizeWithPrefix("general.validation.warmup"));
-                    return;
-                }
-            }
 
             string currentMap = Server.MapName;
             var mapSettings = _mapSettingsManager.GetMapSettings(currentMap);
@@ -90,7 +72,6 @@ namespace MapChooserExtended
 
         public void OnConfigParsed(Config config)
         {
-            _config = config.ExtendMapVote;
         }
     }
 }

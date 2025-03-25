@@ -7,7 +7,6 @@ namespace MapChooserExtended.Core
     {
         private readonly Dictionary<string, int> _mapsOnCoolDown = new();
         private readonly Dictionary<string, HashSet<string>> _taggedMaps = new();
-        private ushort _defaultCoolDown = 0;
         private readonly MapSettingsManager _mapSettingsManager;
         private readonly MapLister _mapLister;
 
@@ -32,7 +31,6 @@ namespace MapChooserExtended.Core
 
         public void OnConfigParsed(Config config)
         {
-            _defaultCoolDown = config.MapsInCoolDown;
         }
 
         public void OnLoad(Plugin plugin)

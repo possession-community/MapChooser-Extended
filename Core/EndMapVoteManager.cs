@@ -293,16 +293,6 @@ namespace MapChooserExtended
                     // TODO: make round time extend?
                     if (mapSettings.Settings.Match.Type == 0 && !_timeLimitManager.UnlimitedTime)
                     {
-                        /*
-                        if (_eomConfig!.RoundBased == true)
-                        {
-                            _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number, _timeLimitManager, _gameRules);
-                        }
-                        else
-                        {
-                            _extendRoundTimeManager.ExtendRoundTime(extendSettings.Number, _timeLimitManager, _gameRules);
-                        }
-                        */
                         _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number, _timeLimitManager, _gameRules);
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed",
                             extendSettings.Number, percent, totalVotes));
@@ -422,7 +412,7 @@ namespace MapChooserExtended
             _pluginState.EofVoteHappening = true;
             _config = config;
             int mapsToShow = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
-            if (config.HudMenu && mapsToShow > MAX_OPTIONS_HUD_MENU)
+            if (mapsToShow > MAX_OPTIONS_HUD_MENU)
                 mapsToShow = MAX_OPTIONS_HUD_MENU;
 
             // Get maps that meet cycle conditions
@@ -450,7 +440,7 @@ namespace MapChooserExtended
 
             // Determine how many maps to show in the vote
             int mapsToInclude = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
-            if (config.HudMenu && mapsToInclude > MAX_OPTIONS_HUD_MENU)
+            if (mapsToInclude > MAX_OPTIONS_HUD_MENU)
                 mapsToInclude = MAX_OPTIONS_HUD_MENU;
 
             // If we have enough nominated maps, use only those

@@ -12,12 +12,15 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 
 # Work in Progress
 - ~~make Extend command for admin only~~
+- ~~introducing CS2ScreenMenu, instead of Chat menu~~
+  - ~~for nomination menu and changemap menu~~
 - vote sounds settings
-- introducing CS2ScreenMenu, instead of Chat menu
-  - for nomination menu and changemap menu
+- remove unnecessary settings
+- remove unnecessary translations
 - remove codes related vip
   - move voteextend to admin only
-- remove votemap
+- remove votemap, revote
+- refactor codebase
 - investigate about timelimit and maxrounds, + roundtime
 
 # Available Commands
@@ -94,7 +97,6 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | MinPlayers          | Minimum amount of players to enable RTV/Nominate                                                                       | 0             | 0     |                                      |
 | MinRounds           | Minimum rounds to enable RTV/Nominate                                                                                  | 0             | 0     |                                      |
 | ChangeMapImmediately | Whether to change the map immediatly when vote ends or not                                                             | true          | false | true                                 |
-| HudMenu             | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | HideHudAfterVote    | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow          | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
 | VoteDuration        | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
@@ -102,7 +104,7 @@ Players can type rtv to request the map to be changed, once a number of votes is
 | DontChangeRtv       | Enable/Disable option not to change the current map                                                                    | true          | false | true                                 |
 | IgnoreSpec          | Ignore spectators from vote count                                                                                      | true          | false | true                                 |
 | InitialRtvDelay     | Cooldown timer to start the "first" RTV                                                                                | 60             | 0 |  -                                 |
-| VoteCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | 
+| RtvCooldownTime    | Cooldown timer to start the next RTV                                                                                   | 300           | 0     | 
 
 ## End of map vote
 Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like vote will start to define the next map, it can be configured to change immediatly or only when the map actually ends
@@ -114,26 +116,9 @@ Based on `mp_timelimit` and `mp_maxrounds` cvar before the map ends a RTV like v
 | HideHudAfterVote        | Whether to hide vote status hud after vote or not, only matters when HudMenu is true                                   | false         | false | true                                 |
 | MapsToShow              | Amount of maps to show in vote,                                                                                        | 6             | 1     | 6 with HudMenu, unlimited without it |
 | VoteDuration            | Seconds the RTV should last                                                                                            | 30            | 1     |                                      |
-| HudMenu                 | Whether to use HudMenu or just the chat one, when false the hud only shows which map is winning instead of actual menu | true          | false | true                                 |
 | TriggerSecondsBeforeEnd | Amount of seconds before end of the map that should trigger the vote, only used when mp_timelimit is greater than 0    | 120           | 1     |                                      |
 | TriggerRoundsBeforeEnd   | Amount of rounds before end of map that should trigger the vote, only used when mp_maxrounds is set                    | 2             | 1     |                                      |
 | DelayToChangeInTheEnd   | Delay in seconds that plugin will take to change the map after the win panel is shown to the players                   | 6             | 3     |                                      |
-| AllowExtend             | Option to extend the current map (Also needs to configure ExtendLimit)                                                 | true          | false | true                                 |
-| RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | 
-
-## Extend map vote
-Players can extend the current map by using the `!ext` command. Extends the `mp_timelimit` and `mp_maxrounds` cvar
-
-| Config                  | Description                                                                                                            | Default Value | Min   | Max                                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | ----- | ------------------------------------ |
-| Enabled                 | Enable/Disable extend map vote functionality                                                                           | true          | false | true                                 |
-| EnabledInWarmup         | Enable/Disable EXT during warmup                                                                                       | true          | false | true                                 |
-| MinRounds               | Minimum rounds to enable ext                                         | 0             |       |      |
-| MinPlayers              | Minimum amount of players to enable ext                              |               |       |      |
-| VotePercentage		  | Percentage of players that should vote in a map in order to extend it												   | 60            | 1     | 100								  |
-| ChangeMapImmediately     | Placeholder field. Keep it as false to prevent breaking the plugin function                                            | false         | false | true                                 |
-| RoundBased              | Whether to extend `mp_timelimit` or extend current round `mp_roundtime`                                                | true          | false | true                                 |
-| IgnoreSpec              | Ignore spectators from vote count																					   | true          | false | true								  |
 
 ## Timeleft
 Players can type `timeleft` to see how much time is left in the current map 
