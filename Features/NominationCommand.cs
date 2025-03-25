@@ -64,7 +64,6 @@ namespace MapChooserExtended
     public class NominationCommand : IPluginDependency<Plugin, Config>
     {
         Dictionary<int, (string PlayerName, List<string> Maps)> Nominations = new();
-        CenterHtmlMenu? nominationMenu = null;
         private Plugin? _plugin;
         private RtvConfig _config = new();
         private EndOfMapConfig _eomConfig = new();
@@ -109,25 +108,6 @@ namespace MapChooserExtended
 
         public void OnMapsLoaded(object? sender, Map[] maps)
         {
-            nominationMenu = new CenterHtmlMenu("Nomination", _plugin);
-            foreach (var map in _mapLister.Maps!.Where(x => x.Name != Server.MapName))
-            {
-                // TODO: Use allMaps + check if the map is available for nomination
-                //       And, add the text to each options, the reason why the map is not available
-                if (_mapCooldown.IsMapInCooldown(map.Name)) {
-                    nominationMenu.AddItem(map.Name, DisableOption.DisableHideNumber);
-                } else {
-                    nominationMenu.AddItem(map.Name, (player, option) =>
-                    {
-                        Nominate(player, option.Text);
-                    });
-                }
-            }
-
-            nominationMenu.AddItem("Exit", (player, option) =>
-            {
-                // in default, Menu will be closed automatically
-            });
         }
 
         public void EnableNominateCommandHandler(CCSPlayerController player)
@@ -281,7 +261,31 @@ namespace MapChooserExtended
 
         public void OpenNominationMenu(CCSPlayerController player)
         {
-            nominationMenu!.Display(player!);
+            var menu = new CenterHtmlMenu("Nomination", _plugin);
+            foreach (var map in _mapLister.AllMaps!
+                .Where(x => x.Name != Server.MapName &&
+                            _mapSettingsManager.IsMapAvailableForNomination(player, x.Name) &&
+                            _mapSettingsManager.IsMapAvailableForCycle(x.Name) &&
+                            !_mapCooldown.IsMapInCooldown(x.Name)
+                )) {
+                // TODO: Use allMaps + check if the map is available for nomination
+                //       And, add the text to each options, the reason why the map is not available
+                if (_mapCooldown.IsMapInCooldown(map.Name)) {
+                    menu.AddItem(map.Name, DisableOption.DisableHideNumber);
+                } else {
+                    menu.AddItem(map.Name, (player, option) =>
+                    {
+                        Nominate(player, option.Text);
+                    });
+                }
+            }
+
+            menu.AddItem("Exit", (player, option) =>
+            {
+                // in default, Menu will be closed automatically
+            });
+
+            menu!.Display(player!);
         }
 
         void Nominate(CCSPlayerController player, string option)
