@@ -38,7 +38,6 @@ namespace MapChooserExtended
         private readonly NextMapCommand _nextMap;
         private readonly DisplayMapListCommandHandler _displayMapListCommandHandler;
         private readonly ExtendMapCommand _extendMapManager;
-        private readonly RevoteCommand _revoteCommand;
         private readonly WorkshopSynchronizer _workshopSynchronizer;
         private readonly ChangeMapCommand _changeMapCommand;
 
@@ -54,7 +53,6 @@ namespace MapChooserExtended
             DisplayMapListCommandHandler displayMapListCommandHandler,
             MapLister mapLister,
             ExtendMapCommand extendMapManager,
-            RevoteCommand revoteCommand,
             WorkshopSynchronizer workshopSynchronizer,
             ChangeMapCommand changeMapCommand)
         {
@@ -70,7 +68,6 @@ namespace MapChooserExtended
             _displayMapListCommandHandler = displayMapListCommandHandler;
             _mapLister = mapLister;
             _extendMapManager = extendMapManager;
-            _revoteCommand = revoteCommand;
             _workshopSynchronizer = workshopSynchronizer;
             _changeMapCommand = changeMapCommand;
         }
@@ -127,11 +124,6 @@ namespace MapChooserExtended
                 {
                     _nextMap.CommandHandler(player);
                 }
-                // TODO: Implement this later
-                //else if (text == "revote")
-                //{
-                //    _endMapVoteManager.HandleRevoteCommand(player);
-                //}
             }
             return HookResult.Continue;
         }

@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-     <PackageReference Include="CounterStrikeSharp.API" Version="1.0.312" />
-     <PackageReference Include="CS2MenuManager" Version="1.0.17" />
+     <PackageReference Include="CounterStrikeSharp.API" Version="1.0.314" />
+     <PackageReference Include="CS2MenuManager" Version="1.0.21" />
   </ItemGroup>
 
   <ItemGroup>
