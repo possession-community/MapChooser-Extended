@@ -13,10 +13,9 @@ namespace MapChooserExtended.Features
         private readonly ChangeMapManager _changeMapManager;
         private readonly StringLocalizer _localizer;
         private readonly MapLister _mapLister;
-        private CenterHtmlMenu? _changeMapMenu = null;
         private Plugin? _plugin;
 
-        [ConsoleCommand("css_mcemaps", "Change the map immediately (Admin only)")]
+        [ConsoleCommand("css_movemap", "Change the map immediately (Admin only)")]
         [RequiresPermissions("@css/changemap")]
         public void ChangeMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
@@ -38,20 +37,6 @@ namespace MapChooserExtended.Features
 
         public void OnMapsLoaded(object? sender, Map[] maps)
         {
-            // Create a menu with all maps, including the current map
-            _changeMapMenu = new CenterHtmlMenu("Change Map", _plugin);
-            foreach (var map in _mapLister.AllMaps!) // Use AllMaps to ignore cycle conditions for admin commands
-            {
-                _changeMapMenu.AddItem(map.Name, (player, option) =>
-                {
-                    ChangeMap(player, option.Text);
-                });
-            }
-
-            _changeMapMenu.AddItem("Exit", (player, option) =>
-            {
-                // Menu will be closed automatically
-            });
         }
 
         public void CommandHandler(CCSPlayerController player, string map)
@@ -66,7 +51,18 @@ namespace MapChooserExtended.Features
             if (string.IsNullOrEmpty(map))
             {
                 // Open menu with all maps
-                OpenChangeMapMenu(player!);
+                ScreenMenu menu = new ScreenMenu("Move Map To:", _plugin) {
+                    MenuType = MenuType.KeyPress,
+                };
+                foreach (var _map in _mapLister.AllMaps!) // Use AllMaps to ignore cycle conditions for admin commands
+                {
+                    menu.AddItem(_map.Name, (player, option) =>
+                    {
+                        ChangeMap(player, option.Text);
+                    });
+                }
+
+                menu.Display(player!);
             }
             else
             {
@@ -84,14 +80,12 @@ namespace MapChooserExtended.Features
                 else if (matchingMaps.Count == 1)
                 {
                     // Even if there's only one match, still show the menu to prevent accidental map changes
-                    CenterHtmlMenu singleMapMenu = new CenterHtmlMenu("Confirm Map Change", _plugin);
+                    ScreenMenu singleMapMenu = new ScreenMenu("Move Map To:", _plugin) {
+                        MenuType = MenuType.KeyPress,
+                    };
                     singleMapMenu.AddItem(matchingMaps[0], (p, option) =>
                     {
                         ChangeMap(p, option.Text);
-                    });
-                    singleMapMenu.AddItem("Exit", (p, option) =>
-                    {
-                        // Menu will be closed automatically
                     });
                     
                     singleMapMenu.Display(player!);
@@ -99,7 +93,9 @@ namespace MapChooserExtended.Features
                 else
                 {
                     // Create a menu with matching maps
-                    CenterHtmlMenu matchingMapMenu = new CenterHtmlMenu("Matching Maps", _plugin);
+                    ScreenMenu matchingMapMenu = new ScreenMenu("Move Map To:", _plugin) {
+                        MenuType = MenuType.KeyPress,
+                    };
                     foreach (var matchingMap in matchingMaps)
                     {
                         matchingMapMenu.AddItem(matchingMap, (p, option) =>
@@ -107,19 +103,10 @@ namespace MapChooserExtended.Features
                             ChangeMap(p, option.Text);
                         });
                     }
-                    matchingMapMenu.AddItem("Exit", (p, option) =>
-                    {
-                        // Menu will be closed automatically
-                    });
                     
                     matchingMapMenu.Display(player!);
                 }
             }
-        }
-
-        private void OpenChangeMapMenu(CCSPlayerController player)
-        {
-            _changeMapMenu!.Display(player!);
         }
 
         private void ChangeMap(CCSPlayerController player, string option)
@@ -138,7 +125,6 @@ namespace MapChooserExtended.Features
             // Schedule immediate map change
             _changeMapManager.ScheduleMapChange(map, false, "changemap.prefix");
             _changeMapManager.ChangeNextMap();
-            
             
             Console.WriteLine($"[MCE] Admin {player.PlayerName} changed map to {map}");
         }

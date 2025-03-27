@@ -388,6 +388,15 @@ namespace MapChooserExtended.Core
                 Server.ExecuteCommand($"mp_timelimit 0");
                 Console.WriteLine($"[MCE] Set mp_maxrounds to {settings.Settings.Match.Limit}");
             }
+            else if (settings.Settings.Match.Type == 2)
+            {
+                // RoundTime limit
+                Server.ExecuteCommand($"mp_roundtime {settings.Settings.Match.Limit}");
+                Server.ExecuteCommand($"mp_timelimit {settings.Settings.Match.Limit}");
+                Server.ExecuteCommand($"mp_maxrounds 0");
+                Console.WriteLine($"[MCE] Set mp_roundtime to {settings.Settings.Match.Limit}");
+                Console.WriteLine($"[MCE] Set mp_timelimit to {settings.Settings.Match.Limit}");
+            }
         }
 
         /// <summary>

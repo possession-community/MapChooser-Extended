@@ -2,26 +2,45 @@
 
 General purpose map voting plugin, rtv, nominate, extend, and more + Bug fix.
 
+**Current Version: 2.0.0**
+
 Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 
 ## Requirements
 [Latest release of Counter Strike Sharp](https://github.com/roflmuffin/CounterStrikeSharp)
 
 # Installation
-- WIP
+1. Download the latest release from the [Releases](https://github.com/possession-community/MapChooser-Extended/releases) page
+2. Extract the contents to your CS2 server's `game/csgo/` directory
+3. Make sure the plugin is placed in the correct directory: `game/csgo/addons/counterstrikesharp/plugins/MapChooserExtended`
+4. Restart your server or load the plugin using the `css_plugins load MapChooserExtended` command
 
 # Work in Progress
-- ~~make Extend command for admin only~~
-- ~~introducing CS2ScreenMenu, instead of Chat menu~~
-  - ~~for nomination menu and changemap menu~~
-- vote sounds settings
+- ✅ ~~make Extend command for admin only~~
+- ✅ ~~introducing CS2ScreenMenu, instead of Chat menu~~
+  - ✅ ~~for nomination menu and changemap menu~~
+- ❌ vote sounds settings
 - remove unnecessary settings
 - remove unnecessary translations
 - remove codes related vip
-  - move voteextend to admin only
+  - ✅ ~~move voteextend to admin only~~
 - remove votemap, revote
 - refactor codebase
-- investigate about timelimit and maxrounds, + roundtime
+- ✅ ~~investigate about timelimit and maxrounds, + roundtime~~
+
+# Features
+
+MapChooser Extended provides a comprehensive set of features for map management and voting in CS2 servers:
+
+- **Rock The Vote (RTV)**: Allows players to vote for changing the current map
+- **Map Nominations**: Players can nominate maps to be included in votes
+- **End of Map Voting**: Automatic map vote before the current map ends
+- **Map Extension**: Option to extend the current map through voting
+- **Per-Map Settings**: Detailed configuration for each map individually
+- **Workshop Integration**: Automatic synchronization with Steam Workshop collections
+- **Admin Controls**: Comprehensive commands for server administrators
+- **Multi-language Support**: Translations for multiple languages
+- **CS2 Screen Menus**: Modern HTML-based menus instead of chat menus
 
 # Available Commands
 
@@ -34,7 +53,6 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 | `css_nomlist` |  | Display a list of nominated maps and who nominated them |
 | `css_timeleft` | `timeleft` | Display the remaining time on the current map |
 | `css_nextmap` | `nextmap` | Display the next map in rotation |
-| `css_revote` | | Change your vote during an active vote |
 
 ## Admin Commands
 
@@ -80,11 +98,19 @@ Based on [Oz-Lin/cs2-rockthevote](https://github.com/Oz-Lin/cs2-rockthevote)
 # Configs
 - A config file will be created in `addons/counterstrikesharp/configs/plugins/MapChooserExtended` the first time you load the plugin.
 - Changes in the config file will require you to reload the plugin or restart the server (change the map won't work).
-- Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/MapChooserExtended/maps/` directory as JSON files, see under section.
+- Now, Per-map settings are stored in `addons/counterstrikesharp/configs/plugins/MapChooserExtended/maps/` directory as JSON files.
+  - MCE don't use `maplist.txt`, see **Map Settings System** section.
 
-## General config
+The main configuration file is located at `addons/counterstrikesharp/configs/plugins/MapChooserExtended/MapChooserExtended.json`. Here are the key settings:
 
-WIP
+| Section | Description |
+| ------- | ----------- |
+| Version | Configuration version (current: 15) |
+| Rtv | Rock The Vote settings |
+| EndOfMapVote | End of map vote settings |
+| Timeleft | Timeleft command settings |
+| Nextmap | Nextmap command settings |
+| Workshop | Workshop synchronization settings |
 
 ## RockTheVote
 Players can type rtv to request the map to be changed, once a number of votes is reached (by default 60% of players in the server) a vote will start for the next map, this vote lasts up to 30 seconds (hardcoded for now), in the end server changes to the winner map.
@@ -134,7 +160,7 @@ Players can type `nextmap` to see which map is going to be played next
 
 # Map Settings System
 
-Version 1.9.4 introduces a new map settings system that allows detailed configuration for each map individually.
+Version 2.0.0 includes an improved map settings system that allows detailed configuration for each map individually.
 
 This system enables server administrators to apply different settings to each map, including extend settings (times, number) that were previously configured globally.
 
@@ -253,8 +279,9 @@ example map settings here:
       // 0 = time, 1 = round
       // default is 0 = time
       "type": 1,
-      // type = "0" -> mp_maxround  20
-      // type = "1" -> mp_timelimit 20
+      // type = "0" -> mp_maxround  30
+      // type = "1" -> mp_timelimit 30
+      // type = "2" -> mp_roundtime 30
       "limit": "30"
     },
     "extend": {
@@ -264,8 +291,9 @@ example map settings here:
       // 0 is disabled extend for this map
       // -1 is extend times = infinity
       "times": 2,
-      // match.type = "0" -> mp_maxround  +
-      // match.type = "1" -> mp_timelimit +
+      // match.type = "0" -> mp_maxround  + 15
+      // match.type = "1" -> mp_timelimit + 15
+      // match.type = "2" -> mp_roundtime + 15
       "number": 15
     },
     // Each value can be named as a cfg file, allowing additional configuration to be performed at map start.
@@ -280,8 +308,60 @@ example map settings here:
 
 # Workshop Auto-Sync
 
-Version 1.9.4 adds the ability to automatically synchronize maps from Steam Workshop collections. Add the collection IDs to your config file under the `Workshop` section: `"Workshop": { "collection_ids": ["123456789"] }`.
+Version 2.0.0 includes the ability to automatically synchronize maps from Steam Workshop collections. This feature makes it easy to keep your server's map pool up-to-date with workshop content.
 
-The plugin will automatically fetch maps from these collections, create settings files for them, and make them available for voting.
+## How to Configure Workshop Auto-Sync
 
-In addition, the map name (including the file name) automatically generated from the workshop may not be the official vpk name(cuz sers can freely write the title of the workshop), so it also includes a process to automatically correct it when the map starts.
+1. Add the collection IDs to your config file under the `Workshop` section:
+   ```json
+   "Workshop": {
+     "collection_ids": ["123456789", "987654321"]
+   }
+   ```
+
+2. The plugin will automatically:
+   - Fetch maps from these collections when the plugin loads
+   - Create map settings files for each workshop map
+   - Make the maps available for voting
+
+3. Map name correction:
+   - The map name generated from the workshop may not match the official VPK name (since workshop authors can freely name their submissions)
+   - The plugin includes a process to automatically correct the map name when the map starts
+   - This ensures proper tracking and configuration of workshop maps
+
+## Benefits of Workshop Auto-Sync
+
+- Eliminates the need to manually download and install workshop maps
+- Keeps your server's map pool synchronized with workshop collections
+- Automatically creates appropriate configuration for each map
+- Handles map name discrepancies between workshop titles and actual map files
+
+# Troubleshooting
+
+## Common Issues and Solutions
+
+### Plugin Not Loading
+- Make sure the plugin is placed in the correct directory: `game/csgo/addons/counterstrikesharp/plugins/MapChooserExtended`
+- Check that you have the latest version of CounterStrikeSharp installed
+- Verify that the plugin files have the correct permissions
+
+### Configuration Issues
+- If you encounter errors with the configuration file, delete it from `addons/counterstrikesharp/configs/plugins/MapChooserExtended` and let the plugin recreate it on load
+- For older configurations (Version < 13), you must delete the config file and let the plugin recreate it
+
+### Map Settings Issues
+- If a map is not appearing in votes, check its settings file in the `maps` directory
+- Verify that the map's `enabled` setting is set to `true`
+- Check if the map is in cooldown (`current_count` > 0)
+- Make sure the map meets the time and player count conditions
+
+### Workshop Maps Not Syncing
+- Verify that the collection IDs are correctly entered in the config file
+- Check that the Steam Workshop is accessible from your server
+- Look for any error messages in the server console during plugin load
+
+## Getting Help
+If you encounter issues not covered here, you can:
+- Check the [GitHub Issues](https://github.com/possession-community/MapChooser-Extended/issues) page
+- Create a new issue with detailed information about your problem
+- Join the community Discord server for support

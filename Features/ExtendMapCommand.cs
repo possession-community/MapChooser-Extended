@@ -63,9 +63,11 @@ namespace MapChooserExtended
 
             // do not check extend times left because this is admin command
             if (mapSettings.Settings.Match.Type == 0) // Time limit
-                _extendRoundTimeManager.ExtendMapTimeLimit(extendTime, _timeLimitManager, _gameRules);
-            else // Round limit
-                _extendRoundTimeManager.ExtendRoundTime(extendTime, _timeLimitManager, _gameRules);
+                _extendRoundTimeManager.ExtendMapTimeLimit(extendTime);
+            else if (mapSettings.Settings.Match.Type == 1) // Round limit
+                _extendRoundTimeManager.ExtendMaxRoundLimit(extendTime);
+            else if (mapSettings.Settings.Match.Type == 2) // Round limit
+                _extendRoundTimeManager.ExtendRoundTime(extendTime, _gameRules);
 
             Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("extendmap.map-extended", extendTime)}");
         }

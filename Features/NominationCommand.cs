@@ -261,7 +261,10 @@ namespace MapChooserExtended
 
         public void OpenNominationMenu(CCSPlayerController player)
         {
-            var menu = new CenterHtmlMenu("Nomination", _plugin);
+            ScreenMenu menu = new ScreenMenu("Nomination", _plugin) {
+                MenuType = MenuType.KeyPress,
+            };
+
             // this is a special case
             foreach (var map in _mapLister.AllMaps!
                 .Where(x => x.Name != Server.MapName &&
@@ -280,11 +283,6 @@ namespace MapChooserExtended
                     });
                 }
             }
-
-            menu.AddItem("Exit", (player, option) =>
-            {
-                // in default, Menu will be closed automatically
-            });
 
             menu!.Display(player!);
         }

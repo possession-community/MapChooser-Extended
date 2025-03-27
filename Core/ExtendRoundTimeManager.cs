@@ -17,38 +17,23 @@ namespace MapChooserExtended
 {
     public class ExtendRoundTimeManager : IPluginDependency<Plugin, Config>
     {
-        public ExtendRoundTimeManager(IStringLocalizer stringLocalizer, PluginState pluginState, TimeLimitManager timeLimitManager, GameRules gameRules, MapSettingsManager mapSettingsManager)
+        public ExtendRoundTimeManager(PluginState pluginState, TimeLimitManager timeLimitManager, RoundLimitManager roundLimitManager, GameRules gameRules, MapSettingsManager mapSettingsManager)
         {
-            _localizer = new StringLocalizer(stringLocalizer, "extendtime.prefix");
             _pluginState = pluginState;
             _timeLimitManager = timeLimitManager;
+            _roundLimitManager = roundLimitManager;
             _gameRules = gameRules;
             _mapSettingsManager = mapSettingsManager;
         }
 
-        private readonly StringLocalizer _localizer;
         private PluginState _pluginState;
         private TimeLimitManager _timeLimitManager;
+        private RoundLimitManager _roundLimitManager;
         private readonly MapSettingsManager _mapSettingsManager;
-        private Timer? Timer;
         private GameRules _gameRules;
-
-        Dictionary<string, int> Votes = new();
-        Dictionary<CCSPlayerController, string> PlayerVotes = new();
-        int timeLeft = -1;
-
-        private int _canVote = 0;
-        private Plugin? _plugin;
-        
-        // Track the number of extends used for the current map
-        private int _extendsUsed = 0;
-
-        public bool VoteInProgress => timeLeft >= 0;
 
         public void OnLoad(Plugin plugin)
         {
-            _plugin = plugin;
-            plugin.RegisterListener<OnTick>(VoteDisplayTick);
         }
 
         /*
@@ -57,203 +42,10 @@ namespace MapChooserExtended
          */
         public void OnMapStart(string map)
         {
-            try
-            {
-                // Reset extends used counter on map start
-                _extendsUsed = 0;
-                
-                // For backward compatibility, still set the plugin state
-                _pluginState.ExtendsLeft = GetCurrentMapExtendSettings().Times;
-            }
-            catch (Exception)
-            {
-                // Screw it, Oz-Lin is fixing the null reference exception issue for razpberry.
-                //Server.PrintToConsole(_localizer.LocalizeWithPrefix("") + "Null Reference Exception happened, default to 3 extends.");
-
-                Server.ExecuteCommand("css_plugins reload MCE"); // screw it!
-            }
-
-            Votes.Clear();
-            PlayerVotes.Clear();
-            timeLeft = -1;
-            KillTimer();
-        }
-
-        // VIP Extend Start
-        public void ExtendTimeVoted(CCSPlayerController player, string voteResponse)
-        {
-            if (PlayerVotes.ContainsKey(player))
-            {
-                Votes[PlayerVotes[player]] -= 1;
-            }
-
-            Votes[voteResponse] += 1;
-            PlayerVotes[player] = voteResponse;
-            player.PrintToCenter(_localizer.LocalizeWithPrefix("extendtime.you-voted", voteResponse));
-            if (Votes.Select(x => x.Value).Sum() >= _canVote)
-            {
-                ExtendTimeVote();
-            }
-        }
-
-        public void RevokeVote(CCSPlayerController player)
-        {
-            if (PlayerVotes.ContainsKey(player))
-            {
-                Votes[PlayerVotes[player]] -= 1;
-                PlayerVotes.Remove(player);
-                player.PrintToCenter(_localizer.LocalizeWithPrefix("general.vote-revoked-choose-again"));
-                ShowVoteMenu(player); // Bring back the vote menu
-            }
-            else
-            {
-                player.PrintToCenter(_localizer.LocalizeWithPrefix("general.no-vote-to-revoke"));
-            }
-        }
-
-        private void ShowVoteMenu(CCSPlayerController player)
-        {
-            var menu = CreateVoteMenu();
-            menu.Display(player);
-        }
-
-        private CenterHtmlMenu CreateVoteMenu()
-        {
-            CenterHtmlMenu menu = new CenterHtmlMenu(_localizer.Localize("extendtime.hud.menu-title"), _plugin);
-
-            var answers = new List<string>() { "Yes", "No" };
-
-            foreach (var answer in answers)
-            {
-                Votes[answer] = 0;
-                menu.AddItem(answer, (player, option) =>
-                {
-                    ExtendTimeVoted(player, answer);
-                });
-            }
-
-            return menu;
-        }
-
-        void KillTimer()
-        {
-            timeLeft = -1;
-            if (Timer is not null)
-            {
-                Timer!.Kill();
-                Timer = null;
-            }
-        }
-
-        void PrintCenterTextAll(string text)
-        {
-            foreach (var player in Utilities.GetPlayers())
-            {
-                if (player.IsValid)
-                {
-                    player.PrintToCenter(text);
-                }
-            }
-        }
-
-        public void VoteDisplayTick()
-        {
-            if (timeLeft < 0)
-                return;
-
-            int index = 1;
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendFormat($"<b>{_localizer.Localize("extendtime.hud.hud-timer", timeLeft)}</b>");
-            foreach (var kv in Votes)
-            {
-                stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
-            }
-
-            foreach (CCSPlayerController player in ServerManager.ValidPlayers())
-            {
-                player.PrintToCenterHtml(stringBuilder.ToString());
-            }
-        }
-
-        void ExtendTimeVote()
-        {
-            KillTimer();
-
-            // Get current map extend settings
-            var extendSettings = GetCurrentMapExtendSettings();
-            var currentMap = Server.MapName;
-            var mapSettings = _mapSettingsManager.GetMapSettings(currentMap);
-            
-            var minutesToExtend = extendSettings.Number; // use map extend settings
-
-            decimal maxVotes = Votes.Select(x => x.Value).Max();
-            IEnumerable<KeyValuePair<string, int>> potentialWinners = Votes.Where(x => x.Value == maxVotes);
-            Random rnd = new();
-            KeyValuePair<string, int> winner = potentialWinners.ElementAt(rnd.Next(0, potentialWinners.Count()));
-
-            decimal totalVotes = Votes.Select(x => x.Value).Sum();
-            decimal percent = totalVotes > 0 ? winner.Value / totalVotes * 100M : 0;
-
-            if (maxVotes > 0)
-            {
-                if (winner.Key == "No")
-                {
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.failed", percent, totalVotes));
-                }
-                else
-                {
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed", minutesToExtend, percent, totalVotes));
-                }
-            }
-            else
-            {
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended-no-votes"));
-            }
-
-            if (winner.Key == "No")
-            {
-                // Do nothing, vote did not pass
-                PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "not be extended."));
-            }
-            else
-            {
-                // Extend mp_timelimit
-                // Use ExtendMapTimeLimit for round-based gamemodes (ze/zm/normal gunfights etc), and ExtendRoundTime for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
-                if (mapSettings.Settings.Match.Type == 0) // Time limit
-                {
-                    ExtendMapTimeLimit(minutesToExtend, _timeLimitManager, _gameRules);
-                }
-                else
-                {
-                    ExtendRoundTime(minutesToExtend, _timeLimitManager, _gameRules);
-                }
-
-                PrintCenterTextAll(_localizer.Localize("extendtime.hud.finished", "be extended."));
-                
-                // Increment extends used counter
-                _extendsUsed++;
-                
-                // For backward compatibility, still update the plugin state
-                if (_pluginState.ExtendsLeft > 0)
-                {
-                    _pluginState.ExtendsLeft -= 1;
-                }
-                
-                // Show extends left message if there's a limit
-                if (extendSettings.Times != -1)
-                {
-                    int extendsLeft = extendSettings.Times - _extendsUsed;
-                    Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.extendsleft", extendsLeft, extendSettings.Times));
-                }
-                
-                _pluginState.CommandsDisabled = false;
-            }
-
-            _pluginState.ExtendTimeVoteHappening = false;
         }
 
         // ExtendRoundTime: Extend the current round time for non-round-based gamemodes (bhop/surf/kz/deathmatch etc)
-        public bool ExtendRoundTime(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
+        public bool ExtendRoundTime(int minutesToExtendBy, GameRules gameRules)
         {
             try
             {
@@ -289,12 +81,32 @@ namespace MapChooserExtended
 
         }
 
-        public bool ExtendMapTimeLimit(int minutesToExtendBy, TimeLimitManager timeLimitManager, GameRules gameRules)
+        public bool ExtendMapTimeLimit(int minutesToExtendBy)
         {
             try
             {
                 // Use the ExtendTime method to properly update the time limit
                 _timeLimitManager.ExtendTime(minutesToExtendBy);
+
+                _pluginState.MapChangeScheduled = false;
+                _pluginState.EofVoteHappening = false;
+                _pluginState.CommandsDisabled = false;
+
+                return true;
+            }
+            catch (Exception) //(Exception ex)
+            {
+                //Logger.LogWarning("Something went wrong when updating the round time {message}", ex.Message);
+
+                return false;
+            }
+        }
+
+        public bool ExtendMaxRoundLimit(int roundsToExtendBy)
+        {
+            try
+            {
+                _roundLimitManager.ExtendRound(roundsToExtendBy);
 
                 _pluginState.MapChangeScheduled = false;
                 _pluginState.EofVoteHappening = false;

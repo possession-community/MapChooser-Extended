@@ -143,9 +143,12 @@ namespace MapChooserExtended
             menu.Display(player);
         }
 
-        private CenterHtmlMenu CreateMapVoteMenu()
+        private ScreenMenu CreateMapVoteMenu()
         {
-            CenterHtmlMenu menu = new CenterHtmlMenu(_localizer.Localize("emv.hud.menu-title"), _plugin);
+            ScreenMenu menu = new ScreenMenu(_localizer.Localize("emv.hud.menu-title"), _plugin) {
+                MenuType = MenuType.KeyPress,
+                MenuTime = _config.VoteDuration
+            };
 
             // Add extend option if allowed
             // Get current map extend settings
@@ -292,14 +295,19 @@ namespace MapChooserExtended
                     // TODO: make round time extend?
                     if (mapSettings.Settings.Match.Type == 0 && !_timeLimitManager.UnlimitedTime)
                     {
-                        _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number, _timeLimitManager, _gameRules);
+                        _extendRoundTimeManager.ExtendMapTimeLimit(extendSettings.Number);
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed",
                             extendSettings.Number, percent, totalVotes));
                     }
                     else if (mapSettings.Settings.Match.Type == 1 && !_roundLimitManager.UnlimitedRound)
                     {
-                        _roundLimitManager.RoundsRemaining =
-                            _roundLimitManager.RoundLimitValue + extendSettings.Number;
+                        _extendRoundTimeManager.ExtendMaxRoundLimit(extendSettings.Number);
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed.rounds",
+                            extendSettings.Number, percent, totalVotes));
+                    }
+                    else if (mapSettings.Settings.Match.Type == 2)
+                    {
+                        _extendRoundTimeManager.ExtendRoundTime(extendSettings.Number, _gameRules);
                         Server.PrintToChatAll(_localizer.LocalizeWithPrefix("extendtime.vote-ended.passed.rounds",
                             extendSettings.Number, percent, totalVotes));
                     }
