@@ -1,6 +1,7 @@
 ﻿﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
+using CounterStrikeSharp.API.Modules.Events;
 using MapChooserExtended.Core;
 using MapChooserExtended.Features;
 using Microsoft.Extensions.DependencyInjection;

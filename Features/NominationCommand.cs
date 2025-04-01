@@ -103,7 +103,7 @@ namespace MapChooserExtended
             _config = config.Rtv;
             _eomConfig = config.EndOfMapVote;
             // Set max nominations based on maps to show in vote
-            _maxNominations = _eomConfig.MapsToShow == 0 ? 5 : _eomConfig.MapsToShow;
+            _maxNominations = _eomConfig.MapsToShow == 0 ? 6 : _eomConfig.MapsToShow;
         }
 
         public void OnMapsLoaded(object? sender, Map[] maps)
@@ -265,26 +265,25 @@ namespace MapChooserExtended
                 MenuType = MenuType.KeyPress,
             };
 
+            // Get all nominated maps to exclude them from the menu
+            var allNominatedMaps = Nominations.SelectMany(x => x.Value.Maps).Distinct().ToList();
+
             // this is a special case
             foreach (var map in _mapLister.AllMaps!
                 .Where(x => x.Name != Server.MapName &&
                             _mapSettingsManager.IsMapAvailableForNomination(player, x.Name) &&
                             _mapSettingsManager.IsMapAvailableForCycle(x.Name) &&
-                            !_mapCooldown.IsMapInCooldown(x.Name)
+                            !_mapCooldown.IsMapInCooldown(x.Name) &&
+                            !allNominatedMaps.Contains(x.Name) // Exclude already nominated maps
                 )) {
-                // TODO: Use allMaps + check if the map is available for nomination
-                //       And, add the text to each options, the reason why the map is not available
-                if (_mapCooldown.IsMapInCooldown(map.Name)) {
-                    menu.AddItem(map.Name, DisableOption.DisableHideNumber);
-                } else {
-                    menu.AddItem(map.Name, (player, option) =>
-                    {
-                        Nominate(player, option.Text);
-                    });
-                }
+                // Add the map to the menu if it's not in cooldown and not already nominated
+                menu.AddItem(map.Name, (player, option) =>
+                {
+                    Nominate(player, option.Text);
+                });
             }
 
-            menu!.Display(player!);
+            menu!.Display(player!, 0);
         }
 
         void Nominate(CCSPlayerController player, string option)
@@ -327,26 +326,25 @@ namespace MapChooserExtended
             }
 
             var userId = player.UserId!.Value;
+            
+            // Check if player has already nominated a map (one nomination per player)
+            if (Nominations.ContainsKey(userId) && Nominations[userId].Maps.Count > 0)
+            {
+                player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-used-nomination"));
+                return;
+            }
+            
             if (!Nominations.ContainsKey(userId))
                 Nominations[userId] = (player.PlayerName, new List<string>());
-
-            bool alreadyVoted = Nominations[userId].Maps.IndexOf(matchingMap) != -1;
-            if (!alreadyVoted)
-                Nominations[userId].Maps.Add(matchingMap);
+                
+            Nominations[userId].Maps.Add(matchingMap);
 
             // Count total votes for this map more efficiently
             var totalVotes = Nominations.Sum(x => x.Value.Maps.Count(y => y == matchingMap));
 
-            if (!alreadyVoted)
-            {
-                Server.PrintToChatAll(_localizer.LocalizeWithPrefix("nominate.nominated", player.PlayerName,
-                    matchingMap, totalVotes));
-            }
-            else
-            {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("nominate.already-nominated", matchingMap,
-                    totalVotes));
-            }
+            // Player has successfully nominated the map
+            Server.PrintToChatAll(_localizer.LocalizeWithPrefix("nominate.nominated", player.PlayerName,
+                matchingMap, totalVotes));
         }
 
         public List<string> NominationWinners()

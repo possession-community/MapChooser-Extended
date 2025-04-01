@@ -62,7 +62,7 @@ namespace MapChooserExtended.Features
                     });
                 }
 
-                menu.Display(player!);
+                menu.Display(player!, 0);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace MapChooserExtended.Features
                         ChangeMap(p, option.Text);
                     });
                     
-                    singleMapMenu.Display(player!);
+                    singleMapMenu.Display(player!, 0);
                 }
                 else
                 {
@@ -104,7 +104,7 @@ namespace MapChooserExtended.Features
                         });
                     }
                     
-                    matchingMapMenu.Display(player!);
+                    matchingMapMenu.Display(player!, 0);
                 }
             }
         }

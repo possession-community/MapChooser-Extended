@@ -23,6 +23,8 @@ namespace MapChooserExtended
         {
             _mapSettingsManager = mapSettingsManager;
             _mapCooldown = mapCooldown;
+
+            EventMapsLoaded += _mapCooldown.OnMapsLoaded;
         }
 
         public void Clear()
@@ -63,6 +65,9 @@ namespace MapChooserExtended
                 .ToArray();
 
             MapsLoaded = true;
+
+            _mapCooldown.SetAllMaps(AllMaps!);
+            
             if (EventMapsLoaded is not null)
                 EventMapsLoaded.Invoke(this, Maps!);
             

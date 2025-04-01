@@ -8,25 +8,13 @@ namespace MapChooserExtended.Core
         private readonly Dictionary<string, int> _mapsOnCoolDown = new();
         private readonly Dictionary<string, HashSet<string>> _taggedMaps = new();
         private readonly MapSettingsManager _mapSettingsManager;
-        private readonly MapLister _mapLister;
+        private Map[]? _allMaps = null;
 
         public event EventHandler<Map[]>? EventCooldownRefreshed;
 
-        public MapCooldown(MapSettingsManager mapSettingsManager, MapLister mapLister)
+        public MapCooldown(MapSettingsManager mapSettingsManager)
         {
             _mapSettingsManager = mapSettingsManager;
-            _mapLister = mapLister;
-
-            // Subscribe to map loaded event to update cooldowns
-            _mapLister.EventMapsLoaded += (e, maps) =>
-            {
-                var map = Server.MapName;
-                if (map is not null)
-                {
-                    UpdateCooldowns(map.Trim());
-                    EventCooldownRefreshed?.Invoke(this, maps);
-                }
-            };
         }
 
         public void OnConfigParsed(Config config)
@@ -53,7 +41,7 @@ namespace MapChooserExtended.Core
             _taggedMaps.Clear();
 
             // Group maps by tags - use AllMaps from MapLister to include all maps
-            foreach (var map in _mapLister.AllMaps ?? Array.Empty<Map>())
+            foreach (var map in _allMaps ?? Array.Empty<Map>())
             {
                 var mapName = map.Name;
                 var settings = _mapSettingsManager.GetMapSettings(mapName);
@@ -125,7 +113,7 @@ namespace MapChooserExtended.Core
             
             // Decrement CurrentCount for all maps except the current map and tagged maps
             // Use AllMaps from MapLister to include all maps
-            foreach (var map in _mapLister.AllMaps ?? Array.Empty<Map>())
+            foreach (var map in _allMaps ?? Array.Empty<Map>())
             {
                 var availableMap = map.Name;
                 if (availableMap != mapName && !settings.Settings.Cooldown.Tags.Any(tag => _taggedMaps.ContainsKey(tag) && _taggedMaps[tag].Contains(availableMap)))
@@ -170,6 +158,25 @@ namespace MapChooserExtended.Core
         public Dictionary<string, int> GetMapsInCooldown()
         {
             return new Dictionary<string, int>(_mapsOnCoolDown);
+        }
+
+        public void SetAllMaps(Map[] maps)
+        {
+            _allMaps = maps;
+
+            InitializeTaggedMaps();
+        }
+
+        public void OnMapsLoaded(object? sender, Map[] maps)
+        {
+            _allMaps = maps;
+            
+            var map = Server.MapName;
+            if (map is not null)
+            {
+                UpdateCooldowns(map.Trim());
+                EventCooldownRefreshed?.Invoke(this, maps);
+            }
         }
     }
 }

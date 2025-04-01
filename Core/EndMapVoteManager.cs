@@ -12,7 +12,7 @@ namespace MapChooserExtended
 {
     public class EndMapVoteManager : IPluginDependency<Plugin, Config>
     {
-        const int MAX_OPTIONS_HUD_MENU = 5;
+        const int MAX_OPTIONS_HUD_MENU = 6;
 
         public EndMapVoteManager(
             MapLister mapLister, 
@@ -122,27 +122,6 @@ namespace MapChooserExtended
             }
         }
 
-        public void RevokeVote(CCSPlayerController player)
-        {
-            if (PlayerVotes.ContainsKey(player))
-            {
-                Votes[PlayerVotes[player]] -= 1;
-                PlayerVotes.Remove(player);
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.vote-revoked-choose-again"));
-                ShowMapVoteMenu(player); // Bring back the map vote menu
-            }
-            else
-            {
-                player.PrintToChat(_localizer.LocalizeWithPrefix("general.no-vote-to-revoke"));
-            }
-        }
-
-        private void ShowMapVoteMenu(CCSPlayerController player)
-        {
-            var menu = CreateMapVoteMenu();
-            menu.Display(player);
-        }
-
         private ScreenMenu CreateMapVoteMenu()
         {
             ScreenMenu menu = new ScreenMenu(_localizer.Localize("emv.hud.menu-title"), _plugin) {
@@ -163,14 +142,14 @@ namespace MapChooserExtended
             }
 
             // Add ignore option if DontChangeRtv is enabled and this is an RTV vote
-            if (_config is RtvConfig rtvConfig && rtvConfig.DontChangeRtv)
-            {
-                Votes[_localizer.Localize("general.ignore-rtv")] = 0;
-                menu.AddItem(_localizer.Localize("general.ignore-rtv"), (player, option) =>
-                {
-                    MapVoted(player, option.Text);
-                });
-            }
+            //if (_config is RtvConfig rtvConfig && rtvConfig.DontChangeRtv)
+            //{
+            //    Votes[_localizer.Localize("general.ignore-rtv")] = 0;
+            //    menu.AddItem(_localizer.Localize("general.ignore-rtv"), (player, option) =>
+            //    {
+            //        MapVoted(player, option.Text);
+            //    });
+            //}
 
             // Add map options
             foreach (var map in mapsEllected.Take(MAX_OPTIONS_HUD_MENU))
@@ -243,10 +222,7 @@ namespace MapChooserExtended
                 stringBuilder.AppendFormat($"<br><font color='yellow'>!{index++}</font> {kv.Key} <font color='green'>({kv.Value})</font>");
             }
 
-            foreach (CCSPlayerController player in ServerManager.ValidPlayers().Where(x => !_voted.Contains(x.UserId!.Value)))
-            {
-                player.PrintToCenterHtml(stringBuilder.ToString());
-            }
+            PrintCenterHtmlAll(stringBuilder.ToString());
         }
 
         public void CountdownDisplayTick()
@@ -279,8 +255,6 @@ namespace MapChooserExtended
             {
                 Server.PrintToChatAll(_localizer.LocalizeWithPrefix("emv.vote-ended-no-votes", winner.Key));
             }
-
-            PrintCenterTextAll(_localizer.Localize("emv.hud.finished", winner.Key));
 
             if (winner.Key == _localizer.Localize("general.extend-current-map"))
             {
@@ -345,12 +319,15 @@ namespace MapChooserExtended
             {
                 _changeMapManager.ScheduleMapChange(winner.Key, mapEnd: mapEnd);
                 if (_config != null && _config.ChangeMapImmediately)
+                {
                     _changeMapManager.ChangeNextMap(mapEnd);
+                }
                 else
                 {
                     if (!mapEnd)
                     {
-                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("general.changing-map-next-round", winner.Key));
+                        // Use a more appropriate message for map change notification
+                        Server.PrintToChatAll(_localizer.LocalizeWithPrefix("general.nextmap-will-be", winner.Key));
                         _pluginState.CommandsDisabled = true;
                     }
                 }
@@ -478,7 +455,7 @@ namespace MapChooserExtended
             var menu = CreateMapVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
-                menu.Display(player);
+                menu.Display(player, 0);
 
             timeLeft = _config.VoteDuration;
             Timer = _plugin!.AddTimer(1.0F, () =>
