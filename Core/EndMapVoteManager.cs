@@ -126,7 +126,6 @@ namespace MapChooserExtended
         {
             ScreenMenu menu = new ScreenMenu(_localizer.Localize("emv.hud.menu-title"), _plugin) {
                 MenuType = MenuType.KeyPress,
-                MenuTime = _config.VoteDuration
             };
 
             // Add extend option if allowed
@@ -395,9 +394,7 @@ namespace MapChooserExtended
 
             _pluginState.EofVoteHappening = true;
             _config = config;
-            int mapsToShow = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
-            if (mapsToShow > MAX_OPTIONS_HUD_MENU)
-                mapsToShow = MAX_OPTIONS_HUD_MENU;
+            int mapsToShow = _config!.MapsToShow == 0 || _config!.MapsToShow > MAX_OPTIONS_HUD_MENU ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
 
             // Get maps from MapLister which are already filtered by availability
             var availableMaps = _mapLister.Maps!
@@ -422,15 +419,10 @@ namespace MapChooserExtended
             // No need to check if maps are available for cycle as MapLister already does this
             var nominatedMaps = _nominationManager.NominationWinners().ToList();
 
-            // Determine how many maps to show in the vote
-            int mapsToInclude = _config!.MapsToShow == 0 ? MAX_OPTIONS_HUD_MENU : _config!.MapsToShow;
-            if (mapsToInclude > MAX_OPTIONS_HUD_MENU)
-                mapsToInclude = MAX_OPTIONS_HUD_MENU;
-
             // If we have enough nominated maps, use only those
-            if (nominatedMaps.Count >= mapsToInclude)
+            if (nominatedMaps.Count >= mapsToShow)
             {
-                mapsEllected = nominatedMaps.Take(mapsToInclude).ToList();
+                mapsEllected = nominatedMaps.Take(mapsToShow).ToList();
             }
             // Otherwise, use all nominated maps and fill the rest with random maps
             else
@@ -439,7 +431,7 @@ namespace MapChooserExtended
                 mapsEllected = new List<string>(nominatedMaps);
                 
                 // Fill the remaining slots with random maps that aren't already nominated
-                int remainingSlots = mapsToInclude - nominatedMaps.Count;
+                int remainingSlots = mapsToShow - nominatedMaps.Count;
                 if (remainingSlots > 0)
                 {
                     var additionalMaps = mapsScrambled
@@ -455,7 +447,7 @@ namespace MapChooserExtended
             var menu = CreateMapVoteMenu();
 
             foreach (var player in ServerManager.ValidPlayers())
-                menu.Display(player, 0);
+                menu.Display(player, _config.VoteDuration);
 
             timeLeft = _config.VoteDuration;
             Timer = _plugin!.AddTimer(1.0F, () =>
