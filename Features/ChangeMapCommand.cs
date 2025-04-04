@@ -15,7 +15,7 @@ namespace MapChooserExtended.Features
         private readonly MapLister _mapLister;
         private Plugin? _plugin;
 
-        [ConsoleCommand("css_movemap", "Change the map immediately (Admin only)")]
+        [ConsoleCommand("css_mcemaps", "Change the map immediately (Admin only)")]
         [RequiresPermissions("@css/changemap")]
         public void ChangeMapCommandHandler(CCSPlayerController player, CommandInfo command)
         {
